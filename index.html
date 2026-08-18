@@ -5,941 +5,415 @@
 
 <meta
   name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover">
+  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 
-<title>DEATHMARRIED — KVARTIRA</title>
+<title>DEATHMARRIED KVARTIRA</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link
-  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600&display=swap"
-  rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-
-/* =========================================================
-   COLORS
-========================================================= */
-
 :root{
-  --cream:#f1e7d0;
-  --paper:#dfccb0;
-
   --wine:#702831;
-  --wine-dark:#40181f;
-
-  --gold:#a98248;
-
-  --ink:#2c1d19;
-  --muted:#806c61;
-
-  --room-light:
-    rgba(255,223,177,.15);
+  --wine2:#421a21;
+  --cream:#eee0c6;
+  --paper:#dfc9a8;
+  --gold:#aa8246;
+  --ink:#2e201b;
+  --muted:#806b5e;
+  --room-light:rgba(255,230,190,.1);
 }
-
-
-/* =========================================================
-   GLOBAL
-========================================================= */
 
 *{
   box-sizing:border-box;
-
-  -webkit-tap-highlight-color:
-    transparent;
+  -webkit-tap-highlight-color:transparent;
 }
-
 
 html{
-  min-height:100%;
+  width:100%;
+  height:100%;
+  touch-action:manipulation;
 }
-
 
 body{
   margin:0;
-
-  min-height:100vh;
-
+  width:100%;
+  height:100%;
   overflow:hidden;
-
-  color:var(--ink);
-
-  font-family:
-    "Montserrat",
-    Arial,
-    sans-serif;
-
   background:#ded0b5;
+  color:var(--ink);
+  font-family:"Montserrat",Arial,sans-serif;
+  overscroll-behavior:none;
 }
-
 
 button,
+.game,
 .character,
-.quick-switch,
+.quick,
+.mobile-nav,
 .tiggo{
-  user-select:none;
-
+  touch-action:manipulation;
   -webkit-user-select:none;
-
-  touch-action:
-    manipulation;
+  user-select:none;
 }
 
+/* =============================
+   LOADING
+============================= */
 
-/* =========================================================
-   WALLPAPER
-========================================================= */
+.loading{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eee3cc;
+  transition:opacity 1s,visibility 1s;
+}
+
+.loading.hide{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.loading-text{
+  text-align:center;
+  color:#5d252b;
+  font:600 clamp(32px,7vw,78px) "Cormorant Garamond",serif;
+  letter-spacing:.12em;
+  animation:loadingPulse 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes loadingPulse{
+  to{
+    opacity:.55;
+    letter-spacing:.16em;
+  }
+}
+
+/* =============================
+   BACKGROUND
+============================= */
 
 .wallpaper{
   position:fixed;
-
   inset:0;
-
   z-index:-10;
-
   background:
-
-    linear-gradient(
-      var(--room-light),
-      var(--room-light)
-    ),
-
-    url("wallpaper.jpg?v=2")
-    center center /
-    cover;
-
-  transition:
-    filter .7s ease,
-    background .7s ease;
+    linear-gradient(var(--room-light),var(--room-light)),
+    url("wallpaper.jpg?v=4") center/cover no-repeat;
+  transition:filter .8s,background .8s;
 }
-
-
-.wallpaper::after{
-  content:"";
-
-  position:absolute;
-
-  inset:0;
-
-  background:
-    linear-gradient(
-      transparent 50%,
-      rgba(76,47,34,.08)
-    );
-}
-
-
-/* =========================================================
-   ROOM COLORS
-========================================================= */
-
-body.room-hall{
-  --room-light:
-    rgba(255,229,181,.10);
-}
-
-
-body.room-salon{
-  --room-light:
-    rgba(145,51,58,.13);
-}
-
-
-body.room-dj{
-  --room-light:
-    rgba(54,85,120,.18);
-}
-
-
-body.room-bedroom{
-  --room-light:
-    rgba(105,54,75,.17);
-}
-
-
-body.room-secret{
-  --room-light:
-    rgba(39,25,24,.34);
-}
-
-
-body.room-secret
-.wallpaper{
-  filter:
-    brightness(.69)
-    sepia(.12);
-}
-
-
-body.room-dj
-.wallpaper{
-  filter:
-    saturate(.75)
-    contrast(1.07);
-}
-
-
-/* =========================================================
-   FLOOR
-========================================================= */
 
 .floor{
   position:fixed;
-
   left:0;
   right:0;
   bottom:0;
-
+  height:12vh;
   z-index:-8;
-
-  height:13vh;
-
-  border-top:
-    5px solid #4e3629;
-
+  border-top:5px solid #493127;
   background:
     repeating-linear-gradient(
       100deg,
       #583b2c 0 80px,
-      #422c23 81px 84px,
+      #402a22 81px 84px,
       #684737 85px 165px
     );
 }
 
-
-/* =========================================================
-   VIGNETTE
-========================================================= */
-
 .vignette{
   position:fixed;
-
   inset:0;
-
   z-index:-5;
-
   pointer-events:none;
-
-  box-shadow:
-    inset 0 0 170px
-    rgba(74,49,35,.14);
+  box-shadow:inset 0 0 180px rgba(67,42,29,.16);
 }
 
+.room-hall{--room-light:rgba(255,230,190,.08)}
+.room-salon{--room-light:rgba(133,41,52,.13)}
+.room-dj{--room-light:rgba(44,78,119,.19)}
+.room-bedroom{--room-light:rgba(104,59,79,.16)}
+.room-kitchen{--room-light:rgba(198,145,76,.12)}
+.room-bath{--room-light:rgba(75,118,128,.15)}
+.room-balcony{--room-light:rgba(58,70,92,.17)}
+.room-secret{--room-light:rgba(31,20,20,.37)}
 
-/* =========================================================
-   NIGHT
-========================================================= */
+.room-secret .wallpaper{
+  filter:brightness(.67) sepia(.1);
+}
 
-.night-overlay{
+.room-dj .wallpaper{
+  filter:saturate(.72) contrast(1.08);
+}
+
+/* =============================
+   NIGHT / FEVER
+============================= */
+
+.night-layer,
+.fever-layer{
   position:fixed;
-
   inset:0;
-
-  z-index:8;
-
   pointer-events:none;
-
   opacity:0;
+  z-index:5;
+  transition:opacity 1s;
+}
 
+.night-layer{
+  background:rgba(17,21,34,.61);
+}
+
+.fever-layer{
   background:
-    rgba(20,22,32,.62);
-
-  transition:
-    opacity 1.4s;
+    radial-gradient(circle at 50% 50%,transparent,#85293622),
+    linear-gradient(115deg,#8a29331d,#345a8018);
+  animation:fever 1s alternate infinite;
 }
 
+body.night .night-layer{opacity:1}
+body.fever .fever-layer{opacity:1}
 
-body.night-event
-.night-overlay{
-  opacity:1;
+@keyframes fever{
+  to{filter:hue-rotate(25deg)}
 }
 
-
-/* =========================================================
-   INTRO
-========================================================= */
-
-.intro{
-  position:fixed;
-
-  inset:0;
-
-  z-index:10000;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  background:#eee3cb;
-
-  cursor:pointer;
-
-  transition:
-    opacity 1.1s,
-    visibility 1.1s;
-}
-
-
-.intro.hide{
-  opacity:0;
-
-  visibility:hidden;
-
-  pointer-events:none;
-}
-
-
-.intro::before{
-  content:"";
-
-  position:absolute;
-
-  inset:23px;
-
-  border:
-    1px solid #8a6b50;
-}
-
-
-.intro-content{
-  text-align:center;
-}
-
-
-.intro-mark{
-  width:65px;
-  height:65px;
-
-  margin:
-    0 auto 24px;
-
-  display:grid;
-
-  place-items:center;
-
-  border:
-    1px solid var(--gold);
-
-  border-radius:50%;
-
-  color:var(--wine);
-
-  font:
-    italic 30px
-    "Cormorant Garamond",
-    serif;
-}
-
-
-.intro-title{
-  color:#40251f;
-
-  font:
-    500
-    clamp(45px,8vw,90px)
-    /.8
-    "Cormorant Garamond",
-    serif;
-
-  letter-spacing:.08em;
-}
-
-
-.intro-sub{
-  margin-top:27px;
-
-  color:var(--wine);
-
-  font-size:10px;
-
-  letter-spacing:.7em;
-}
-
-
-.intro-line{
-  width:230px;
-
-  height:1px;
-
-  margin:
-    25px auto;
-
-  background:
-    var(--gold);
-}
-
-
-.intro-note{
-  color:#826a59;
-
-  font:
-    italic 13px
-    "Cormorant Garamond",
-    serif;
-}
-
-
-/* =========================================================
+/* =============================
    HEADER
-========================================================= */
+============================= */
 
 header{
   position:fixed;
-
-  top:15px;
+  top:13px;
   left:50%;
-
-  transform:
-    translateX(-50%);
-
-  z-index:30;
-
+  transform:translateX(-50%);
+  z-index:20;
   text-align:center;
-
   pointer-events:none;
 }
 
-
 .logo{
   color:var(--wine);
-
-  font:
-    600
-    clamp(30px,4vw,51px)
-    /.9
-    "Cormorant Garamond",
-    serif;
-
+  font:600 clamp(29px,4vw,49px)/.9 "Cormorant Garamond",serif;
   letter-spacing:.12em;
 }
 
-
 .tag{
-  margin-top:7px;
-
-  color:#7b6256;
-
+  margin-top:6px;
+  color:#866e60;
   font-size:7px;
-
-  letter-spacing:.5em;
+  letter-spacing:.45em;
 }
 
-
-/* =========================================================
+/* =============================
    LANGUAGE
-========================================================= */
+============================= */
 
 .language{
   position:fixed;
-
-  left:16px;
-  top:15px;
-
-  z-index:1600;
-
+  top:13px;
+  left:14px;
+  z-index:1500;
   display:flex;
-
-  overflow:hidden;
-
-  border:
-    1px solid #927358;
-
-  background:
-    rgba(234,218,191,.93);
-
-  backdrop-filter:
-    blur(10px);
+  border:1px solid #9b795b;
+  background:#e4cfadef;
 }
 
-
 .language button{
-  padding:
-    7px 10px;
-
+  padding:7px 10px;
   border:0;
-
-  color:#735c50;
-
-  background:none;
-
-  font-size:9px;
-
+  color:#755d51;
+  background:transparent;
   cursor:pointer;
 }
 
-
 .language button.active{
+  background:var(--wine);
   color:white;
-
-  background:
-    var(--wine);
 }
 
-
-/* =========================================================
-   TELEGRAM USER
-========================================================= */
-
-.tg-profile{
-  position:fixed;
-
-  left:16px;
-  top:54px;
-
-  z-index:1200;
-
-  display:none;
-
-  align-items:center;
-
-  gap:7px;
-
-  padding:
-    6px 8px;
-
-  border:
-    1px solid #a28365;
-
-  background:
-    rgba(235,219,191,.9);
-
-  backdrop-filter:
-    blur(8px);
-
-  font-size:8px;
-}
-
-
-.tg-profile.show{
-  display:flex;
-}
-
-
-.tg-avatar{
-  display:none;
-
-  width:28px;
-  height:28px;
-
-  object-fit:cover;
-
-  border-radius:50%;
-}
-
-
-.tg-name{
-  color:var(--wine);
-
-  font-weight:600;
-}
-
-
-/* =========================================================
+/* =============================
    STATS
-========================================================= */
+============================= */
 
 .stats{
   position:fixed;
-
-  top:88px;
+  top:80px;
   left:50%;
-
-  transform:
-    translateX(-50%);
-
-  z-index:30;
-
+  z-index:25;
   width:390px;
-
+  transform:translateX(-50%);
   text-align:center;
+  pointer-events:none;
 }
-
 
 .souls{
-  color:var(--wine-dark);
-
-  font:
-    600 36px
-    "Cormorant Garamond",
-    serif;
+  color:var(--wine2);
+  font:600 35px "Cormorant Garamond",serif;
 }
 
-
-.small{
-  color:#79675e;
-
+.minor{
+  color:#7e6a5e;
   font-size:8px;
 }
 
-
-.level-text{
-  margin-top:5px;
-
+.level-line{
+  margin-top:4px;
   color:#5b4138;
-
-  font:
-    italic 13px
-    "Cormorant Garamond",
-    serif;
+  font:italic 12px "Cormorant Garamond",serif;
 }
-
 
 .bar{
-  width:260px;
+  width:245px;
   height:5px;
-
-  margin:
-    6px auto;
-
+  margin:5px auto;
+  border:1px solid #a0886e;
+  background:#ae99832f;
   overflow:hidden;
-
-  border:
-    1px solid #9c8369;
-
-  background:
-    rgba(130,105,80,.25);
 }
 
-
-.bar div{
+.bar-fill{
   height:100%;
-
-  transition:
-    width .18s;
-
-  background:
-    var(--wine);
+  width:0%;
+  background:var(--wine);
+  transition:width .15s;
 }
-
 
 #rageBar{
-  background:#c18849;
+  background:#c18a49;
 }
 
+/* =============================
+   QUICK LEFT
+============================= */
 
-/* =========================================================
-   QUICK SWITCHER — LEFT TOP
-========================================================= */
-
-.quick-switch{
+.quick{
   position:fixed;
+  left:14px;
+  top:96px;
+  z-index:1200;
+  width:210px;
+  padding:5px;
+  border:1px solid #9d7c5f;
+  background:#e7d3b4e8;
+  backdrop-filter:blur(9px);
+}
 
-  left:16px;
-  top:103px;
-
-  z-index:1400;
-
+.quick-row{
   display:grid;
-
-  grid-template-columns:
-    29px 150px 29px;
-
-  gap:4px;
-
-  padding:6px;
-
-  border:
-    1px solid
-    rgba(126,92,67,.45);
-
-  background:
-    rgba(235,219,192,.88);
-
-  box-shadow:
-    0 8px 25px
-    rgba(70,44,31,.08);
-
-  backdrop-filter:
-    blur(10px);
+  grid-template-columns:28px 1fr 28px;
+  gap:3px;
 }
 
-
-.quick-box{
-  width:150px;
-
-  min-height:38px;
-
-  padding:
-    4px 7px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  justify-content:center;
-
-  overflow:hidden;
-
-  text-align:center;
-
-  border:
-    1px solid
-    rgba(151,116,84,.55);
-
-  background:
-    rgba(248,234,210,.55);
+.quick-row + .quick-row{
+  margin-top:3px;
 }
 
-
-.quick-label{
-  color:#9a8170;
-
-  font-size:6px;
-
-  letter-spacing:.15em;
-}
-
-
-.quick-name{
-  margin-top:2px;
-
-  overflow:hidden;
-
-  color:#58362e;
-
-  font:
-    600 13px
-    "Cormorant Garamond",
-    serif;
-
-  text-overflow:ellipsis;
-
-  white-space:nowrap;
-}
-
-
-.quick-arrow{
-  width:29px;
-
-  min-height:38px;
-
-  padding:0;
-
-  border:
-    1px solid
-    rgba(145,106,77,.65);
-
-  color:#633b33;
-
-  background:
-    rgba(242,224,195,.72);
-
-  font:
-    20px
-    "Cormorant Garamond",
-    serif;
-
+.quick button{
+  border:1px solid #a08162;
+  background:#ead7b9;
+  color:#603b32;
+  font-size:18px;
   cursor:pointer;
 }
 
-
-.quick-arrow:hover{
-  background:
-    rgba(250,239,220,.95);
+.quick-current{
+  min-width:0;
+  padding:4px;
+  text-align:center;
+  border:1px solid #ae9273;
+  background:#f0dec2a8;
 }
 
-
-.quick-arrow:active{
-  transform:
-    scale(.9);
+.quick-title{
+  color:#9a806d;
+  font-size:5px;
+  letter-spacing:.13em;
 }
 
-
-/* ОБЛИК */
-
-#prevSkin{
-  grid-column:1;
-  grid-row:1;
+.quick-name{
+  overflow:hidden;
+  margin-top:1px;
+  color:#54332d;
+  font:600 12px "Cormorant Garamond",serif;
+  white-space:nowrap;
+  text-overflow:ellipsis;
 }
 
-
-.quick-switch
-.quick-box.skin-box{
-  grid-column:2;
-  grid-row:1;
-}
-
-
-#nextSkin{
-  grid-column:3;
-  grid-row:1;
-}
-
-
-/* КОМНАТА */
-
-#prevRoom{
-  grid-column:1;
-  grid-row:2;
-}
-
-
-.quick-switch
-.quick-box.room-box{
-  grid-column:2;
-  grid-row:2;
-}
-
-
-#nextRoom{
-  grid-column:3;
-  grid-row:2;
-}
-
-
-/* =========================================================
+/* =============================
    GAME
-========================================================= */
+============================= */
 
 .game{
-  position:absolute;
-
+  position:fixed;
   inset:0;
-
   display:flex;
-
   align-items:center;
   justify-content:center;
+  z-index:10;
 }
-
 
 .character{
   position:relative;
-
   width:360px;
   height:350px;
-
-  margin-top:100px;
-
+  margin-top:90px;
   cursor:pointer;
-
-  touch-action:
-    manipulation;
-
-  transition:
-    transform .065s;
-
-  filter:
-    drop-shadow(
-      0 28px 22px
-      rgba(55,31,21,.38)
-    );
+  touch-action:manipulation;
+  transition:transform .06s;
+  filter:drop-shadow(0 28px 22px rgba(55,31,21,.38));
 }
-
 
 .character:hover{
-  transform:
-    scale(1.025);
+  transform:scale(1.02);
 }
-
 
 .character.hit{
-  transform:
-    scale(.91)
-    rotate(-2deg);
+  transform:scale(.92) rotate(-2deg);
 }
 
-
-/* =========================================================
-   PUMPKIN
-========================================================= */
+/* pumpkin */
 
 .pumpkin{
   position:absolute;
-
   left:60px;
   top:72px;
-
   width:240px;
   height:190px;
 }
 
-
 .stem{
   position:absolute;
-
   left:104px;
   top:-39px;
-
   width:31px;
   height:52px;
-
   border-radius:8px;
-
-  transform:
-    rotate(7deg);
-
-  background:
-    linear-gradient(
-      90deg,
-      #382619,
-      #81633a,
-      #322218
-    );
+  transform:rotate(7deg);
+  background:linear-gradient(90deg,#382619,#81633a,#322218);
 }
-
 
 .lobe{
   position:absolute;
-
   top:0;
-
   height:185px;
-
   border-radius:50%;
-
   background:
-    radial-gradient(
-      circle at 42% 25%,
-      #dc8849,
-      transparent 27%
-    ),
-    linear-gradient(
-      90deg,
-      #753120,
-      #b95b30,
-      #722c20
-    );
-
-  box-shadow:
-    inset 0 -18px 25px
-    #49181466;
+    radial-gradient(circle at 42% 25%,#dd8949,transparent 27%),
+    linear-gradient(90deg,#753120,#b95b30,#722c20);
+  box-shadow:inset 0 -18px 25px #49181466;
 }
 
-
-.a{
-  left:0;
-  width:100px;
-}
-
-
-.b{
-  left:38px;
-  width:122px;
-  z-index:1;
-}
-
-
-.c{
-  right:0;
-  width:100px;
-}
-
-
-.d{
-  right:38px;
-  width:122px;
-  z-index:1;
-}
-
-
-/* =========================================================
-   FACE
-========================================================= */
+.a{left:0;width:100px}
+.b{left:38px;width:122px;z-index:1}
+.c{right:0;width:100px}
+.d{right:38px;width:122px;z-index:1}
 
 .face{
   position:absolute;
@@ -947,2309 +421,1163 @@ header{
   z-index:5;
 }
 
-
 .eye{
   position:absolute;
-
   top:68px;
-
   width:46px;
   height:31px;
-
   background:#251410;
-
-  clip-path:
-    polygon(
-      0 0,
-      100% 28%,
-      72% 100%,
-      14% 72%
-    );
+  clip-path:polygon(0 0,100% 28%,72% 100%,14% 72%);
 }
-
 
 .eye::after{
   content:"";
-
   position:absolute;
-
   left:17px;
   top:11px;
-
   width:12px;
   height:6px;
-
   background:#d29558;
-
-  box-shadow:
-    0 0 7px #ad5137;
+  box-shadow:0 0 7px #ad5137;
 }
 
-
-.eye.left{
-  left:49px;
-}
-
-
-.eye.right{
-  right:49px;
-
-  transform:
-    scaleX(-1);
-}
-
+.eye.left{left:49px}
+.eye.right{right:49px;transform:scaleX(-1)}
 
 .mouth{
   position:absolute;
-
   left:64px;
   top:120px;
-
   width:112px;
   height:47px;
-
   background:#24130f;
-
-  clip-path:
-    polygon(
-      0 25%,
-      15% 38%,
-      25% 10%,
-      39% 44%,
-      51% 6%,
-      64% 43%,
-      77% 12%,
-      88% 41%,
-      100% 22%,
-      90% 78%,
-      70% 88%,
-      50% 72%,
-      30% 89%,
-      10% 77%
-    );
+  clip-path:polygon(
+    0 25%,15% 38%,25% 10%,39% 44%,51% 6%,
+    64% 43%,77% 12%,88% 41%,100% 22%,
+    90% 78%,70% 88%,50% 72%,30% 89%,10% 77%
+  );
 }
 
-
-/* =========================================================
-   HEADPHONES
-========================================================= */
+/* headphones */
 
 .phones{
   position:absolute;
-
   left:42px;
   top:38px;
-
   width:275px;
   height:190px;
-
   z-index:9;
-
   pointer-events:none;
 }
-
 
 .band{
   position:absolute;
-
   left:28px;
-
   width:219px;
   height:155px;
-
-  border:
-    20px solid #24201e;
-
+  border:20px solid #24201e;
   border-bottom:none;
-
-  border-radius:
-    130px 130px 0 0;
-
-  box-shadow:
-    inset 0 0 0
-    3px #584b44;
+  border-radius:130px 130px 0 0;
+  box-shadow:inset 0 0 0 3px #584b44;
 }
-
 
 .ear{
   position:absolute;
-
   top:100px;
-
   width:51px;
   height:85px;
-
-  border:
-    4px solid #493b35;
-
+  border:4px solid #493b35;
   border-radius:17px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #171312,
-      #3b302c,
-      #161211
-    );
+  background:linear-gradient(90deg,#171312,#3b302c,#161211);
 }
-
 
 .ear::after{
   content:"";
-
   position:absolute;
-
   inset:15px 9px;
-
   border-radius:10px;
-
-  background:
-    var(--wine);
+  background:var(--wine);
 }
 
+.ear.left{left:4px;transform:rotate(-7deg)}
+.ear.right{right:4px;transform:rotate(7deg)}
 
-.ear.left{
-  left:4px;
+/* =============================
+   SKIN EXTRAS
+============================= */
 
-  transform:
-    rotate(-7deg);
-}
-
-
-.ear.right{
-  right:4px;
-
-  transform:
-    rotate(7deg);
-}
-
-
-/* =========================================================
-   SKINS
-========================================================= */
-
-.dj-console,
-.horns,
-.crown,
-.void-aura{
+.dj-console,.horns,.crown,.void-aura,.veil,.halo,.glasses{
   display:none;
-
   pointer-events:none;
 }
 
-
-/* DJ */
-
 .dj-console{
   position:absolute;
-
   left:54px;
   top:229px;
-
+  z-index:15;
   width:252px;
   height:78px;
-
-  z-index:15;
-
-  border:
-    5px solid #442e27;
-
-  background:
-    linear-gradient(
-      #752c34,
-      #3b1e20
-    );
-
-  transform:
-    perspective(300px)
-    rotateX(20deg);
+  border:5px solid #442e27;
+  background:linear-gradient(#752c34,#3b1e20);
+  transform:perspective(300px) rotateX(20deg);
 }
-
 
 .deck{
   position:absolute;
-
   top:14px;
-
   width:49px;
   height:49px;
-
-  border:
-    5px solid #ae8850;
-
+  border:5px solid #ae8850;
   border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle,
-      #762b33 0 9%,
-      #28201e 10% 55%,
-      #5b4437 57%
-    );
+  background:radial-gradient(circle,#762b33 0 9%,#28201e 10% 55%,#5b4437 57%);
 }
 
-
-.deck.left{
-  left:18px;
-}
-
-
-.deck.right{
-  right:18px;
-}
-
+.deck.left{left:18px}
+.deck.right{right:18px}
 
 .mixer{
   position:absolute;
-
   left:90px;
   top:13px;
 }
 
-
 .mixer span{
   display:inline-block;
-
   width:6px;
   height:39px;
-
   margin:3px;
-
-  background:
-    linear-gradient(
-      #ddc69f,
-      #a98246,
-      #4b2022
-    );
+  background:linear-gradient(#ddc69f,#a98246,#4b2022);
 }
 
+.skin-dj .dj-console{display:block}
+.skin-dj .deck{animation:spin 1.5s linear infinite}
 
-.skin-dj
-.dj-console{
-  display:block;
-}
-
-
-.skin-dj
-.deck{
-  animation:
-    spin 1.6s linear infinite;
-}
-
-
-@keyframes spin{
-  to{
-    transform:
-      rotate(360deg);
-  }
-}
-
-
-/* HORNS */
+@keyframes spin{to{transform:rotate(360deg)}}
 
 .horns{
   position:absolute;
-
   left:70px;
   top:34px;
-
   width:220px;
-
   z-index:7;
-
-  justify-content:
-    space-between;
+  justify-content:space-between;
 }
-
 
 .horn{
   width:48px;
   height:75px;
-
-  background:
-    linear-gradient(
-      #68413a,
-      #211414
-    );
-
-  clip-path:
-    polygon(
-      50% 0,
-      100% 100%,
-      25% 80%
-    );
+  background:linear-gradient(#68413a,#211414);
+  clip-path:polygon(50% 0,100% 100%,25% 80%);
 }
 
-
-.horn:last-child{
-  transform:
-    scaleX(-1);
-}
-
-
-.skin-hell
-.horns{
-  display:flex;
-}
-
-
-/* KING */
+.horn:last-child{transform:scaleX(-1)}
+.skin-hell .horns{display:flex}
 
 .crown{
   position:absolute;
-
   left:130px;
-  top:5px;
-
+  top:4px;
   z-index:15;
-
   color:#b18c50;
-
-  font:
-    75px Georgia,
-    serif;
+  font:75px Georgia,serif;
 }
 
-
-.skin-king
-.crown{
-  display:block;
-}
-
-
-/* VOID */
+.skin-king .crown{display:block}
 
 .void-aura{
   position:absolute;
-
   left:40px;
   top:43px;
-
+  z-index:-1;
   width:280px;
   height:245px;
-
-  z-index:-1;
-
   border-radius:50%;
-
   background:#64273b20;
-
-  box-shadow:
-    0 0 70px
-    #67273a55;
-
-  animation:
-    aura 1s alternate infinite;
+  box-shadow:0 0 70px #67273a55;
+  animation:aura 1s alternate infinite;
 }
 
+.skin-void .void-aura{display:block}
 
-.skin-void
-.void-aura{
-  display:block;
-}
-
-
-.skin-void
-.lobe{
+.skin-void .lobe{
   background:
-    radial-gradient(
-      circle at 42% 25%,
-      #8c5a61,
-      transparent 24%
-    ),
-    linear-gradient(
-      90deg,
-      #29161a,
-      #5e2931,
-      #221215
-    );
+    radial-gradient(circle at 42% 25%,#8c5a61,transparent 24%),
+    linear-gradient(90deg,#29161a,#5e2931,#221215);
 }
 
+@keyframes aura{to{transform:scale(1.1)}}
 
-@keyframes aura{
-  to{
-    transform:
-      scale(1.1);
-  }
+.glasses{
+  position:absolute;
+  left:108px;
+  top:137px;
+  z-index:20;
+  width:145px;
+  height:30px;
+  border-top:8px solid #171414;
 }
 
+.glasses::before,
+.glasses::after{
+  content:"";
+  position:absolute;
+  top:-7px;
+  width:55px;
+  height:28px;
+  background:#19191bdd;
+  border:3px solid #a68d69;
+}
 
-/* =========================================================
+.glasses::before{left:0;transform:skew(-8deg)}
+.glasses::after{right:0;transform:skew(8deg)}
+
+.skin-night .glasses{display:block}
+
+.veil{
+  position:absolute;
+  left:75px;
+  top:70px;
+  z-index:18;
+  width:210px;
+  height:180px;
+  border-radius:50% 50% 35% 35%;
+  opacity:.34;
+  background:
+    repeating-linear-gradient(45deg,#251b20 0 2px,transparent 2px 8px);
+}
+
+.skin-bride .veil{display:block}
+
+.halo{
+  position:absolute;
+  left:105px;
+  top:31px;
+  z-index:17;
+  width:150px;
+  height:33px;
+  border:5px solid #c2a365;
+  border-radius:50%;
+  box-shadow:0 0 15px #d6ba7755;
+}
+
+.skin-saint .halo{display:block}
+
+/* =============================
    COMBO
-========================================================= */
+============================= */
 
 .combo{
   position:absolute;
-
-  bottom:14px;
-
+  bottom:12px;
   width:100%;
-
   text-align:center;
-
-  color:#712b34;
-
-  font:
-    italic 16px
-    "Cormorant Garamond",
-    serif;
-
+  color:var(--wine);
+  font:italic 16px "Cormorant Garamond",serif;
   opacity:0;
 }
 
+.combo.show{opacity:1}
 
-.combo.show{
-  opacity:1;
-}
-
-
-/* =========================================================
-   PANELS
-========================================================= */
+/* =============================
+   DESKTOP PANELS
+============================= */
 
 .panel{
   position:fixed;
-
   z-index:100;
-
   width:315px;
-
   padding:13px;
-
-  border:
-    1px solid #967657;
-
+  border:1px solid #967657;
   color:#412e28;
-
-  background:
-    rgba(229,210,178,.91);
-
-  box-shadow:
-    0 9px 30px
-    rgba(58,35,25,.16);
-
-  backdrop-filter:
-    blur(12px);
+  background:rgba(229,210,178,.92);
+  box-shadow:0 9px 30px rgba(58,35,25,.16);
+  backdrop-filter:blur(12px);
 }
-
 
 .left-panel{
-  left:18px;
-
+  left:16px;
   top:58%;
-
-  transform:
-    translateY(-50%);
+  transform:translateY(-50%);
 }
-
 
 .right-panel{
-  right:18px;
-
+  right:16px;
   top:50%;
-
-  transform:
-    translateY(-50%);
+  transform:translateY(-50%);
 }
-
-
-.panel-title{
-  color:var(--wine-dark);
-
-  font:
-    600 18px
-    "Cormorant Garamond",
-    serif;
-}
-
-
-/* =========================================================
-   TABS
-========================================================= */
 
 .tabs{
   display:flex;
-
   gap:2px;
-
   margin-bottom:8px;
 }
-
 
 .tab{
   flex:1;
-
   min-height:31px;
-
-  padding:
-    6px 2px;
-
   border:0;
-
-  border-bottom:
-    1px solid #a2886a;
-
+  border-bottom:1px solid #a2886a;
   color:#786156;
-
   background:none;
-
-  font:
-    600 7px
-    Montserrat,
-    sans-serif;
-
+  font:600 7px Montserrat,sans-serif;
   cursor:pointer;
 }
-
 
 .tab.active{
   color:var(--wine);
-
-  border-bottom:
-    2px solid var(--wine);
+  border-bottom:2px solid var(--wine);
 }
 
+.content{display:none}
+.content.active{display:block}
 
-.tab-content{
-  display:none;
+.panel-title{
+  color:var(--wine2);
+  font:600 18px "Cormorant Garamond",serif;
 }
-
-
-.tab-content.active{
-  display:block;
-}
-
-
-/* =========================================================
-   ITEMS
-========================================================= */
-
-.shop-item,
-.action{
-  width:100%;
-
-  min-height:42px;
-
-  margin-top:6px;
-
-  padding:
-    8px 9px;
-
-  border:
-    1px solid #a18568;
-
-  color:#49332c;
-
-  background:
-    rgba(245,228,200,.56);
-
-  cursor:pointer;
-}
-
-
-.shop-item{
-  text-align:left;
-}
-
-
-.shop-item:hover,
-.action:hover{
-  border-color:
-    var(--wine);
-
-  background:
-    rgba(249,235,214,.8);
-}
-
-
-.shop-item:disabled,
-.action:disabled{
-  opacity:.38;
-
-  cursor:not-allowed;
-}
-
-
-.shop-item b{
-  display:block;
-
-  color:#59362e;
-
-  font:
-    600 15px
-    "Cormorant Garamond",
-    serif;
-}
-
-
-.desc{
-  color:#836e62;
-
-  font-size:8px;
-}
-
-
-.price{
-  margin-top:3px;
-
-  color:var(--wine);
-
-  font:
-    600 13px
-    "Cormorant Garamond",
-    serif;
-}
-
-
-/* =========================================================
-   PROFILE
-========================================================= */
 
 .stat{
-  padding:
-    5px 0;
-
-  border-bottom:
-    1px dotted #72513d44;
-
+  padding:5px 0;
+  border-bottom:1px dotted #72513d44;
   color:#755e53;
-
-  font:
-    13px
-    "Cormorant Garamond",
-    serif;
+  font:13px "Cormorant Garamond",serif;
 }
-
 
 .stat strong{
   float:right;
-
   color:#462e27;
-
-  font-weight:600;
 }
 
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.modal-backdrop{
-  position:fixed;
-
-  inset:0;
-
-  z-index:5000;
-
-  display:none;
-
-  align-items:center;
-  justify-content:center;
-
-  padding:16px;
-
-  background:
-    rgba(45,27,21,.43);
-
-  backdrop-filter:
-    blur(4px);
-}
-
-
-.modal-backdrop.open{
-  display:flex;
-}
-
-
-.modal{
-  width:
-    min(
-      520px,
-      100%
-    );
-
-  max-height:
-    min(
-      650px,
-      85vh
-    );
-
-  overflow:auto;
-
-  padding:16px;
-
-  border:
-    1px solid #89684e;
-
-  background:#ead9bd;
-
-  box-shadow:
-    0 20px 70px
-    #331c1766;
-
-  overscroll-behavior:
-    contain;
-}
-
-
-.modal-head{
-  display:flex;
-
-  align-items:center;
-  justify-content:space-between;
-
-  gap:10px;
-
-  margin-bottom:10px;
-}
-
-
-.modal-title{
-  color:var(--wine-dark);
-
-  font:
-    600 23px
-    "Cormorant Garamond",
-    serif;
-}
-
-
-.modal-close{
-  width:35px;
-  height:35px;
-
-  border:
-    1px solid #9a795b;
-
-  color:#6e4a3d;
-
-  background:
-    transparent;
-
+.action,
+.shop-item{
+  width:100%;
+  min-height:42px;
+  margin-top:6px;
+  padding:8px 9px;
+  border:1px solid #a18568;
+  color:#49332c;
+  background:rgba(245,228,200,.58);
   cursor:pointer;
 }
 
+.shop-item{text-align:left}
 
-/* =========================================================
+.action:hover,
+.shop-item:hover{
+  border-color:var(--wine);
+  background:#f6e7cf;
+}
+
+.action:disabled,
+.shop-item:disabled{
+  opacity:.37;
+  cursor:not-allowed;
+}
+
+.shop-item b{
+  display:block;
+  color:#58352d;
+  font:600 15px "Cormorant Garamond",serif;
+}
+
+.desc{
+  color:#806b60;
+  font-size:8px;
+}
+
+.price{
+  margin-top:3px;
+  color:var(--wine);
+  font:600 13px "Cormorant Garamond",serif;
+}
+
+/* =============================
+   MODAL
+============================= */
+
+.modal-bg{
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  background:rgba(45,27,21,.43);
+  backdrop-filter:blur(4px);
+}
+
+.modal-bg.open{display:flex}
+
+.modal{
+  width:min(540px,100%);
+  max-height:84vh;
+  overflow:auto;
+  padding:15px;
+  border:1px solid #89684e;
+  background:#ead9bd;
+  box-shadow:0 20px 70px #331c1766;
+  overscroll-behavior:contain;
+}
+
+.modal-header{
+  position:sticky;
+  top:-15px;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:-15px -15px 10px;
+  padding:14px 15px 10px;
+  background:#ead9bd;
+}
+
+.modal-title{
+  color:var(--wine2);
+  font:600 23px "Cormorant Garamond",serif;
+}
+
+.close{
+  width:35px;
+  height:35px;
+  border:1px solid #98765a;
+  color:#63453a;
+  background:none;
+  cursor:pointer;
+}
+
+/* =============================
    CARDS
-========================================================= */
+============================= */
 
 .card{
   margin:7px 0;
-
   padding:9px;
-
-  border:
-    1px solid #ac8e70;
-
-  background:
-    rgba(247,229,199,.45);
+  border:1px solid #ac8e70;
+  background:#f7e5c775;
 }
-
 
 .card.selected{
-  border-color:
-    var(--wine);
-
-  background:
-    rgba(114,41,49,.06);
+  border-color:var(--wine);
+  background:#7129330e;
 }
 
-
-.card.locked{
-  opacity:.55;
-}
-
+.card.locked{opacity:.55}
 
 .card-name{
   color:#56342d;
-
-  font:
-    600 16px
-    "Cormorant Garamond",
-    serif;
+  font:600 16px "Cormorant Garamond",serif;
 }
-
 
 .card-info{
   margin-top:2px;
-
   color:#806b60;
-
   font-size:8px;
 }
-
 
 .card button{
   width:100%;
-
-  min-height:33px;
-
+  min-height:34px;
   margin-top:6px;
-
-  border:
-    1px solid #98785b;
-
+  border:1px solid #98785b;
   color:#513129;
-
   background:#dec6a4;
-
-  cursor:pointer;
 }
 
-
-/* =========================================================
+/* =============================
    INVENTORY
-========================================================= */
+============================= */
 
 .inventory-summary{
-  margin-bottom:8px;
-
   padding:8px;
-
-  border:
-    1px solid #ac8c6b;
-
+  margin-bottom:8px;
+  border:1px solid #aa8b6b;
+  background:#f8e9cf77;
   color:#695044;
-
-  background:
-    rgba(250,234,206,.42);
-
   font-size:8px;
-
   line-height:1.7;
 }
 
-
 .loot{
   margin:6px 0;
-
   padding:8px;
-
-  border-left:
-    3px solid #88745e;
-
-  background:
-    rgba(249,232,205,.45);
+  border-left:3px solid #7e746a;
+  background:#f7e8ce77;
 }
 
-
-.loot.common{
-  border-color:#81786c;
-}
-
-
-.loot.rare{
-  border-color:#3d6680;
-}
-
-
-.loot.epic{
-  border-color:#744970;
-}
-
-
-.loot.legendary{
-  border-color:#a27725;
-}
-
-
-.loot.cursed{
-  border-color:#7d1d2b;
-
-  background:
-    rgba(111,30,40,.08);
-}
-
+.loot.common{border-color:#777269}
+.loot.rare{border-color:#315e7c}
+.loot.epic{border-color:#754773}
+.loot.legendary{border-color:#a07825}
+.loot.cursed{border-color:#7f202e;background:#7e25300c}
+.loot.mythic{border-color:#b55f25;box-shadow:inset 0 0 15px #c47b2820}
 
 .loot-name{
-  font:
-    600 14px
-    "Cormorant Garamond",
-    serif;
+  font:600 14px "Cormorant Garamond",serif;
 }
-
-
-.loot.common
-.loot-name{
-  color:#5d554c;
-}
-
-
-.loot.rare
-.loot-name{
-  color:#2e5d7a;
-}
-
-
-.loot.epic
-.loot-name{
-  color:#6c3e69;
-}
-
-
-.loot.legendary
-.loot-name{
-  color:#87621d;
-}
-
-
-.loot.cursed
-.loot-name{
-  color:#791f2d;
-}
-
 
 .loot-stat{
   margin-top:2px;
-
-  color:#75645b;
-
+  color:#77655b;
   font-size:8px;
 }
 
+/* =============================
+   ACHIEVEMENT / LEVEL REWARD
+============================= */
 
-/* =========================================================
-   CONTRACTS
-========================================================= */
-
-.contract{
-  margin:7px 0;
-
-  padding:8px;
-
-  border:
-    1px solid #a98b6e;
-
-  background:
-    rgba(247,229,200,.45);
+.reward-pop{
+  position:fixed;
+  inset:0;
+  z-index:7000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+  background:#36211966;
+  animation:rewardFade 2.8s forwards;
 }
 
-
-.contract-name{
-  color:#56362e;
-
-  font:
-    600 14px
-    "Cormorant Garamond",
-    serif;
+.reward-box{
+  width:min(430px,85vw);
+  padding:27px;
+  text-align:center;
+  border:1px solid #947154;
+  outline:1px solid #b38e65;
+  outline-offset:-7px;
+  background:#ecddc3;
 }
 
-
-.progress{
-  height:4px;
-
-  margin-top:5px;
-
-  overflow:hidden;
-
-  background:#b9a28b;
+.reward-small{
+  color:#947766;
+  font-size:7px;
+  letter-spacing:.3em;
 }
 
-
-.progress div{
-  height:100%;
-
-  background:
-    var(--wine);
+.reward-name{
+  margin-top:8px;
+  color:var(--wine);
+  font:600 28px "Cormorant Garamond",serif;
 }
 
+@keyframes rewardFade{
+  0%,78%{opacity:1}
+  100%{opacity:0}
+}
 
-/* =========================================================
+/* =============================
    BOSS
-========================================================= */
+============================= */
 
 .boss{
   position:fixed;
-
-  right:18px;
-  top:17px;
-
+  right:14px;
+  top:14px;
   z-index:1800;
-
   display:none;
-
   width:305px;
-
-  padding:13px;
-
-  border:
-    1px solid #8c6c51;
-
-  background:
-    rgba(235,218,190,.96);
-
-  box-shadow:
-    0 12px 40px
-    rgba(55,31,24,.26);
+  padding:12px;
+  border:1px solid #8c6c51;
+  background:#ebdabeF7;
+  box-shadow:0 12px 40px #371f183d;
 }
 
+.boss.show{display:block}
 
-.boss.show{
-  display:block;
+.boss.enraged{
+  animation:bossPulse .45s alternate infinite;
 }
 
+@keyframes bossPulse{
+  to{box-shadow:0 0 35px #81263655}
+}
 
 .boss-kicker{
   color:#947969;
-
   font-size:6px;
-
-  letter-spacing:.24em;
+  letter-spacing:.23em;
 }
-
 
 .boss-name{
-  color:var(--wine-dark);
-
-  font:
-    600 22px
-    "Cormorant Garamond",
-    serif;
+  color:var(--wine2);
+  font:600 22px "Cormorant Garamond",serif;
 }
 
-
-.boss-phase{
+.boss-skill{
   margin-top:3px;
-
-  color:#8d6057;
-
+  color:#8b5d55;
   font-size:7px;
 }
 
-
-.hpbar{
-  height:8px;
-
-  margin:
-    7px 0 4px;
-
-  overflow:hidden;
-
-  background:#af967e;
-}
-
-
 .hp{
-  width:100%;
+  height:8px;
+  margin:6px 0 4px;
+  overflow:hidden;
+  background:#b09a83;
+}
 
+.hp-fill{
   height:100%;
-
-  transition:
-    width .1s;
-
-  background:
-    var(--wine);
+  width:100%;
+  background:var(--wine);
+  transition:width .1s;
 }
 
+/* =============================
+   CHEST / DOORBELL
+============================= */
 
-.boss.enraged{
-  animation:
-    bossRage .45s alternate infinite;
-}
-
-
-@keyframes bossRage{
-  to{
-    box-shadow:
-      0 0 35px
-      rgba(125,27,42,.35);
-  }
-}
-
-
-/* =========================================================
-   DOORBELL
-========================================================= */
-
-.doorbell{
+.event-card{
   position:fixed;
-
   left:50%;
-  top:205px;
-
-  z-index:1700;
-
+  top:195px;
+  z-index:1900;
   display:none;
-
-  width:300px;
-
-  transform:
-    translateX(-50%);
-
-  padding:12px;
-
+  width:310px;
+  transform:translateX(-50%);
+  padding:11px;
   text-align:center;
-
-  border:
-    1px solid #987356;
-
-  background:
-    rgba(238,221,191,.97);
-
-  box-shadow:
-    0 10px 35px
-    rgba(50,30,22,.25);
+  border:1px solid #987356;
+  background:#eeddbff7;
+  box-shadow:0 10px 35px #32201833;
 }
 
+.event-card.show{display:block}
 
-.doorbell.show{
-  display:block;
-}
-
-
-.doorbell-title{
+.event-title{
   color:var(--wine);
-
-  font:
-    600 19px
-    "Cormorant Garamond",
-    serif;
+  font:600 19px "Cormorant Garamond",serif;
 }
 
-
-.doorbell-buttons{
+.event-buttons{
   display:flex;
-
-  gap:6px;
-
+  gap:5px;
   margin-top:8px;
 }
 
-
-.doorbell-buttons button{
+.event-buttons button{
   flex:1;
-
-  padding:8px;
-
-  border:
-    1px solid #9a785b;
-
-  background:#e5cfad;
-
+  min-height:37px;
+  border:1px solid #9a785b;
+  background:#e4ceac;
   color:#593a30;
-
-  cursor:pointer;
 }
 
-
-/* =========================================================
+/* =============================
    TIGGO
-========================================================= */
+============================= */
 
 .tiggo{
   position:fixed;
-
-  z-index:2000;
-
+  z-index:2100;
   width:230px;
   height:110px;
-
   cursor:pointer;
-
-  touch-action:
-    manipulation;
-
-  filter:
-    drop-shadow(
-      0 13px 10px
-      rgba(40,25,20,.65)
-    );
+  filter:drop-shadow(0 13px 10px #28181499);
 }
 
-
-.tiggo.normal{
+.tiggo.drive{
   left:-250px;
-
-  animation:
-    drive 7s linear forwards;
+  animation:drive 7s linear forwards;
 }
-
 
 @keyframes drive{
-  to{
-    left:
-      calc(
-        100vw + 260px
-      );
-  }
+  to{left:calc(100vw + 260px)}
 }
-
-
-.car-body{
-  position:absolute;
-
-  left:5px;
-  bottom:19px;
-
-  width:216px;
-  height:57px;
-
-  border:
-    2px solid #68605b;
-
-  border-radius:
-    40px 50px 17px 17px;
-
-  background:
-    linear-gradient(
-      #d7d2c8,
-      #999792 48%,
-      #484744
-    );
-}
-
 
 .car-roof{
   position:absolute;
-
   left:55px;
   bottom:68px;
-
   width:120px;
   height:39px;
-
   background:#aaa79e;
-
-  clip-path:
-    polygon(
-      20% 100%,
-      35% 10%,
-      74% 7%,
-      100% 100%
-    );
+  clip-path:polygon(20% 100%,35% 10%,74% 7%,100% 100%);
 }
-
 
 .car-window{
   position:absolute;
-
   left:82px;
   bottom:72px;
-
   width:80px;
   height:27px;
-
   background:#344c56;
-
-  clip-path:
-    polygon(
-      7% 100%,
-      20% 12%,
-      70% 10%,
-      100% 100%
-    );
+  clip-path:polygon(7% 100%,20% 12%,70% 10%,100% 100%);
 }
 
+.car-body{
+  position:absolute;
+  left:5px;
+  bottom:19px;
+  width:216px;
+  height:57px;
+  border:2px solid #68605b;
+  border-radius:40px 50px 17px 17px;
+  background:linear-gradient(#d7d2c8,#999792 48%,#484744);
+}
 
 .wheel{
   position:absolute;
-
   bottom:4px;
-
   width:42px;
   height:42px;
-
   border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle,
-      #898078 0 20%,
-      #25211f 22% 65%,
-      #0d0b0a 67%
-    );
+  background:radial-gradient(circle,#898078 0 20%,#25211f 22% 65%,#0d0b0a 67%);
 }
 
+.w1{left:31px}
+.w2{right:31px}
 
-.wheel.one{
-  left:31px;
-}
-
-
-.wheel.two{
-  right:31px;
-}
-
-
-.tiggo-logo{
+.car-logo{
   position:absolute;
-
   left:80px;
   bottom:38px;
-
   color:#312b28;
-
   font-size:10px;
-
   font-weight:600;
-
   letter-spacing:3px;
 }
 
-
-.black-tiggo
-.car-body{
-  background:
-    linear-gradient(
-      #332a28,
-      #151211 55%,
-      #070606
-    );
+.black-tiggo .car-body{
+  background:linear-gradient(#332a28,#151211 55%,#070606);
 }
 
+.black-tiggo .car-roof{background:#211c1b}
+.black-tiggo .car-logo{color:#ba5963}
 
-.black-tiggo
-.car-roof{
-  background:#211c1b;
+.golden-tiggo .car-body{
+  border-color:#ab7a2b;
+  background:linear-gradient(#f0d580,#c49135 48%,#715018);
+  box-shadow:0 0 25px #c5973c77;
 }
 
-
-.black-tiggo
-.tiggo-logo{
-  color:#ba5963;
+.golden-tiggo .car-roof{
+  background:#b88935;
 }
 
+.golden-tiggo .car-logo{
+  color:#fff0a5;
+}
 
-/* =========================================================
+/* =============================
    CHASE
-========================================================= */
+============================= */
 
 .chase{
   position:fixed;
-
   left:50%;
-  top:205px;
-
-  z-index:2100;
-
+  top:195px;
+  z-index:2200;
   display:none;
-
-  width:320px;
-
-  transform:
-    translateX(-50%);
-
-  padding:10px;
-
+  width:310px;
+  transform:translateX(-50%);
+  padding:9px;
   text-align:center;
-
-  border:
-    1px solid #936e52;
-
-  background:
-    rgba(237,220,191,.97);
+  border:1px solid #927053;
+  background:#eddbbdf8;
 }
 
+.chase.show{display:block}
 
-.chase.show{
-  display:block;
-}
-
-
-/* =========================================================
-   EXPLOSION
-========================================================= */
-
-.explosion{
-  position:fixed;
-
-  z-index:5000;
-
-  pointer-events:none;
-}
-
-
-.explosion-core{
-  position:absolute;
-
-  width:22px;
-  height:22px;
-
-  border-radius:50%;
-
-  background:#fff1c6;
-
-  box-shadow:
-    0 0 20px white,
-    0 0 50px #bf7638,
-    0 0 95px #792932;
-
-  animation:
-    boom .55s forwards;
-}
-
-
-@keyframes boom{
-  to{
-    transform:
-      scale(10);
-
-    opacity:0;
-  }
-}
-
-
-.explosion-particle{
-  position:absolute;
-
-  width:7px;
-  height:7px;
-
-  border-radius:50%;
-
-  background:#bf7638;
-
-  animation:
-    particle .75s forwards;
-}
-
-
-@keyframes particle{
-  to{
-    transform:
-      translate(
-        var(--x),
-        var(--y)
-      );
-
-    opacity:0;
-  }
-}
-
-
-/* =========================================================
-   MESSAGE
-========================================================= */
+/* =============================
+   MESSAGE / FLOAT
+============================= */
 
 .message{
   position:fixed;
-
   left:50%;
-  top:23%;
-
-  z-index:6000;
-
-  transform:
-    translateX(-50%);
-
-  min-width:260px;
-
-  max-width:
-    calc(100% - 25px);
-
-  padding:
-    12px 20px;
-
+  top:22%;
+  z-index:6500;
+  transform:translateX(-50%);
+  max-width:calc(100% - 25px);
+  padding:11px 18px;
   text-align:center;
-
-  border:
-    1px solid #946e51;
-
-  color:#57332c;
-
-  background:
-    rgba(238,222,195,.97);
-
-  font:
-    italic 17px
-    "Cormorant Garamond",
-    serif;
-
+  border:1px solid #987252;
+  background:#eddbbef8;
+  color:#59362e;
+  font:italic 17px "Cormorant Garamond",serif;
   pointer-events:none;
-
-  animation:
-    message 2.4s forwards;
+  animation:msg 2.3s forwards;
 }
 
-
-@keyframes message{
-  0%{
-    opacity:0;
-
-    transform:
-      translate(-50%,12px);
-  }
-
-  15%,
-  80%{
-    opacity:1;
-  }
-
-  100%{
-    opacity:0;
-
-    transform:
-      translate(-50%,-25px);
-  }
+@keyframes msg{
+  0%{opacity:0;transform:translate(-50%,12px)}
+  15%,78%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-25px)}
 }
-
-
-/* =========================================================
-   FLOAT
-========================================================= */
 
 .float{
   position:fixed;
-
-  z-index:5500;
-
+  z-index:6000;
   pointer-events:none;
-
   color:var(--wine);
-
-  font:
-    600 24px
-    "Cormorant Garamond",
-    serif;
-
-  animation:
-    floatUp .75s forwards;
+  font:600 24px "Cormorant Garamond",serif;
+  animation:floatUp .75s forwards;
 }
 
-
-.float.critical{
-  color:#681e2a;
-
+.float.crit{
+  color:#681f2a;
   font-size:30px;
 }
 
+.float.jackpot{
+  color:#98701e;
+  font-size:33px;
+}
 
 @keyframes floatUp{
   to{
-    transform:
-      translateY(-90px);
-
+    transform:translateY(-90px);
     opacity:0;
   }
 }
 
-
-/* =========================================================
+/* =============================
    MUSIC
-========================================================= */
+============================= */
 
 .music{
   position:fixed;
-
-  right:17px;
-  bottom:14px;
-
-  z-index:2200;
-
+  right:14px;
+  bottom:13px;
+  z-index:2500;
   display:flex;
-
-  align-items:center;
-
   gap:6px;
-
-  padding:
-    5px 8px;
-
-  border:
-    1px solid #927255;
-
-  background:
-    rgba(230,211,179,.92);
-
-  backdrop-filter:
-    blur(10px);
+  align-items:center;
+  padding:5px 8px;
+  border:1px solid #927255;
+  background:#e5cfacf0;
+  backdrop-filter:blur(10px);
 }
-
 
 .music button{
   width:34px;
   height:34px;
-
-  border:
-    1px solid #987758;
-
+  border:1px solid #987758;
   border-radius:50%;
-
   color:var(--wine);
-
   background:#ead8b9;
-
-  cursor:pointer;
 }
-
 
 .music input{
   width:70px;
-
-  accent-color:
-    var(--wine);
+  accent-color:var(--wine);
 }
 
-
-/* =========================================================
+/* =============================
    MOBILE NAV
-========================================================= */
+============================= */
 
-.mobile-nav{
-  display:none;
+.mobile-nav{display:none}
+
+/* =============================
+   DESKTOP MINI APP
+============================= */
+
+@media(
+  min-width:901px
+) and (
+  max-height:720px
+){
+
+  .stats{
+    top:70px;
+  }
+
+  .quick{
+    top:85px;
+    transform:scale(.9);
+    transform-origin:top left;
+  }
+
+  .character{
+    margin-top:110px;
+    transform:scale(.86);
+  }
+
+  .left-panel,
+  .right-panel{
+    transform:translateY(-50%) scale(.88);
+  }
+
+  .left-panel{
+    transform-origin:left center;
+  }
+
+  .right-panel{
+    transform-origin:right center;
+  }
 }
 
-
-/* =========================================================
-   MOBILE / TELEGRAM
-========================================================= */
+/* =============================
+   MOBILE
+============================= */
 
 @media(max-width:900px){
 
+  html,
   body{
-    min-height:100vh;
-
+    height:100%;
     overflow:hidden;
-
-    overscroll-behavior:none;
+    touch-action:manipulation;
   }
-
-
-  .wallpaper{
-    background-attachment:
-      scroll;
-  }
-
-
-  .floor{
-    height:10vh;
-  }
-
 
   header{
-    top:
-      calc(
-        7px +
-        env(
-          safe-area-inset-top
-        )
-      );
+    top:calc(7px + env(safe-area-inset-top));
   }
-
 
   .logo{
     font-size:29px;
   }
 
-
   .tag{
     display:none;
   }
 
-
   .language{
-    left:7px;
-
-    top:
-      calc(
-        7px +
-        env(
-          safe-area-inset-top
-        )
-      );
+    left:6px;
+    top:calc(6px + env(safe-area-inset-top));
   }
-
-
-  .tg-profile{
-    display:none !important;
-  }
-
 
   .stats{
-    top:
-      calc(
-        55px +
-        env(
-          safe-area-inset-top
-        )
-      );
-
+    top:calc(53px + env(safe-area-inset-top));
     width:100%;
   }
 
-
   .souls{
-    font-size:30px;
+    font-size:29px;
   }
-
 
   .bar{
-    width:205px;
+    width:200px;
   }
 
-
-  /*
-  Переключатели теперь слева.
-  Они больше не перекрывают тыкву.
-  */
-
-  .quick-switch{
-    left:7px;
-
-    top:
-      calc(
-        128px +
-        env(
-          safe-area-inset-top
-        )
-      );
-
-    grid-template-columns:
-      26px 108px 26px;
-
-    gap:3px;
-
-    padding:4px;
+  .quick{
+    left:6px;
+    top:calc(124px + env(safe-area-inset-top));
+    width:165px;
+    padding:3px;
   }
 
-
-  .quick-box{
-    width:108px;
-
-    min-height:33px;
-
-    padding:3px 4px;
+  .quick-row{
+    grid-template-columns:25px 1fr 25px;
   }
 
-
-  .quick-label{
-    font-size:5px;
+  .quick-current{
+    padding:3px;
   }
-
 
   .quick-name{
     font-size:10px;
   }
 
-
-  .quick-arrow{
-    width:26px;
-
-    min-height:33px;
-
-    font-size:17px;
-  }
-
-
   .game{
     height:100dvh;
-
-    min-height:580px;
-
-    padding-bottom:
-      calc(
-        65px +
-        env(
-          safe-area-inset-bottom
-        )
-      );
+    min-height:520px;
+    padding-bottom:75px;
   }
-
 
   .character{
     width:340px;
-
     height:340px;
-
-    margin-top:80px;
-
+    margin-top:88px;
     transform:none !important;
   }
 
-
   .character:active{
-    transform:
-      scale(.965)
-      !important;
+    transform:scale(.965) !important;
   }
-
 
   .pumpkin{
     left:50px;
   }
 
-
   .phones{
     left:32px;
   }
-
 
   .dj-console{
     left:44px;
   }
 
-
-  /*
-  Десктопные большие панели
-  скрываем.
-  */
-
   .panel{
     display:none;
   }
 
-
-  /*
-  Нижнее меню.
-  */
-
   .mobile-nav{
     position:fixed;
-
-    left:7px;
-    right:7px;
-
-    bottom:
-      calc(
-        7px +
-        env(
-          safe-area-inset-bottom
-        )
-      );
-
+    left:6px;
+    right:6px;
+    bottom:calc(6px + env(safe-area-inset-bottom));
     z-index:3000;
-
     display:grid;
-
-    grid-template-columns:
-      repeat(
-        4,
-        1fr
-      );
-
-    gap:4px;
-
-    padding:5px;
-
-    border:
-      1px solid #947255;
-
-    background:
-      rgba(230,211,179,.96);
-
-    backdrop-filter:
-      blur(12px);
+    grid-template-columns:repeat(5,1fr);
+    gap:3px;
+    padding:4px;
+    border:1px solid #947255;
+    background:#e5cfacf5;
+    backdrop-filter:blur(12px);
   }
-
 
   .mobile-nav button{
     min-height:44px;
-
     border:0;
-
-    color:#694b40;
-
-    background:
-      rgba(250,236,213,.65);
-
-    font-size:7px;
-
-    cursor:pointer;
+    background:#f2dfc1aa;
+    color:#684a3f;
+    font-size:6px;
   }
-
 
   .music{
-    right:7px;
-
-    bottom:
-      calc(
-        65px +
-        env(
-          safe-area-inset-bottom
-        )
-      );
+    right:6px;
+    bottom:calc(61px + env(safe-area-inset-bottom));
   }
 
-
-  /*
-  Босс сверху,
-  но не закрывает всю тыкву.
-  */
-
-  .boss{
-    left:7px;
-    right:7px;
-
-    top:
-      calc(
-        48px +
-        env(
-          safe-area-inset-top
-        )
-      );
-
-    width:auto;
-  }
-
-
-  .doorbell{
-    top:
-      calc(
-        155px +
-        env(
-          safe-area-inset-top
-        )
-      );
-
-    width:
-      calc(
-        100% - 20px
-      );
-  }
-
-
-  .chase{
-    top:
-      calc(
-        155px +
-        env(
-          safe-area-inset-top
-        )
-      );
-
-    width:
-      calc(
-        100% - 20px
-      );
-  }
-
-
-  /*
-  Нижняя шторка.
-  */
-
-  .modal-backdrop{
+  .modal-bg{
     align-items:flex-end;
-
-    padding:
-      7px
-      7px
-      calc(
-        7px +
-        env(
-          safe-area-inset-bottom
-        )
-      );
+    padding:6px 6px calc(6px + env(safe-area-inset-bottom));
   }
-
 
   .modal{
     width:100%;
-
     max-height:72dvh;
-
-    padding:14px;
-
-    border-radius:
-      15px 15px 5px 5px;
-
-    -webkit-overflow-scrolling:
-      touch;
+    border-radius:15px 15px 5px 5px;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-y;
   }
 
+  .boss{
+    left:6px;
+    right:6px;
+    top:calc(48px + env(safe-area-inset-top));
+    width:auto;
+  }
+
+  .event-card,
+  .chase{
+    top:calc(160px + env(safe-area-inset-top));
+    width:calc(100% - 20px);
+  }
 
   .message{
-    top:
-      calc(
-        190px +
-        env(
-          safe-area-inset-top
-        )
-      );
+    top:calc(185px + env(safe-area-inset-top));
   }
-
 }
-
 </style>
 </head>
 
-
 <body class="room-hall">
-
-
-<!-- BACKGROUND -->
 
 <div class="wallpaper"></div>
 <div class="floor"></div>
 <div class="vignette"></div>
-<div class="night-overlay"></div>
+<div class="night-layer"></div>
+<div class="fever-layer"></div>
 
+<!-- LOADING -->
 
-<!-- INTRO -->
-
-<div
-  class="intro"
-  id="intro">
-
-  <div class="intro-content">
-
-    <div class="intro-mark">
-      DM
-    </div>
-
-    <div class="intro-title">
-      DEATH<br>MARRIED
-    </div>
-
-    <div class="intro-line"></div>
-
-    <div class="intro-sub">
-      KVARTIRA
-    </div>
-
-    <div class="intro-line"></div>
-
-    <div
-      class="intro-note"
-      id="introNote">
-
-      квартира для тех,
-      кто не ушёл
-
-    </div>
-
+<div class="loading" id="loading">
+  <div class="loading-text">
+    DEATHMARRIED<br>
+    KVARTIRA
   </div>
-
 </div>
-
 
 <!-- LANGUAGE -->
 
 <div class="language">
-
-  <button
-    id="ruButton"
-    onclick="setLanguage('ru')">
-
-    RU
-
-  </button>
-
-  <button
-    id="enButton"
-    onclick="setLanguage('en')">
-
-    EN
-
-  </button>
-
+  <button id="ruBtn">RU</button>
+  <button id="enBtn">EN</button>
 </div>
-
-
-<!-- TELEGRAM -->
-
-<div
-  class="tg-profile"
-  id="tgProfile">
-
-  <img
-    class="tg-avatar"
-    id="tgAvatar"
-    alt="">
-
-  <div>
-
-    <div
-      class="tg-name"
-      id="tgName">
-
-      Resident
-
-    </div>
-
-    <div id="tgLabel">
-      KVARTIRA
-    </div>
-
-  </div>
-
-</div>
-
 
 <!-- HEADER -->
 
 <header>
-
-  <div class="logo">
-    DeathMarried
-  </div>
-
-  <div class="tag">
-    KVARTIRA · CLICKER
-  </div>
-
+  <div class="logo">DeathMarried</div>
+  <div class="tag">KVARTIRA · CLICKER</div>
 </header>
-
 
 <!-- STATS -->
 
 <div class="stats">
 
   <div class="souls">
-
-    ♱
-
-    <span id="souls">
-      0
-    </span>
-
+    ♱ <span id="souls">0</span>
   </div>
 
-  <div class="small">
-
-    <span id="sps">
-      0
-    </span>
-
-    <span id="spsLabel">
-      душ / сек.
-    </span>
-
+  <div class="minor">
+    <span id="sps">0</span>
+    <span id="spsText">душ / сек.</span>
     ·
-
-    <span id="clickLabel">
-      нажатие
-    </span>
-
-    <span id="power">
-      1
-    </span>
-
-    ·
-
-    x<span id="totalMultiplier">
-      1.00
-    </span>
-
+    <span id="clickText">нажатие</span>
+    <span id="clickPower">1</span>
+    · x<span id="allMulti">1.00</span>
   </div>
 
   <div class="bar">
-    <div id="levelBar"></div>
+    <div class="bar-fill" id="levelBar"></div>
   </div>
 
-  <div class="level-text">
-
-    <span id="levelLabel">
-      уровень
-    </span>
-
-    <span id="level">
-      1
-    </span>
-
+  <div class="level-line">
+    <span id="levelText">уровень</span>
+    <span id="level">1</span>
   </div>
 
   <div class="bar">
-    <div id="rageBar"></div>
+    <div class="bar-fill" id="rageBar"></div>
   </div>
 
 </div>
 
+<!-- QUICK -->
 
-<!-- =====================================================
-     QUICK SWITCH — СЛЕВА
-===================================================== -->
+<div class="quick">
 
-<div class="quick-switch">
+  <div class="quick-row">
 
-  <button
-    class="quick-arrow"
-    id="prevSkin">
+    <button id="skinPrev">‹</button>
 
-    ‹
-
-  </button>
-
-  <div class="quick-box skin-box">
-
-    <div
-      class="quick-label"
-      id="quickSkinLabel">
-
-      ОБЛИК
-
+    <div class="quick-current">
+      <div class="quick-title" id="skinLabel">ОБЛИК</div>
+      <div class="quick-name" id="skinName">Death Head</div>
     </div>
 
-    <div
-      class="quick-name"
-      id="quickSkin">
-
-      Death Head
-
-    </div>
+    <button id="skinNext">›</button>
 
   </div>
 
-  <button
-    class="quick-arrow"
-    id="nextSkin">
+  <div class="quick-row">
 
-    ›
+    <button id="roomPrev">‹</button>
 
-  </button>
-
-
-  <button
-    class="quick-arrow"
-    id="prevRoom">
-
-    ‹
-
-  </button>
-
-  <div class="quick-box room-box">
-
-    <div
-      class="quick-label"
-      id="quickRoomLabel">
-
-      КОМНАТА
-
+    <div class="quick-current">
+      <div class="quick-title" id="roomLabel">КОМНАТА</div>
+      <div class="quick-name" id="roomName">Прихожая</div>
     </div>
 
-    <div
-      class="quick-name"
-      id="quickRoom">
-
-      Прихожая
-
-    </div>
+    <button id="roomNext">›</button>
 
   </div>
-
-  <button
-    class="quick-arrow"
-    id="nextRoom">
-
-    ›
-
-  </button>
 
 </div>
-
 
 <!-- GAME -->
 
 <div class="game">
 
-  <div
-    class="character"
-    id="character">
+  <div class="character" id="character">
 
     <div class="void-aura"></div>
 
     <div class="horns">
-
       <div class="horn"></div>
       <div class="horn"></div>
-
     </div>
 
-    <div class="crown">
-      ♛
-    </div>
-
+    <div class="crown">♛</div>
+    <div class="veil"></div>
+    <div class="halo"></div>
+    <div class="glasses"></div>
 
     <div class="pumpkin">
 
@@ -3261,685 +1589,252 @@ header{
       <div class="lobe d"></div>
 
       <div class="face">
-
         <div class="eye left"></div>
-
         <div class="eye right"></div>
-
         <div class="mouth"></div>
-
       </div>
 
     </div>
-
 
     <div class="phones">
-
       <div class="band"></div>
-
       <div class="ear left"></div>
-
       <div class="ear right"></div>
-
     </div>
-
 
     <div class="dj-console">
-
       <div class="deck left"></div>
-
       <div class="mixer">
-
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-
+        <span></span><span></span><span></span><span></span>
       </div>
-
       <div class="deck right"></div>
-
     </div>
 
-
-    <div
-      class="combo"
-      id="combo">
-    </div>
+    <div class="combo" id="combo"></div>
 
   </div>
 
 </div>
 
-
-<!-- LEFT PANEL -->
+<!-- LEFT -->
 
 <div class="panel left-panel">
 
   <div class="tabs">
-
-    <button
-      class="tab active"
-      data-left="profile"
-      id="profileTab">
-
-      ПРОФИЛЬ
-
-    </button>
-
-    <button
-      class="tab"
-      data-left="wardrobe"
-      id="wardrobeTab">
-
-      ГАРДЕРОБ
-
-    </button>
-
-    <button
-      class="tab"
-      data-left="collection"
-      id="collectionTab">
-
-      КОЛЛЕКЦИЯ
-
-    </button>
-
+    <button class="tab active" data-left="profile" id="profileTab">ПРОФИЛЬ</button>
+    <button class="tab" data-left="collection" id="collectionTab">КОЛЛЕКЦИЯ</button>
+    <button class="tab" data-left="achievements" id="achievementTab">ЦЕЛИ</button>
   </div>
 
+  <div class="content active" id="profile">
 
-  <div
-    class="tab-content active"
-    id="profile">
+    <div class="panel-title" id="profileTitle">Житель квартиры</div>
 
-    <div
-      class="panel-title"
-      id="profileTitle">
-
-      Житель квартиры
-
+    <div class="stat">
+      <span id="totalLabel">Всего душ</span>
+      <strong id="lifetime">0</strong>
     </div>
 
     <div class="stat">
-
-      <span id="totalSoulsLabel">
-        Всего душ
-      </span>
-
-      <strong id="lifetime">
-        0
-      </strong>
-
+      <span id="clicksLabel">Нажатий</span>
+      <strong id="clicks">0</strong>
     </div>
 
     <div class="stat">
-
-      <span id="clicksStatLabel">
-        Нажатий
-      </span>
-
-      <strong id="clicksStat">
-        0
-      </strong>
-
+      <span id="bossesLabel">Боссов</span>
+      <strong id="bosses">0</strong>
     </div>
 
     <div class="stat">
-
-      <span id="critStatLabel">
-        Критов
-      </span>
-
-      <strong id="critStat">
-        0
-      </strong>
-
-    </div>
-
-    <div class="stat">
-
-      <span id="bossStatLabel">
-        Боссов
-      </span>
-
-      <strong id="bossStat">
-        0
-      </strong>
-
-    </div>
-
-    <div class="stat">
-
       TIGGO
-
-      <strong id="tiggoStat">
-        0
-      </strong>
-
+      <strong id="tiggos">0</strong>
     </div>
 
     <div class="stat">
-
-      BLACK TIGGO
-
-      <strong id="blackStat">
-        0
-      </strong>
-
+      <span id="keysLabel">Ключей</span>
+      <strong id="keys">0</strong>
     </div>
 
-    <button
-      class="action"
-      id="rageButton"
-      disabled>
-    </button>
-
-    <button
-      class="action"
-      id="dailyButton">
-    </button>
-
-    <button
-      class="action"
-      id="bossButton">
-    </button>
+    <button class="action" id="rageButton"></button>
+    <button class="action" id="dailyButton"></button>
+    <button class="action" id="bossButton"></button>
+    <button class="action" id="chestButton"></button>
 
   </div>
 
+  <div class="content" id="collection">
 
-  <div
-    class="tab-content"
-    id="wardrobe">
-
-    <div class="panel-title">
-      Облики и комнаты
-    </div>
-
-    <button
-      class="action"
-      id="openSkins">
-
-      ОТКРЫТЬ ГАРДЕРОБ
-
-    </button>
-
-    <button
-      class="action"
-      id="openRooms">
-
-      ВЫБРАТЬ КОМНАТУ
-
-    </button>
+    <button class="action" id="skinMenu">ГАРДЕРОБ</button>
+    <button class="action" id="roomMenu">КОМНАТЫ</button>
+    <button class="action" id="inventoryMenu">ИНВЕНТАРЬ</button>
+    <button class="action" id="recordsMenu">ПЛАСТИНКИ</button>
 
   </div>
 
-
-  <div
-    class="tab-content"
-    id="collection">
-
-    <div class="panel-title">
-      Коллекция
-    </div>
-
-    <button
-      class="action"
-      id="openInventory">
-
-      ИНВЕНТАРЬ
-
-    </button>
-
-    <button
-      class="action"
-      id="openRecords">
-
-      ПЛАСТИНКИ
-
-    </button>
-
+  <div class="content" id="achievements">
+    <div id="achievementList"></div>
   </div>
 
 </div>
 
-
-<!-- RIGHT PANEL -->
+<!-- RIGHT -->
 
 <div class="panel right-panel">
 
   <div class="tabs">
+    <button class="tab active" data-right="shop" id="shopTab">МАГАЗИН</button>
+    <button class="tab" data-right="tasks" id="tasksTab">ЗАДАНИЯ</button>
+    <button class="tab" data-right="marriage" id="marriageTab">БРАК</button>
+  </div>
 
-    <button
-      class="tab active"
-      data-right="shop"
-      id="shopTab">
+  <div class="content active" id="shop">
 
-      МАГАЗИН
-
+    <button class="shop-item" id="buyClick">
+      <b id="clickName">Старинный нож</b>
+      <span class="desc" id="clickDesc">+1 к нажатию</span>
+      <div class="price">
+        ♱ <span id="clickCost">25</span>
+        · <span id="clickLvl">ур. 0</span>
+      </div>
     </button>
 
-    <button
-      class="tab"
-      data-right="tasks"
-      id="tasksTab">
-
-      ЗАДАНИЯ
-
+    <button class="shop-item" id="buyAuto">
+      <b id="autoName">Свеча на пианино</b>
+      <span class="desc" id="autoDesc">+1 душа / сек.</span>
+      <div class="price">
+        ♱ <span id="autoCost">50</span>
+        · <span id="autoLvl">ур. 0</span>
+      </div>
     </button>
 
-    <button
-      class="tab"
-      data-right="marriage"
-      id="marriageTab">
+    <button class="shop-item" id="buyRing">
+      <b id="ringName">Кольцо виконтессы</b>
+      <span class="desc" id="ringDesc">+5 душ / сек.</span>
+      <div class="price">
+        ♱ <span id="ringCost">250</span>
+        · <span id="ringLvl">ур. 0</span>
+      </div>
+    </button>
 
-      БРАК
+    <button class="shop-item" id="buyCrit">
+      <b id="critName">Бордовая перчатка</b>
+      <span class="desc" id="critDesc">+2% шанс крита</span>
+      <div class="price">
+        ♱ <span id="critCost">650</span>
+        · <span id="critLvl">ур. 0</span>
+      </div>
+    </button>
 
+    <button class="shop-item" id="buyCritPower">
+      <b id="critPowerName">Семейная брошь</b>
+      <span class="desc" id="critPowerDesc">+1 множитель крита</span>
+      <div class="price">
+        ♱ <span id="critPowerCost">1800</span>
+        · <span id="critPowerLvl">ур. 0</span>
+      </div>
     </button>
 
   </div>
 
-
-  <div
-    class="tab-content active"
-    id="shop">
-
-    <button
-      class="shop-item"
-      id="buyClick">
-
-      <b id="clickUpgradeName">
-        Старинный нож
-      </b>
-
-      <span
-        class="desc"
-        id="clickUpgradeDesc">
-
-        +1 к силе нажатия
-
-      </span>
-
-      <div class="price">
-
-        ♱
-        <span id="clickCost">
-          25
-        </span>
-
-        ·
-
-        <span id="clickLvl">
-          ур. 0
-        </span>
-
-      </div>
-
-    </button>
-
-
-    <button
-      class="shop-item"
-      id="buyAuto">
-
-      <b id="autoUpgradeName">
-        Свеча на пианино
-      </b>
-
-      <span
-        class="desc"
-        id="autoUpgradeDesc">
-
-        +1 душа в секунду
-
-      </span>
-
-      <div class="price">
-
-        ♱
-        <span id="autoCost">
-          50
-        </span>
-
-        ·
-
-        <span id="autoLvl">
-          ур. 0
-        </span>
-
-      </div>
-
-    </button>
-
-
-    <button
-      class="shop-item"
-      id="buyRing">
-
-      <b id="ringUpgradeName">
-        Кольцо виконтессы
-      </b>
-
-      <span
-        class="desc"
-        id="ringUpgradeDesc">
-
-        +5 душ в секунду
-
-      </span>
-
-      <div class="price">
-
-        ♱
-        <span id="ringCost">
-          250
-        </span>
-
-        ·
-
-        <span id="ringLvl">
-          ур. 0
-        </span>
-
-      </div>
-
-    </button>
-
-
-    <button
-      class="shop-item"
-      id="buyCrit">
-
-      <b id="critUpgradeName">
-        Бордовая перчатка
-      </b>
-
-      <span
-        class="desc"
-        id="critUpgradeDesc">
-
-        +2% шанс крита
-
-      </span>
-
-      <div class="price">
-
-        ♱
-        <span id="critCost">
-          650
-        </span>
-
-        ·
-
-        <span id="critLvl">
-          ур. 0
-        </span>
-
-      </div>
-
-    </button>
-
-
-    <button
-      class="shop-item"
-      id="buyCritPower">
-
-      <b id="critPowerUpgradeName">
-        Семейная брошь
-      </b>
-
-      <span
-        class="desc"
-        id="critPowerUpgradeDesc">
-
-        +1 к силе крита
-
-      </span>
-
-      <div class="price">
-
-        ♱
-        <span id="critPowerCost">
-          1800
-        </span>
-
-        ·
-
-        <span id="critPowerLvl">
-          ур. 0
-        </span>
-
-      </div>
-
-    </button>
-
+  <div class="content" id="tasks">
+    <div id="contracts"></div>
   </div>
 
+  <div class="content" id="marriage">
 
-  <div
-    class="tab-content"
-    id="tasks">
+    <div class="panel-title" id="marriageTitle">Брак со Смертью</div>
 
-    <div class="panel-title">
-      Записки на столе
-    </div>
-
-    <div id="contractsList"></div>
-
-  </div>
-
-
-  <div
-    class="tab-content"
-    id="marriage">
-
-    <div class="panel-title">
-      Брак со Смертью
-    </div>
-
-    <div
-      class="small"
-      id="marriageDescription">
-
-      Новый цикл становится сложнее,
-      но каждый брак усиливает доход.
-
-    </div>
+    <p class="minor" id="marriageInfo"></p>
 
     <div style="
       margin:15px 0;
       text-align:center;
-      font:28px 'Cormorant Garamond';
-      color:#722a32;
+      color:#702831;
+      font:30px 'Cormorant Garamond';
     ">
-
-      x<span id="prestigeMultiplier">
-        1.00
-      </span>
-
+      x<span id="prestigeMulti">1.00</span>
     </div>
 
-    <button
-      class="action"
-      id="prestigeButton"
-      disabled>
-    </button>
+    <button class="action" id="prestigeButton"></button>
 
   </div>
 
 </div>
 
-
-<!-- MOBILE MENU -->
+<!-- MOBILE NAV -->
 
 <div class="mobile-nav">
-
-  <button id="mobileProfile">
-    ПРОФИЛЬ
-  </button>
-
-  <button id="mobileShop">
-    МАГАЗИН
-  </button>
-
-  <button id="mobileWardrobe">
-    ОБЛИКИ
-  </button>
-
-  <button id="mobileInventory">
-    ВЕЩИ
-  </button>
-
+  <button id="mProfile">ПРОФИЛЬ</button>
+  <button id="mShop">МАГАЗИН</button>
+  <button id="mSkins">ОБЛИКИ</button>
+  <button id="mRooms">КОМНАТЫ</button>
+  <button id="mItems">ВЕЩИ</button>
 </div>
-
 
 <!-- BOSS -->
 
-<div
-  class="boss"
-  id="boss">
+<div class="boss" id="boss">
 
-  <div
-    class="boss-kicker"
-    id="bossKicker">
+  <div class="boss-kicker" id="bossKicker">В КВАРТИРЕ ГОСТЬ</div>
 
-    В КВАРТИРЕ ГОСТЬ
+  <div class="boss-name" id="bossName">БОСС КУКОЛДОВ</div>
 
+  <div class="boss-skill" id="bossSkill"></div>
+
+  <div class="hp">
+    <div class="hp-fill" id="bossHP"></div>
   </div>
 
-  <div
-    class="boss-name"
-    id="bossName">
+  <div class="minor" id="bossHPText"></div>
 
-    БОСС КУКОЛДОВ
-
-  </div>
-
-  <div
-    class="boss-phase"
-    id="bossPhase">
-
-    ФАЗА I
-
-  </div>
-
-  <div class="hpbar">
-
-    <div
-      class="hp"
-      id="bossHP">
-    </div>
-
-  </div>
-
-  <div
-    class="small"
-    id="bossHPText">
-  </div>
-
-  <button
-    class="action"
-    id="leaveBoss">
-
-    ПОКИНУТЬ БОЙ
-
-  </button>
+  <button class="action" id="leaveBoss">ПОКИНУТЬ БОЙ</button>
 
 </div>
 
+<!-- EVENT -->
 
-<!-- DOORBELL -->
+<div class="event-card" id="eventCard">
 
-<div
-  class="doorbell"
-  id="doorbell">
+  <div class="event-title" id="eventTitle"></div>
 
-  <div
-    class="doorbell-title"
-    id="doorbellTitle">
+  <div class="minor" id="eventText"></div>
 
-    В дверь звонят.
-
-  </div>
-
-  <div
-    class="small"
-    id="doorbellText">
-
-    Открыть?
-
-  </div>
-
-  <div class="doorbell-buttons">
-
-    <button id="openDoor">
-      ОТКРЫТЬ
-    </button>
-
-    <button id="ignoreDoor">
-      НЕ ОТКРЫВАТЬ
-    </button>
-
+  <div class="event-buttons">
+    <button id="eventYes"></button>
+    <button id="eventNo"></button>
   </div>
 
 </div>
-
 
 <!-- CHASE -->
 
-<div
-  class="chase"
-  id="chase">
+<div class="chase" id="chase">
 
-  <b>BLACK TIGGO</b>
+  <b id="chaseTitle">BLACK TIGGO</b>
 
-  <div class="hpbar">
-
-    <div
-      class="hp"
-      id="chaseHP">
-    </div>
-
+  <div class="hp">
+    <div class="hp-fill" id="chaseHP"></div>
   </div>
 
-  <div class="small">
-
+  <div class="minor">
     <span id="chaseHPText"></span>
-
     ·
-
-    <span id="chaseTime">
-      15
-    </span>
-
-    sec.
-
+    <span id="chaseTime">15</span>s
   </div>
 
 </div>
 
-
 <!-- MODAL -->
 
-<div
-  class="modal-backdrop"
-  id="modalBackdrop">
+<div class="modal-bg" id="modalBg">
 
   <div class="modal">
 
-    <div class="modal-head">
+    <div class="modal-header">
 
-      <div
-        class="modal-title"
-        id="modalTitle">
-      </div>
+      <div class="modal-title" id="modalTitle"></div>
 
-      <button
-        class="modal-close"
-        id="modalClose">
-
-        ×
-
-      </button>
+      <button class="close" id="modalClose">×</button>
 
     </div>
 
@@ -3949,665 +1844,316 @@ header{
 
 </div>
 
-
 <!-- MUSIC -->
 
-<audio
-  id="music"
-  loop
-  preload="auto">
-
-  <source
-    src="music.mp3?v=2"
-    type="audio/mpeg">
-
+<audio id="music" loop preload="auto">
+  <source src="music.mp3?v=4" type="audio/mpeg">
 </audio>
 
-
 <div class="music">
-
-  <button id="musicButton">
-    ♪
-  </button>
-
-  <input
-    id="volume"
-    type="range"
-    min="0"
-    max="1"
-    step=".01"
-    value=".35">
-
+  <button id="musicButton">♪</button>
+  <input id="volume" type="range" min="0" max="1" step=".01" value=".35">
 </div>
 
-
 <script>
+const $=id=>document.getElementById(id);
 
-/* =========================================================
-   HELPERS
-========================================================= */
+const tg=window.Telegram?.WebApp||null;
 
-const $ =
-  id =>
-    document
-    .getElementById(
-      id
-    );
+/* =========================
+   STOP MOBILE ZOOM
+========================= */
 
+/*
+Telegram/iOS иногда пытается увеличить
+страницу при серии быстрых taps.
+*/
 
-const tg =
-  window.Telegram?.WebApp
-  || null;
+let lastTouchEnd=0;
 
+document.addEventListener("touchend",e=>{
+  const now=Date.now();
 
-/* =========================================================
-   LANGUAGE
-========================================================= */
-
-let language =
-  localStorage.getItem(
-    "dm-language"
-  )
-  || "ru";
-
-
-const TEXT = {
-
-  ru:{
-
-    intro:
-      "квартира для тех, кто не ушёл",
-
-    skin:
-      "ОБЛИК",
-
-    room:
-      "КОМНАТА",
-
-    level:
-      "уровень",
-
-    soulSec:
-      "душ / сек.",
-
-    click:
-      "нажатие",
-
-    profile:
-      "ПРОФИЛЬ",
-
-    shop:
-      "МАГАЗИН",
-
-    wardrobe:
-      "ОБЛИКИ",
-
-    items:
-      "ВЕЩИ",
-
-    equip:
-      "НАДЕТЬ",
-
-    equipped:
-      "НАДЕТО",
-
-    enter:
-      "ВОЙТИ",
-
-    current:
-      "ВЫ ЗДЕСЬ",
-
-    locked:
-      "Откроется на уровне",
-
-    boss:
-      "БОСС КУКОЛДОВ",
-
-    bossButton:
-      "ПОЗВАТЬ БОССА",
-
-    phase1:
-      "ФАЗА I · НЕДОВОЛЕН",
-
-    phase2:
-      "ФАЗА II · В ЯРОСТИ",
-
-    rage:
-      "РИТМ",
-
-    rageReady:
-      "ВКЛЮЧИТЬ ПОЛНЫЙ РИТМ",
-
-    daily:
-      "УТРЕННЯЯ ПОЧТА",
-
-    inventory:
-      "Инвентарь",
-
-    records:
-      "Пластинки",
-
-    skins:
-      "Гардероб",
-
-    rooms:
-      "Комнаты",
-
-    noItems:
-      "Инвентарь пока пуст.",
-
-    noRecords:
-      "Пластинок пока нет.",
-
-    door:
-      "В дверь звонят.",
-
-    doorQuestion:
-      "На лестничной площадке кто-то стоит.",
-
-    open:
-      "ОТКРЫТЬ",
-
-    ignore:
-      "НЕ ОТКРЫВАТЬ",
-
-    critical:
-      "КРИТ",
-
-    combo:
-      "серия",
-
-    prestigeLocked:
-      "НУЖЕН 50 УРОВЕНЬ",
-
-    prestigeReady:
-      "ЗАКЛЮЧИТЬ БРАК",
-
-    task:
-      "Записка выполнена",
-
-    drop:
-      "Выпал предмет",
-
-    recordDrop:
-      "Найдена пластинка",
-
-    telegram:
-      "житель KVARTIRA"
-
-  },
-
-
-  en:{
-
-    intro:
-      "an apartment for those who never left",
-
-    skin:
-      "SKIN",
-
-    room:
-      "ROOM",
-
-    level:
-      "level",
-
-    soulSec:
-      "souls / sec.",
-
-    click:
-      "click",
-
-    profile:
-      "PROFILE",
-
-    shop:
-      "SHOP",
-
-    wardrobe:
-      "SKINS",
-
-    items:
-      "ITEMS",
-
-    equip:
-      "WEAR",
-
-    equipped:
-      "WEARING",
-
-    enter:
-      "ENTER",
-
-    current:
-      "YOU ARE HERE",
-
-    locked:
-      "Unlocks at level",
-
-    boss:
-      "CUCKOLD BOSS",
-
-    bossButton:
-      "CALL THE BOSS",
-
-    phase1:
-      "PHASE I · ANNOYED",
-
-    phase2:
-      "PHASE II · ENRAGED",
-
-    rage:
-      "RHYTHM",
-
-    rageReady:
-      "PLAY THE WHOLE ROOM",
-
-    daily:
-      "MORNING MAIL",
-
-    inventory:
-      "Inventory",
-
-    records:
-      "Records",
-
-    skins:
-      "Wardrobe",
-
-    rooms:
-      "Rooms",
-
-    noItems:
-      "Inventory is empty.",
-
-    noRecords:
-      "No records found.",
-
-    door:
-      "Someone is ringing the bell.",
-
-    doorQuestion:
-      "Someone is standing outside.",
-
-    open:
-      "OPEN",
-
-    ignore:
-      "IGNORE",
-
-    critical:
-      "CRITICAL",
-
-    combo:
-      "combo",
-
-    prestigeLocked:
-      "LEVEL 50 REQUIRED",
-
-    prestigeReady:
-      "MARRY DEATH",
-
-    task:
-      "Note completed",
-
-    drop:
-      "Item dropped",
-
-    recordDrop:
-      "Record found",
-
-    telegram:
-      "KVARTIRA resident"
-
+  if(now-lastTouchEnd<=300){
+    e.preventDefault();
   }
 
+  lastTouchEnd=now;
+},{passive:false});
+
+document.addEventListener("dblclick",e=>{
+  if(
+    e.target.closest(
+      ".character,.mobile-nav,button,.tiggo"
+    )
+  ){
+    e.preventDefault();
+  }
+});
+
+document.addEventListener("gesturestart",e=>{
+  e.preventDefault();
+},{passive:false});
+
+/* =========================
+   LANGUAGE
+========================= */
+
+let lang=localStorage.getItem("dm-language")||"ru";
+
+const T={
+  ru:{
+    skin:"ОБЛИК",
+    room:"КОМНАТА",
+    level:"уровень",
+    soulsSec:"душ / сек.",
+    click:"нажатие",
+    profile:"ПРОФИЛЬ",
+    shop:"МАГАЗИН",
+    skins:"ОБЛИКИ",
+    rooms:"КОМНАТЫ",
+    items:"ВЕЩИ",
+    collection:"КОЛЛЕКЦИЯ",
+    goals:"ЦЕЛИ",
+    tasks:"ЗАДАНИЯ",
+    marriage:"БРАК",
+    equip:"НАДЕТЬ",
+    equipped:"НАДЕТО",
+    enter:"ВОЙТИ",
+    current:"ВЫ ЗДЕСЬ",
+    locked:"Откроется на уровне",
+    boss:"БОСС КУКОЛДОВ",
+    callBoss:"ПОЗВАТЬ БОССА",
+    rage:"РИТМ",
+    rageReady:"ВКЛЮЧИТЬ ПОЛНЫЙ РИТМ",
+    mail:"УТРЕННЯЯ ПОЧТА",
+    chest:"СУНДУК КВАРТИРЫ",
+    inventory:"Инвентарь",
+    records:"Пластинки",
+    noItems:"Пока ничего не найдено.",
+    noRecords:"Пластинок пока нет.",
+    critical:"КРИТ",
+    superCrit:"СУПЕР-КРИТ",
+    jackpot:"ДЖЕКПОТ",
+    combo:"серия",
+    leave:"ПОКИНУТЬ БОЙ",
+    yes:"ОТКРЫТЬ",
+    no:"НЕ ОТКРЫВАТЬ",
+    prestigeReady:"ЗАКЛЮЧИТЬ БРАК",
+    prestigeLocked:"НУЖЕН 50 УРОВЕНЬ"
+  },
+  en:{
+    skin:"SKIN",
+    room:"ROOM",
+    level:"level",
+    soulsSec:"souls / sec.",
+    click:"click",
+    profile:"PROFILE",
+    shop:"SHOP",
+    skins:"SKINS",
+    rooms:"ROOMS",
+    items:"ITEMS",
+    collection:"COLLECTION",
+    goals:"GOALS",
+    tasks:"TASKS",
+    marriage:"MARRIAGE",
+    equip:"WEAR",
+    equipped:"WEARING",
+    enter:"ENTER",
+    current:"YOU ARE HERE",
+    locked:"Unlocks at level",
+    boss:"CUCKOLD BOSS",
+    callBoss:"CALL THE BOSS",
+    rage:"RHYTHM",
+    rageReady:"PLAY THE WHOLE ROOM",
+    mail:"MORNING MAIL",
+    chest:"KVARTIRA CHEST",
+    inventory:"Inventory",
+    records:"Records",
+    noItems:"Nothing found yet.",
+    noRecords:"No records found.",
+    critical:"CRITICAL",
+    superCrit:"SUPER CRITICAL",
+    jackpot:"JACKPOT",
+    combo:"combo",
+    leave:"LEAVE FIGHT",
+    yes:"OPEN",
+    no:"IGNORE",
+    prestigeReady:"MARRY DEATH",
+    prestigeLocked:"LEVEL 50 REQUIRED"
+  }
 };
 
+const tx=k=>T[lang][k];
 
-const tx =
-  key =>
-    TEXT[
-      language
-    ][key];
-
-
-/* =========================================================
+/* =========================
    SAVE
-========================================================= */
+========================= */
 
-const SAVE_KEY =
-  "deathmarried-kvartira-telegram-v1";
+const SAVE_KEY="deathmarried-kvartira-telegram-v1";
 
-
-const DEFAULT_GAME = {
-
+const DEFAULT={
   souls:0,
-
   lifetime:0,
-
   clicks:0,
-
   criticals:0,
-
   bosses:0,
-
   tiggos:0,
-
   blackTiggos:0,
+  goldenTiggos:0,
 
   clickLvl:0,
-
   autoLvl:0,
-
   ringLvl:0,
-
   critLvl:0,
-
   critPowerLvl:0,
 
   clickCost:25,
-
   autoCost:50,
-
   ringCost:250,
-
   critCost:650,
-
   critPowerCost:1800,
 
   rage:0,
-
   prestiges:0,
+  keys:0,
+  levelRewards:[],
 
-  lastDaily:0,
+  currentSkin:"default",
+  currentRoom:"hall",
 
-  currentSkin:
-    "default",
-
-  currentRoom:
-    "hall",
-
-  unlockedSkins:[
-    "default"
-  ],
-
-  unlockedRooms:[
-    "hall"
-  ],
+  unlockedSkins:["default"],
+  unlockedRooms:["hall"],
 
   loot:[],
-
   records:[],
-
   contracts:[],
+  achievements:[],
 
-  lastSeen:
-    Date.now()
-
+  lastDaily:0,
+  lastChest:0,
+  lastSeen:Date.now()
 };
 
-
-let game = {
-  ...DEFAULT_GAME
-};
-
+let g={...DEFAULT};
 
 try{
+  const s=JSON.parse(localStorage.getItem(SAVE_KEY));
 
-  const saved =
-    JSON.parse(
-      localStorage
-      .getItem(
-        SAVE_KEY
-      )
-    );
-
-
-  if(saved){
-
-    game = {
-
-      ...DEFAULT_GAME,
-
-      ...saved,
-
-      loot:
-        Array.isArray(
-          saved.loot
-        )
-        ? saved.loot
-        : [],
-
-      records:
-        Array.isArray(
-          saved.records
-        )
-        ? saved.records
-        : [],
-
-      contracts:
-        Array.isArray(
-          saved.contracts
-        )
-        ? saved.contracts
-        : [],
-
-      unlockedSkins:
-        Array.isArray(
-          saved.unlockedSkins
-        )
-        ? saved.unlockedSkins
-        : ["default"],
-
-      unlockedRooms:
-        Array.isArray(
-          saved.unlockedRooms
-        )
-        ? saved.unlockedRooms
-        : ["hall"]
-
+  if(s){
+    g={
+      ...DEFAULT,
+      ...s,
+      loot:Array.isArray(s.loot)?s.loot:[],
+      records:Array.isArray(s.records)?s.records:[],
+      contracts:Array.isArray(s.contracts)?s.contracts:[],
+      achievements:Array.isArray(s.achievements)?s.achievements:[],
+      levelRewards:Array.isArray(s.levelRewards)?s.levelRewards:[],
+      unlockedSkins:Array.isArray(s.unlockedSkins)?s.unlockedSkins:["default"],
+      unlockedRooms:Array.isArray(s.unlockedRooms)?s.unlockedRooms:["hall"]
     };
-
   }
+}catch(e){}
 
-}catch(error){}
+/* =========================
+   SKINS
+========================= */
 
-
-/* =========================================================
-   DATA
-========================================================= */
-
-const SKINS = [
-
+const SKINS=[
   {
-    id:"default",
-    level:1,
-
-    ru:[
-      "Death Head",
-      "Классическая тыква в наушниках.",
-      "Без особого эффекта."
-    ],
-
-    en:[
-      "Death Head",
-      "Classic pumpkin with headphones.",
-      "No special effect."
-    ]
+    id:"default",level:1,
+    ru:["Death Head","Тыква в наушниках.","Базовый облик."],
+    en:["Death Head","Pumpkin with headphones.","Base form."]
   },
-
-
   {
-    id:"dj",
-    level:10,
-
-    ru:[
-      "DJ Pumpkin",
-      "Перед тыквой появляется DJ-пульт.",
-      "+25% к нажатию."
-    ],
-
-    en:[
-      "DJ Pumpkin",
-      "A DJ console appears.",
-      "+25% click power."
-    ]
+    id:"dj",level:8,
+    ru:["DJ Pumpkin","Пульт и вращающиеся деки.","+20% к нажатию."],
+    en:["DJ Pumpkin","Console and spinning decks.","+20% click."]
   },
-
-
   {
-    id:"hell",
-    level:20,
-
-    ru:[
-      "Рогатый житель",
-      "Тыква принимает новую форму.",
-      "+1 к множителю крита."
-    ],
-
-    en:[
-      "Horned Resident",
-      "The resident changes form.",
-      "+1 critical multiplier."
-    ]
+    id:"night",level:14,
+    ru:["Night Head","Тёмные очки.","+5% шанс крита."],
+    en:["Night Head","Dark glasses.","+5% crit chance."]
   },
-
-
   {
-    id:"king",
-    level:30,
-
-    ru:[
-      "Виконт",
-      "Старинная корона из шкафа.",
-      "+25% ко всему доходу."
-    ],
-
-    en:[
-      "The Viscount",
-      "An antique crown.",
-      "+25% all income."
-    ]
+    id:"hell",level:20,
+    ru:["Рогатый житель","Тёмные рога.","+1 множитель крита."],
+    en:["Horned Resident","Dark horns.","+1 critical multiplier."]
   },
-
-
   {
-    id:"void",
-    level:50,
-
-    ru:[
-      "Последний житель",
-      "Он был здесь до появления квартиры.",
-      "+50% ко всему доходу."
-    ],
-
-    en:[
-      "The Last Resident",
-      "It was here before the apartment.",
-      "+50% all income."
-    ]
+    id:"bride",level:26,
+    ru:["Мёртвая невеста","Старая вуаль.","+25% пассивного дохода."],
+    en:["Dead Bride","An old veil.","+25% passive income."]
+  },
+  {
+    id:"king",level:32,
+    ru:["Виконт","Старинная корона.","+25% всего дохода."],
+    en:["The Viscount","Antique crown.","+25% all income."]
+  },
+  {
+    id:"saint",level:40,
+    ru:["Святой житель","Золотой нимб.","+15% всего и +5% крит."],
+    en:["Saint Resident","Golden halo.","+15% all and +5% crit."]
+  },
+  {
+    id:"void",level:50,
+    ru:["Последний житель","Форма из закрытой комнаты.","+50% всего дохода."],
+    en:["The Last Resident","Form from the locked room.","+50% all income."]
   }
-
 ];
 
+/* =========================
+   ROOMS
+========================= */
 
-const ROOMS = [
-
+const ROOMS=[
   {
-    id:"hall",
-    level:1,
-
-    ru:[
-      "Прихожая",
-      "Светлая комната с полосатыми обоями.",
-      "+10% к нажатию."
-    ],
-
-    en:[
-      "Hallway",
-      "A bright room with striped wallpaper.",
-      "+10% click power."
-    ]
+    id:"hall",level:1,
+    ru:["Прихожая","+10% к нажатию."],
+    en:["Hallway","+10% click."]
   },
-
-
   {
-    id:"salon",
-    level:8,
-
-    ru:[
-      "Бордовая гостиная",
-      "Тёплый красный свет.",
-      "+25% пассивного дохода."
-    ],
-
-    en:[
-      "Burgundy Salon",
-      "Warm red light.",
-      "+25% passive income."
-    ]
+    id:"salon",level:7,
+    ru:["Бордовая гостиная","+25% пассивного дохода."],
+    en:["Burgundy Salon","+25% passive income."]
   },
-
-
   {
-    id:"dj",
-    level:15,
-
-    ru:[
-      "Комната DJ",
-      "Холодный синий свет.",
-      "Комбо растёт вдвое быстрее."
-    ],
-
-    en:[
-      "DJ Room",
-      "Cold blue light.",
-      "Combo grows twice as fast."
-    ]
+    id:"kitchen",level:12,
+    ru:["Старая кухня","TIGGO приносит +30% душ."],
+    en:["Old Kitchen","TIGGO gives +30% souls."]
   },
-
-
   {
-    id:"bedroom",
-    level:25,
-
-    ru:[
-      "Спальня",
-      "Здесь постоянно находят чужие вещи.",
-      "+20% шанс предметов."
-    ],
-
-    en:[
-      "Bedroom",
-      "Lost objects keep appearing.",
-      "+20% item chance."
-    ]
+    id:"dj",level:17,
+    ru:["Комната DJ","Комбо растёт вдвое быстрее."],
+    en:["DJ Room","Combo grows twice as fast."]
   },
-
-
   {
-    id:"secret",
-    level:40,
-
-    ru:[
-      "Закрытая комната",
-      "Никто не помнит, кто её запер.",
-      "+40% ко всему доходу."
-    ],
-
-    en:[
-      "The Locked Room",
-      "Nobody remembers who locked it.",
-      "+40% all income."
-    ]
+    id:"bath",level:22,
+    ru:["Ванная","Ярость заряжается +50% быстрее."],
+    en:["Bathroom","Rage charges 50% faster."]
+  },
+  {
+    id:"bedroom",level:28,
+    ru:["Спальня","+20% шанс предметов."],
+    en:["Bedroom","+20% item drop chance."]
+  },
+  {
+    id:"balcony",level:35,
+    ru:["Балкон","+15% крит и TIGGO появляется чаще."],
+    en:["Balcony","+15% crit and more TIGGO."]
+  },
+  {
+    id:"secret",level:45,
+    ru:["Закрытая комната","+40% ко всему доходу."],
+    en:["Locked Room","+40% all income."]
   }
-
 ];
 
+/* =========================
+   ITEMS
+========================= */
 
-const ITEM_NAMES = {
-
+const ITEMS={
   ru:[
     "Бархатная перчатка",
     "Серебряная пуговица",
@@ -4621,12 +2167,15 @@ const ITEM_NAMES = {
     "Кассета из спальни",
     "Золотая зажигалка",
     "Осколок зеркала",
-    "Ключ от комнаты №13",
-    "Чёрная пластинка",
     "Письмо без адреса",
-    "Красный камень"
+    "Красный камень",
+    "Чёрный жемчуг",
+    "Старая фотография",
+    "Ключ от шкафа",
+    "Стеклянный глаз",
+    "Зуб гостя",
+    "Пульт без проводов"
   ],
-
   en:[
     "Velvet Glove",
     "Silver Button",
@@ -4640,5688 +2189,2093 @@ const ITEM_NAMES = {
     "Bedroom Cassette",
     "Golden Lighter",
     "Mirror Fragment",
-    "Room 13 Key",
-    "Black Record",
     "Letter Without Address",
-    "Red Stone"
+    "Red Stone",
+    "Black Pearl",
+    "Old Photograph",
+    "Cabinet Key",
+    "Glass Eye",
+    "Guest's Tooth",
+    "Wireless Console"
   ]
-
 };
 
-
-const RECORDS = [
-
+const RECORDS=[
   "KVARTIRA 00:13",
-
   "THE LAST ROOM",
-
   "DEAD FREQUENCY",
-
   "MARRIED AFTER MIDNIGHT",
-
   "NO ONE LEFT THE SALON",
-
-  "BLACK TIGGO / NIGHT DRIVE"
-
+  "BLACK TIGGO / NIGHT DRIVE",
+  "ROOM 13",
+  "MORNING AFTER DEATH"
 ];
 
+/* =========================
+   ACHIEVEMENTS
+========================= */
 
-const CONTRACT_TYPES = {
-
-  clicks:{
-    target:150,
-    reward:700,
-
-    ru:
-      "Сделать 150 нажатий",
-
-    en:
-      "Make 150 clicks"
+const ACHIEVEMENTS=[
+  {
+    id:"click1000",
+    test:()=>g.clicks>=1000,
+    ru:"1 000 нажатий",
+    en:"1,000 clicks"
   },
-
-
-  souls:{
-    target:7500,
-    reward:1800,
-
-    ru:
-      "Собрать 7 500 душ",
-
-    en:
-      "Collect 7,500 souls"
+  {
+    id:"million",
+    test:()=>g.lifetime>=1000000,
+    ru:"Собрать 1 000 000 душ",
+    en:"Collect 1,000,000 souls"
   },
-
-
-  upgrades:{
-    target:7,
-    reward:1100,
-
-    ru:
-      "Купить 7 улучшений",
-
-    en:
-      "Buy 7 upgrades"
+  {
+    id:"boss5",
+    test:()=>g.bosses>=5,
+    ru:"Победить 5 боссов",
+    en:"Defeat 5 bosses"
   },
-
-
-  tiggo:{
-    target:2,
-    reward:2500,
-
-    ru:
-      "Поймать 2 TIGGO",
-
-    en:
-      "Catch 2 TIGGOs"
+  {
+    id:"records",
+    test:()=>g.records.length>=5,
+    ru:"Найти 5 пластинок",
+    en:"Find 5 records"
   },
-
-
-  boss:{
-    target:1,
-    reward:4000,
-
-    ru:
-      "Победить БОССА КУКОЛДОВ",
-
-    en:
-      "Defeat the CUCKOLD BOSS"
+  {
+    id:"black",
+    test:()=>g.blackTiggos>=3,
+    ru:"Уничтожить 3 BLACK TIGGO",
+    en:"Destroy 3 BLACK TIGGOs"
+  },
+  {
+    id:"marriage",
+    test:()=>g.prestiges>=1,
+    ru:"Заключить первый Брак со Смертью",
+    en:"Complete the first Marriage with Death"
   }
+];
 
+/* =========================
+   CONTRACTS
+========================= */
+
+const CONTRACTS={
+  clicks:{
+    target:250,reward:1000,
+    ru:"Сделать 250 нажатий",
+    en:"Make 250 clicks"
+  },
+  souls:{
+    target:15000,reward:3500,
+    ru:"Собрать 15 000 душ",
+    en:"Collect 15,000 souls"
+  },
+  upgrades:{
+    target:8,reward:2200,
+    ru:"Купить 8 улучшений",
+    en:"Buy 8 upgrades"
+  },
+  tiggo:{
+    target:3,reward:4500,
+    ru:"Поймать 3 TIGGO",
+    en:"Catch 3 TIGGOs"
+  },
+  boss:{
+    target:1,reward:7000,
+    ru:"Победить БОССА КУКОЛДОВ",
+    en:"Defeat the CUCKOLD BOSS"
+  }
 };
 
-
-/* =========================================================
+/* =========================
    FORMAT
-========================================================= */
+========================= */
 
-function fmt(number){
+function fmt(n){
+  n=Math.floor(Number(n)||0);
 
-  number =
-    Math.floor(
-      Number(number)
-      || 0
-    );
-
-
-  if(number < 1000){
-
-    return number
-      .toLocaleString(
-        language === "ru"
-        ? "ru-RU"
-        : "en-US"
-      );
-
-  }
-
-
-  if(number < 1e6)
-    return (
-      number / 1e3
-    ).toFixed(1) + "K";
-
-
-  if(number < 1e9)
-    return (
-      number / 1e6
-    ).toFixed(1) + "M";
-
-
-  if(number < 1e12)
-    return (
-      number / 1e9
-    ).toFixed(1) + "B";
-
-
-  return (
-    number / 1e12
-  ).toFixed(1) + "T";
-
+  if(n<1000)return n.toLocaleString(lang==="ru"?"ru-RU":"en-US");
+  if(n<1e6)return(n/1e3).toFixed(1)+"K";
+  if(n<1e9)return(n/1e6).toFixed(1)+"M";
+  if(n<1e12)return(n/1e9).toFixed(1)+"B";
+  return(n/1e12).toFixed(1)+"T";
 }
 
-
-/* =========================================================
+/* =========================
    LEVEL
-========================================================= */
+========================= */
 
 function level(){
-
-  return Math.floor(
-
-    Math.sqrt(
-      game.lifetime
-      /
-      190
-    )
-
-  )
-  + 1;
-
+  return Math.floor(Math.sqrt(g.lifetime/210))+1;
 }
-
 
 function levelProgress(){
+  const l=level();
+  const a=(l-1)**2*210;
+  const b=l**2*210;
 
-  const lv =
-    level();
-
-
-  const start =
-    Math.pow(
-      lv - 1,
-      2
-    )
-    *
-    190;
-
-
-  const end =
-    Math.pow(
-      lv,
-      2
-    )
-    *
-    190;
-
-
-  return (
-    (
-      game.lifetime
-      -
-      start
-    )
-    /
-    (
-      end
-      -
-      start
-    )
-  )
-  *
-  100;
-
+  return((g.lifetime-a)/(b-a))*100;
 }
 
-
-/* =========================================================
+/* =========================
    ITEM BONUS
-========================================================= */
+========================= */
 
-function itemBonus(type){
+function itemBonus(stat){
+  return g.loot.reduce((sum,item)=>{
+    let n=sum;
 
-  return game.loot
-  .reduce(
+    if(item.stat===stat)n+=Number(item.value)||0;
+    if(item.penaltyStat===stat)n+=Number(item.penalty)||0;
 
-    (sum,item) => {
-
-      let total =
-        sum;
-
-
-      if(
-        item.stat
-        ===
-        type
-      ){
-
-        total +=
-          Number(
-            item.value
-          )
-          || 0;
-
-      }
-
-
-      if(
-        item.penaltyStat
-        ===
-        type
-      ){
-
-        total +=
-          Number(
-            item.penalty
-          )
-          || 0;
-
-      }
-
-
-      return total;
-
-    },
-
-    0
-
-  );
-
+    return n;
+  },0);
 }
 
-
-/* =========================================================
+/* =========================
    MULTIPLIERS
-========================================================= */
+========================= */
+
+let eventMulti=1;
+let rageActive=false;
+let feverActive=false;
 
 function prestigeMulti(){
-
-  return 1
-    +
-    game.prestiges
-    *
-    .22;
-
+  return 1+g.prestiges*.22;
 }
-
 
 function recordMulti(){
-
-  return 1
-    +
-    game.records.length
-    *
-    .04;
-
+  return 1+g.records.length*.04;
 }
 
-
-function skinGlobal(){
-
-  if(
-    game.currentSkin
-    === "king"
-  )
-    return 1.25;
-
-
-  if(
-    game.currentSkin
-    === "void"
-  )
-    return 1.5;
-
-
+function skinAll(){
+  if(g.currentSkin==="king")return 1.25;
+  if(g.currentSkin==="saint")return 1.15;
+  if(g.currentSkin==="void")return 1.5;
   return 1;
-
 }
 
-
-function roomGlobal(){
-
-  return (
-    game.currentRoom
-    === "secret"
-  )
-  ? 1.40
-  : 1;
-
+function roomAll(){
+  return g.currentRoom==="secret"?1.4:1;
 }
 
-
-let eventMultiplier =
-  1;
-
-
-function globalMulti(){
-
-  return (
-
-    prestigeMulti()
-
-    *
-
-    recordMulti()
-
-    *
-
-    Math.max(
-      .2,
-      1
-      +
-      itemBonus(
-        "global"
-      )
-    )
-
-    *
-
-    skinGlobal()
-
-    *
-
-    roomGlobal()
-
-    *
-
-    eventMultiplier
-
-  );
-
+function allMulti(){
+  return prestigeMulti()
+    *recordMulti()
+    *Math.max(.2,1+itemBonus("global"))
+    *skinAll()
+    *roomAll()
+    *eventMulti;
 }
-
 
 function baseClick(){
-
-  return 1
-    +
-    game.clickLvl;
-
+  return 1+g.clickLvl;
 }
-
 
 function clickMulti(){
+  let m=Math.max(.2,1+itemBonus("click"));
 
-  let value =
-    1
-    +
-    itemBonus(
-      "click"
-    );
+  if(g.currentSkin==="dj")m*=1.2;
+  if(g.currentRoom==="hall")m*=1.1;
 
-
-  if(
-    game.currentSkin
-    === "dj"
-  )
-    value *=
-      1.25;
-
-
-  if(
-    game.currentRoom
-    === "hall"
-  )
-    value *=
-      1.10;
-
-
-  return Math.max(
-    .2,
-    value
-  );
-
+  return m;
 }
-
 
 function passiveBase(){
-
-  return (
-    game.autoLvl
-    +
-    game.ringLvl
-    *
-    5
-  );
-
+  return g.autoLvl+g.ringLvl*5;
 }
-
 
 function passiveMulti(){
+  let m=Math.max(.2,1+itemBonus("passive"));
 
-  let value =
-    1
-    +
-    itemBonus(
-      "passive"
-    );
+  if(g.currentRoom==="salon")m*=1.25;
+  if(g.currentSkin==="bride")m*=1.25;
 
-
-  if(
-    game.currentRoom
-    === "salon"
-  )
-    value *=
-      1.25;
-
-
-  return Math.max(
-    .2,
-    value
-  );
-
+  return m;
 }
-
 
 function critChance(){
+  let chance=g.critLvl*.02+itemBonus("crit");
 
-  return Math.min(
+  if(g.currentSkin==="night")chance+=.05;
+  if(g.currentSkin==="saint")chance+=.05;
+  if(g.currentRoom==="balcony")chance+=.15;
 
-    .55,
-
-    game.critLvl
-    *
-    .02
-
-    +
-
-    itemBonus(
-      "crit"
-    )
-
-  );
-
+  return Math.min(.62,chance);
 }
-
 
 function critPower(){
-
-  return (
-    3
-
-    +
-
-    game.critPowerLvl
-
-    +
-
-    (
-      game.currentSkin
-      === "hell"
-      ? 1
-      : 0
-    )
-  );
-
+  return 3+g.critPowerLvl+(g.currentSkin==="hell"?1:0);
 }
 
-
-function itemDropChance(){
-
-  return (
-    game.currentRoom
-    === "bedroom"
-  )
-  ? .20
-  : 0;
-
+function dropBonus(){
+  return g.currentRoom==="bedroom"?.20:0;
 }
 
-
-/* =========================================================
-   HAPTIC
-========================================================= */
+/* =========================
+   HAPTICS
+========================= */
 
 function haptic(type){
-
   try{
+    if(!tg)return;
 
-    if(!tg)
-      return;
-
-
-    if(
-      type === "light"
-    )
-      tg.HapticFeedback
-        ?.impactOccurred(
-          "light"
-        );
-
-
-    if(
-      type === "heavy"
-    )
-      tg.HapticFeedback
-        ?.impactOccurred(
-          "heavy"
-        );
-
-
-    if(
-      type === "success"
-    )
-      tg.HapticFeedback
-        ?.notificationOccurred(
-          "success"
-        );
-
-
-    if(
-      type === "error"
-    )
-      tg.HapticFeedback
-        ?.notificationOccurred(
-          "error"
-        );
-
-
-    if(
-      type === "select"
-    )
-      tg.HapticFeedback
-        ?.selectionChanged();
-
-  }
-
-  catch(error){}
-
+    if(type==="light")tg.HapticFeedback?.impactOccurred("light");
+    if(type==="heavy")tg.HapticFeedback?.impactOccurred("heavy");
+    if(type==="success")tg.HapticFeedback?.notificationOccurred("success");
+    if(type==="error")tg.HapticFeedback?.notificationOccurred("error");
+    if(type==="select")tg.HapticFeedback?.selectionChanged();
+  }catch(e){}
 }
 
-
-/* =========================================================
+/* =========================
    TELEGRAM
-========================================================= */
+========================= */
 
 function initTelegram(){
-
-  if(!tg)
-    return;
-
+  if(!tg)return;
 
   try{
-
     tg.ready();
-
     tg.expand();
 
-  }
-
-  catch(error){}
-
+    if(typeof tg.requestFullscreen==="function"){
+      tg.requestFullscreen();
+    }
+  }catch(e){}
 
   try{
-
-    tg.setHeaderColor(
-      "#702831"
-    );
-
-
-    tg.setBackgroundColor(
-      "#ded0b5"
-    );
-
-  }
-
-  catch(error){}
-
-
-  const user =
-    tg.initDataUnsafe?.user;
-
-
-  if(!user)
-    return;
-
-
-  $("tgProfile")
-    .classList
-    .add(
-      "show"
-    );
-
-
-  $("tgName")
-    .textContent =
-
-    user.username
-
-    ? "@"
-      +
-      user.username
-
-    : [
-        user.first_name,
-        user.last_name
-      ]
-      .filter(Boolean)
-      .join(" ");
-
-
-  if(
-    user.photo_url
-  ){
-
-    $("tgAvatar").src =
-      user.photo_url;
-
-
-    $("tgAvatar")
-      .style.display =
-      "block";
-
-  }
-
+    tg.setHeaderColor("#702831");
+    tg.setBackgroundColor("#ded0b5");
+  }catch(e){}
 }
 
-
-/* =========================================================
-   UNLOCKS
-========================================================= */
-
-function checkUnlocks(){
-
-  SKINS.forEach(
-
-    skin => {
-
-      if(
-
-        level()
-        >=
-        skin.level
-
-        &&
-
-        !game.unlockedSkins
-          .includes(
-            skin.id
-          )
-
-      ){
-
-        game.unlockedSkins
-          .push(
-            skin.id
-          );
-
-
-        message(
-
-          (
-            language === "ru"
-            ? "Новый облик: "
-            : "New skin: "
-          )
-
-          +
-
-          skin[
-            language
-          ][0]
-
-        );
-
-
-        haptic(
-          "success"
-        );
-
-      }
-
-    }
-
-  );
-
-
-  ROOMS.forEach(
-
-    room => {
-
-      if(
-
-        level()
-        >=
-        room.level
-
-        &&
-
-        !game.unlockedRooms
-          .includes(
-            room.id
-          )
-
-      ){
-
-        game.unlockedRooms
-          .push(
-            room.id
-          );
-
-
-        message(
-
-          (
-            language === "ru"
-            ? "Новая комната: "
-            : "New room: "
-          )
-
-          +
-
-          room[
-            language
-          ][0]
-
-        );
-
-
-        haptic(
-          "success"
-        );
-
-      }
-
-    }
-
-  );
-
-}
-
-
-/* =========================================================
-   APPLY SKIN
-========================================================= */
+/* =========================
+   SKIN / ROOM
+========================= */
 
 function applySkin(){
+  const c=$("character");
 
-  const character =
-    $("character");
+  [
+    "skin-dj",
+    "skin-night",
+    "skin-hell",
+    "skin-bride",
+    "skin-king",
+    "skin-saint",
+    "skin-void"
+  ].forEach(x=>c.classList.remove(x));
 
-
-  character.classList
-    .remove(
-      "skin-dj",
-      "skin-hell",
-      "skin-king",
-      "skin-void"
-    );
-
-
-  if(
-    game.currentSkin
-    !== "default"
-  ){
-
-    character.classList
-      .add(
-        "skin-"
-        +
-        game.currentSkin
-      );
-
+  if(g.currentSkin!=="default"){
+    c.classList.add("skin-"+g.currentSkin);
   }
 
-
-  const skin =
-    SKINS.find(
-
-      item =>
-        item.id
-        ===
-        game.currentSkin
-
-    )
-    ||
-    SKINS[0];
-
-
-  $("quickSkin")
-    .textContent =
-    skin[
-      language
-    ][0];
-
+  const s=SKINS.find(x=>x.id===g.currentSkin)||SKINS[0];
+  $("skinName").textContent=s[lang][0];
 }
-
-
-/* =========================================================
-   APPLY ROOM
-========================================================= */
 
 function applyRoom(){
+  ROOMS.forEach(r=>document.body.classList.remove("room-"+r.id));
 
-  document.body
-    .classList
-    .remove(
-      "room-hall",
-      "room-salon",
-      "room-dj",
-      "room-bedroom",
-      "room-secret"
-    );
+  document.body.classList.add("room-"+g.currentRoom);
 
-
-  document.body
-    .classList
-    .add(
-      "room-"
-      +
-      game.currentRoom
-    );
-
-
-  const room =
-    ROOMS.find(
-
-      item =>
-        item.id
-        ===
-        game.currentRoom
-
-    )
-    ||
-    ROOMS[0];
-
-
-  $("quickRoom")
-    .textContent =
-    room[
-      language
-    ][0];
-
+  const room=ROOMS.find(x=>x.id===g.currentRoom)||ROOMS[0];
+  $("roomName").textContent=room[lang][0];
 }
 
+/* =========================
+   UNLOCKS + LEVEL REWARDS
+========================= */
 
-/* =========================================================
+let previousLevel=level();
+
+function checkUnlocks(){
+  SKINS.forEach(s=>{
+    if(level()>=s.level&&!g.unlockedSkins.includes(s.id)){
+      g.unlockedSkins.push(s.id);
+      rewardPopup(
+        lang==="ru"?"НОВЫЙ ОБЛИК":"NEW SKIN",
+        s[lang][0]
+      );
+    }
+  });
+
+  ROOMS.forEach(r=>{
+    if(level()>=r.level&&!g.unlockedRooms.includes(r.id)){
+      g.unlockedRooms.push(r.id);
+      rewardPopup(
+        lang==="ru"?"НОВАЯ КОМНАТА":"NEW ROOM",
+        r[lang][0]
+      );
+    }
+  });
+
+  const now=level();
+
+  if(now>previousLevel){
+    for(let l=previousLevel+1;l<=now;l++){
+      levelReward(l);
+    }
+    previousLevel=now;
+  }
+}
+
+function levelReward(lvl){
+  if(g.levelRewards.includes(lvl))return;
+
+  g.levelRewards.push(lvl);
+
+  let reward=100+lvl*60;
+
+  if(lvl%5===0){
+    reward*=3;
+    g.keys++;
+  }
+
+  addSoulsRaw(reward);
+
+  rewardPopup(
+    lang==="ru"?"НОВЫЙ УРОВЕНЬ":"LEVEL UP",
+    `${lvl} · +${fmt(reward)} ♱${lvl%5===0?" · +1 🔑":""}`
+  );
+}
+
+function rewardPopup(top,name){
+  haptic("success");
+
+  const e=document.createElement("div");
+  e.className="reward-pop";
+
+  e.innerHTML=`
+    <div class="reward-box">
+      <div class="reward-small">${top}</div>
+      <div class="reward-name">${name}</div>
+    </div>
+  `;
+
+  document.body.appendChild(e);
+
+  setTimeout(()=>e.remove(),2800);
+}
+
+/* =========================
    QUICK SWITCH
-========================================================= */
+========================= */
 
-function switchUnlocked(
-  type,
-  direction
-){
+function switchUnlocked(kind,direction){
+  const data=kind==="skin"?SKINS:ROOMS;
+  const unlocked=kind==="skin"?g.unlockedSkins:g.unlockedRooms;
+  const current=kind==="skin"?g.currentSkin:g.currentRoom;
 
-  const source =
-    type === "skin"
-    ? SKINS
-    : ROOMS;
+  const available=data.filter(x=>unlocked.includes(x.id));
 
+  if(available.length<2)return;
 
-  const unlocked =
-    type === "skin"
-    ? game.unlockedSkins
-    : game.unlockedRooms;
+  let index=available.findIndex(x=>x.id===current);
+  if(index<0)index=0;
 
+  index=(index+direction+available.length)%available.length;
 
-  const current =
-    type === "skin"
-    ? game.currentSkin
-    : game.currentRoom;
-
-
-  const available =
-    source.filter(
-
-      item =>
-        unlocked.includes(
-          item.id
-        )
-
-    );
-
-
-  if(
-    available.length
-    <
-    2
-  )
-    return;
-
-
-  let index =
-    available.findIndex(
-
-      item =>
-        item.id
-        === current
-
-    );
-
-
-  if(
-    index < 0
-  )
-    index = 0;
-
-
-  index =
-
-    (
-      index
-      +
-      direction
-      +
-      available.length
-    )
-
-    %
-
-    available.length;
-
-
-  if(
-    type === "skin"
-  ){
-
-    game.currentSkin =
-      available[
-        index
-      ].id;
-
-
+  if(kind==="skin"){
+    g.currentSkin=available[index].id;
     applySkin();
-
-  }
-
-  else{
-
-    game.currentRoom =
-      available[
-        index
-      ].id;
-
-
+  }else{
+    g.currentRoom=available[index].id;
     applyRoom();
-
   }
 
-
-  haptic(
-    "select"
-  );
-
-
-  saveGame();
-
-  updateUI();
-
+  haptic("select");
+  save();
+  update();
 }
 
+$("skinPrev").onclick=()=>switchUnlocked("skin",-1);
+$("skinNext").onclick=()=>switchUnlocked("skin",1);
+$("roomPrev").onclick=()=>switchUnlocked("room",-1);
+$("roomNext").onclick=()=>switchUnlocked("room",1);
 
-$("prevSkin")
-.onclick =
-() =>
-  switchUnlocked(
-    "skin",
-    -1
-  );
-
-
-$("nextSkin")
-.onclick =
-() =>
-  switchUnlocked(
-    "skin",
-    1
-  );
-
-
-$("prevRoom")
-.onclick =
-() =>
-  switchUnlocked(
-    "room",
-    -1
-  );
-
-
-$("nextRoom")
-.onclick =
-() =>
-  switchUnlocked(
-    "room",
-    1
-  );
-
-
-/* =========================================================
+/* =========================
    MODAL
-========================================================= */
+========================= */
 
-function openModal(
-  title,
-  content
-){
-
-  $("modalTitle")
-    .textContent =
-    title;
-
-
-  $("modalContent")
-    .innerHTML =
-    content;
-
-
-  $("modalBackdrop")
-    .classList
-    .add(
-      "open"
-    );
-
+function modal(title,html){
+  $("modalTitle").textContent=title;
+  $("modalContent").innerHTML=html;
+  $("modalBg").classList.add("open");
 }
-
 
 function closeModal(){
-
-  $("modalBackdrop")
-    .classList
-    .remove(
-      "open"
-    );
-
+  $("modalBg").classList.remove("open");
 }
 
+$("modalClose").onclick=closeModal;
 
-$("modalClose")
-.onclick =
-  closeModal;
-
-
-$("modalBackdrop")
-.onclick =
-event => {
-
-  if(
-    event.target
-    ===
-    $("modalBackdrop")
-  )
-    closeModal();
-
+$("modalBg").onclick=e=>{
+  if(e.target===$("modalBg"))closeModal();
 };
 
-
-/* =========================================================
+/* =========================
    SKIN MENU
-========================================================= */
+========================= */
 
 function showSkins(){
+  const html=SKINS.map(s=>{
+    const open=g.unlockedSkins.includes(s.id);
+    const current=g.currentSkin===s.id;
+    const d=s[lang];
 
-  const html =
-    SKINS.map(
+    return `
+      <div class="card ${current?"selected":""} ${open?"":"locked"}">
+        <div class="card-name">${open?d[0]:"🔒 ???"}</div>
+        <div class="card-info">${open?d[1]:tx("locked")+" "+s.level}</div>
+        <div class="card-info">${open?d[2]:""}</div>
 
-      skin => {
+        ${open?`
+          <button data-skin="${s.id}" ${current?"disabled":""}>
+            ${current?tx("equipped"):tx("equip")}
+          </button>
+        `:""}
+      </div>
+    `;
+  }).join("");
 
-        const unlocked =
-          game.unlockedSkins
-            .includes(
-              skin.id
-            );
+  modal(tx("skins"),html);
 
-
-        const selected =
-          game.currentSkin
-          ===
-          skin.id;
-
-
-        const data =
-          skin[
-            language
-          ];
-
-
-        return `
-
-        <div class="
-          card
-          ${selected ? "selected" : ""}
-          ${unlocked ? "" : "locked"}
-        ">
-
-          <div class="card-name">
-
-            ${
-              unlocked
-              ? data[0]
-              : "🔒 ???"
-            }
-
-          </div>
-
-          <div class="card-info">
-
-            ${
-              unlocked
-              ? data[1]
-              : tx("locked")
-                + " "
-                + skin.level
-            }
-
-          </div>
-
-          <div class="card-info">
-
-            ${
-              unlocked
-              ? data[2]
-              : ""
-            }
-
-          </div>
-
-          ${
-            unlocked
-
-            ? `
-
-            <button
-              data-skin="${skin.id}"
-              ${selected ? "disabled" : ""}>
-
-              ${
-                selected
-                ? tx("equipped")
-                : tx("equip")
-              }
-
-            </button>
-
-            `
-
-            : ""
-          }
-
-        </div>
-
-        `;
-
-      }
-
-    ).join("");
-
-
-  openModal(
-    tx("skins"),
-    html
-  );
-
-
-  document
-    .querySelectorAll(
-      "[data-skin]"
-    )
-    .forEach(
-
-      button => {
-
-        button.onclick =
-        () => {
-
-          game.currentSkin =
-            button.dataset.skin;
-
-
-          applySkin();
-
-
-          haptic(
-            "select"
-          );
-
-
-          saveGame();
-
-          closeModal();
-
-          updateUI();
-
-        };
-
-      }
-
-    );
-
+  document.querySelectorAll("[data-skin]").forEach(b=>{
+    b.onclick=()=>{
+      g.currentSkin=b.dataset.skin;
+      applySkin();
+      haptic("select");
+      save();
+      closeModal();
+      update();
+    };
+  });
 }
 
-
-/* =========================================================
+/* =========================
    ROOM MENU
-========================================================= */
+========================= */
 
 function showRooms(){
+  const html=ROOMS.map(r=>{
+    const open=g.unlockedRooms.includes(r.id);
+    const current=g.currentRoom===r.id;
+    const d=r[lang];
 
-  const html =
-    ROOMS.map(
+    return `
+      <div class="card ${current?"selected":""} ${open?"":"locked"}">
+        <div class="card-name">${open?d[0]:"🔒 ???"}</div>
+        <div class="card-info">${open?d[1]:tx("locked")+" "+r.level}</div>
 
-      room => {
+        ${open?`
+          <button data-room="${r.id}" ${current?"disabled":""}>
+            ${current?tx("current"):tx("enter")}
+          </button>
+        `:""}
+      </div>
+    `;
+  }).join("");
 
-        const unlocked =
-          game.unlockedRooms
-            .includes(
-              room.id
-            );
+  modal(tx("rooms"),html);
 
-
-        const selected =
-          game.currentRoom
-          ===
-          room.id;
-
-
-        const data =
-          room[
-            language
-          ];
-
-
-        return `
-
-        <div class="
-          card
-          ${selected ? "selected" : ""}
-          ${unlocked ? "" : "locked"}
-        ">
-
-          <div class="card-name">
-
-            ${
-              unlocked
-              ? data[0]
-              : "🔒 ???"
-            }
-
-          </div>
-
-          <div class="card-info">
-
-            ${
-              unlocked
-              ? data[1]
-              : tx("locked")
-                + " "
-                + room.level
-            }
-
-          </div>
-
-          <div class="card-info">
-
-            ${
-              unlocked
-              ? data[2]
-              : ""
-            }
-
-          </div>
-
-          ${
-            unlocked
-
-            ? `
-
-            <button
-              data-room="${room.id}"
-              ${selected ? "disabled" : ""}>
-
-              ${
-                selected
-                ? tx("current")
-                : tx("enter")
-              }
-
-            </button>
-
-            `
-
-            : ""
-          }
-
-        </div>
-
-        `;
-
-      }
-
-    ).join("");
-
-
-  openModal(
-    tx("rooms"),
-    html
-  );
-
-
-  document
-    .querySelectorAll(
-      "[data-room]"
-    )
-    .forEach(
-
-      button => {
-
-        button.onclick =
-        () => {
-
-          game.currentRoom =
-            button.dataset.room;
-
-
-          applyRoom();
-
-
-          haptic(
-            "select"
-          );
-
-
-          saveGame();
-
-          closeModal();
-
-          updateUI();
-
-        };
-
-      }
-
-    );
-
+  document.querySelectorAll("[data-room]").forEach(b=>{
+    b.onclick=()=>{
+      g.currentRoom=b.dataset.room;
+      applyRoom();
+      haptic("select");
+      save();
+      closeModal();
+      update();
+    };
+  });
 }
 
+/* =========================
+   LOOT
+========================= */
 
-$("openSkins")
-.onclick =
-  showSkins;
+function makeLoot(good=false){
+  let roll=Math.random();
 
-
-$("openRooms")
-.onclick =
-  showRooms;
-
-
-/* =========================================================
-   GENERATE LOOT
-========================================================= */
-
-function generateLoot(
-  guaranteedGood = false
-){
-
-  let roll =
-    Math.random();
-
-
-  if(
-    guaranteedGood
-  ){
-
-    roll =
-      .60
-      +
-      Math.random()
-      *
-      .40;
-
-  }
-
+  if(good)roll=.6+Math.random()*.4;
 
   let rarity;
   let base;
 
-
-  if(
-    roll < .45
-  ){
-
-    rarity =
-      "common";
-
-    base =
-      .025;
-
+  if(roll<.42){
+    rarity="common";base=.02;
+  }else if(roll<.74){
+    rarity="rare";base=.045;
+  }else if(roll<.91){
+    rarity="epic";base=.09;
+  }else if(roll<.975){
+    rarity="legendary";base=.18;
+  }else if(roll<.995){
+    rarity="cursed";base=.34;
+  }else{
+    rarity="mythic";base=.55;
   }
 
-  else if(
-    roll < .76
-  ){
+  const stats=["click","passive","global","crit"];
+  const stat=stats[Math.floor(Math.random()*stats.length)];
 
-    rarity =
-      "rare";
+  let value=base*(.8+Math.random()*.4);
 
-    base =
-      .05;
+  if(stat==="crit")value*=.3;
 
-  }
-
-  else if(
-    roll < .93
-  ){
-
-    rarity =
-      "epic";
-
-    base =
-      .10;
-
-  }
-
-  else if(
-    roll < .985
-  ){
-
-    rarity =
-      "legendary";
-
-    base =
-      .20;
-
-  }
-
-  else{
-
-    rarity =
-      "cursed";
-
-    base =
-      .38;
-
-  }
-
-
-  const stats = [
-    "click",
-    "passive",
-    "global",
-    "crit"
-  ];
-
-
-  const stat =
-    stats[
-
-      Math.floor(
-        Math.random()
-        *
-        stats.length
-      )
-
-    ];
-
-
-  let value =
-
-    base
-
-    *
-
-    (
-      .75
-      +
-      Math.random()
-      *
-      .5
-    );
-
-
-  if(
-    stat === "crit"
-  ){
-
-    value *=
-      .35;
-
-  }
-
-
-  const item = {
-
-    key:
-      Math.floor(
-        Math.random()
-        *
-        ITEM_NAMES.ru.length
-      ),
-
+  const item={
+    key:Math.floor(Math.random()*ITEMS.ru.length),
     rarity,
-
     stat,
-
     value,
-
     penaltyStat:null,
-
     penalty:0
-
   };
 
-
-  if(
-    rarity === "cursed"
-  ){
-
-    const possible =
-      [
-        "click",
-        "passive",
-        "global"
-      ]
-      .filter(
-        x =>
-          x !== stat
-      );
-
-
-    item.penaltyStat =
-      possible[
-
-        Math.floor(
-          Math.random()
-          *
-          possible.length
-        )
-
-      ];
-
-
-    item.penalty =
-      -.12;
-
+  if(rarity==="cursed"){
+    const options=["click","passive","global"].filter(x=>x!==stat);
+    item.penaltyStat=options[Math.floor(Math.random()*options.length)];
+    item.penalty=-.10;
   }
 
+  g.loot.push(item);
 
-  game.loot.push(
-    item
-  );
-
-
-  if(
-    game.loot.length
-    >
-    50
-  ){
-
-    game.loot =
-      game.loot
-      .slice(
-        -50
-      );
-
+  if(g.loot.length>60){
+    g.loot=g.loot.slice(-60);
   }
 
-
-  haptic(
-    "success"
-  );
-
+  haptic("success");
 
   message(
-
-    tx("drop")
-
-    +
-    " · "
-
-    +
-    ITEM_NAMES[
-      language
-    ][item.key]
-
+    (lang==="ru"?"Выпал предмет: ":"Item dropped: ")+
+    ITEMS[lang][item.key]
   );
 
-
-  saveGame();
-
+  save();
 }
 
-
-/* =========================================================
-   INVENTORY
-========================================================= */
-
 function statName(stat){
-
-  const names = {
-
+  const names={
     ru:{
       click:"сила нажатия",
       passive:"пассивный доход",
       global:"общий доход",
       crit:"шанс крита"
     },
-
     en:{
       click:"click power",
       passive:"passive income",
       global:"all income",
       crit:"critical chance"
     }
-
   };
 
-
-  return names[
-    language
-  ][stat];
-
+  return names[lang][stat];
 }
-
 
 function showInventory(){
-
-  const summary = `
-
-  <div class="inventory-summary">
-
-    ${
-      language === "ru"
-      ? "Сила нажатия"
-      : "Click power"
-    }:
-    ${(itemBonus("click")*100).toFixed(1)}%
-
-    <br>
-
-    ${
-      language === "ru"
-      ? "Пассивный доход"
-      : "Passive income"
-    }:
-    ${(itemBonus("passive")*100).toFixed(1)}%
-
-    <br>
-
-    ${
-      language === "ru"
-      ? "Общий доход"
-      : "All income"
-    }:
-    ${(itemBonus("global")*100).toFixed(1)}%
-
-    <br>
-
-    ${
-      language === "ru"
-      ? "Доп. шанс крита"
-      : "Extra critical chance"
-    }:
-    ${(itemBonus("crit")*100).toFixed(1)}%
-
-  </div>
-
+  const summary=`
+    <div class="inventory-summary">
+      ${lang==="ru"?"Нажатие":"Click"}: ${(itemBonus("click")*100).toFixed(1)}%<br>
+      ${lang==="ru"?"Пассив":"Passive"}: ${(itemBonus("passive")*100).toFixed(1)}%<br>
+      ${lang==="ru"?"Общий":"Global"}: ${(itemBonus("global")*100).toFixed(1)}%<br>
+      ${lang==="ru"?"Крит":"Crit"}: ${(itemBonus("crit")*100).toFixed(1)}%
+    </div>
   `;
 
+  const list=g.loot.length
+    ?g.loot.slice().reverse().map(item=>{
+      const name=ITEMS[lang][Number.isInteger(item.key)?item.key:0];
 
-  const items =
-    game.loot.length
-
-    ? game.loot
-      .slice()
-      .reverse()
-      .map(
-
-        item => {
-
-          const key =
-            Number.isInteger(
-              item.key
-            )
-            ? item.key
-            : 0;
-
-
-          return `
-
-          <div class="
-            loot
-            ${item.rarity || "common"}
-          ">
-
-            <div class="loot-name">
-
-              ${
-                ITEM_NAMES[
-                  language
-                ][key]
-              }
-
-            </div>
-
-            <div class="loot-stat">
-
-              +${
-                (
-                  Math.max(
-                    0,
-                    Number(item.value)
-                    || 0
-                  )
-                  *
-                  100
-                )
-                .toFixed(1)
-              }%
-
-              ${
-                statName(
-                  item.stat
-                )
-              }
-
-            </div>
-
-            ${
-              item.rarity
-              ===
-              "cursed"
-
-              ? `
-
-              <div class="loot-stat">
-
-                ☠ −12%
-
-                ${
-                  statName(
-                    item.penaltyStat
-                  )
-                }
-
-              </div>
-
-              `
-
-              : ""
-            }
-
+      return `
+        <div class="loot ${item.rarity||"common"}">
+          <div class="loot-name">${name}</div>
+          <div class="loot-stat">
+            +${((Number(item.value)||0)*100).toFixed(1)}%
+            ${statName(item.stat)}
           </div>
 
-          `;
+          ${item.penaltyStat?`
+            <div class="loot-stat">
+              ☠ ${(item.penalty*100).toFixed(0)}%
+              ${statName(item.penaltyStat)}
+            </div>
+          `:""}
+        </div>
+      `;
+    }).join("")
+    :`<div class="minor">${tx("noItems")}</div>`;
 
-        }
-
-      )
-      .join("")
-
-    : `<div class="small">${tx("noItems")}</div>`;
-
-
-  openModal(
-
-    tx("inventory"),
-
-    summary
-    +
-    items
-
-  );
-
+  modal(tx("items"),summary+list);
 }
 
-
-$("openInventory")
-.onclick =
-  showInventory;
-
-
-/* =========================================================
+/* =========================
    RECORDS
-========================================================= */
+========================= */
 
 function dropRecord(){
+  const record=RECORDS[Math.floor(Math.random()*RECORDS.length)];
 
-  const record =
-    RECORDS[
-
-      Math.floor(
-        Math.random()
-        *
-        RECORDS.length
-      )
-
-    ];
-
-
-  if(
-    game.records
-      .includes(
-        record
-      )
-  ){
-
-    const reward =
-      Math.max(
-        750,
-        baseClick()
-        *
-        100
-      );
-
-
-    addSouls(
-      reward
-    );
-
-
+  if(g.records.includes(record)){
+    addSouls(Math.max(1000,baseClick()*150));
     return;
-
   }
 
+  g.records.push(record);
 
-  game.records
-    .push(
-      record
-    );
-
-
-  haptic(
-    "success"
-  );
-
+  haptic("success");
 
   message(
-
-    tx("recordDrop")
-
-    +
-    " · "
-
-    +
-    record
-
+    (lang==="ru"?"Найдена пластинка: ":"Record found: ")+record
   );
 
-
-  saveGame();
-
+  save();
 }
-
 
 function showRecords(){
-
-  const html =
-    game.records.length
-
-    ? game.records
-      .map(
-
-        (record,index) => `
-
-        <div class="
-          loot legendary
-        ">
-
-          <div class="loot-name">
-
-            ${
-              String(
-                index + 1
-              )
-              .padStart(
-                2,
-                "0"
-              )
-            }
-
-            ·
-
-            ${record}
-
-          </div>
-
-          <div class="loot-stat">
-
-            +4%
-
-            ${
-              language === "ru"
-              ? "ко всему доходу"
-              : "all income"
-            }
-
-          </div>
-
+  const html=g.records.length
+    ?g.records.map((r,i)=>`
+      <div class="loot legendary">
+        <div class="loot-name">
+          ${String(i+1).padStart(2,"0")} · ${r}
         </div>
+        <div class="loot-stat">+4% ${lang==="ru"?"ко всему доходу":"all income"}</div>
+      </div>
+    `).join("")
+    :`<div class="minor">${tx("noRecords")}</div>`;
 
-        `
-
-      )
-      .join("")
-
-    : `<div class="small">${tx("noRecords")}</div>`;
-
-
-  openModal(
-    tx("records"),
-    html
-  );
-
+  modal(tx("records"),html);
 }
 
-
-$("openRecords")
-.onclick =
-  showRecords;
-
-
-/* =========================================================
+/* =========================
    CONTRACTS
-========================================================= */
+========================= */
 
 function createContracts(){
-
-  game.contracts =
-
-    Object.keys(
-      CONTRACT_TYPES
-    )
-
-    .sort(
-      () =>
-        Math.random()
-        -
-        .5
-    )
-
-    .slice(
-      0,
-      3
-    )
-
-    .map(
-
-      type => ({
-
-        type,
-
-        progress:0,
-
-        done:false
-
-      })
-
-    );
-
+  g.contracts=Object.keys(CONTRACTS)
+    .sort(()=>Math.random()-.5)
+    .slice(0,3)
+    .map(type=>({
+      type,
+      progress:0,
+      done:false
+    }));
 }
 
+if(!g.contracts.length)createContracts();
 
-if(
-  !game.contracts.length
-){
+function contractProgress(type,amount){
+  g.contracts.forEach(c=>{
+    if(c.done||c.type!==type)return;
 
-  createContracts();
+    const data=CONTRACTS[c.type];
 
-}
+    c.progress=Math.min(data.target,c.progress+amount);
 
+    if(c.progress>=data.target){
+      c.done=true;
 
-function progressContract(
-  type,
-  amount
-){
+      const reward=data.reward*allMulti();
 
-  game.contracts
-    .forEach(
+      addSoulsRaw(reward);
 
-      contract => {
-
-        if(
-          contract.type
-          !== type
-          ||
-          contract.done
-        )
-          return;
-
-
-        const data =
-          CONTRACT_TYPES[
-            contract.type
-          ];
-
-
-        contract.progress =
-          Math.min(
-
-            data.target,
-
-            contract.progress
-            +
-            amount
-
-          );
-
-
-        if(
-          contract.progress
-          >=
-          data.target
-        ){
-
-          contract.done =
-            true;
-
-
-          const reward =
-
-            data.reward
-
-            *
-
-            globalMulti();
-
-
-          addSoulsRaw(
-            reward
-          );
-
-
-          haptic(
-            "success"
-          );
-
-
-          message(
-
-            tx("task")
-
-            +
-            " · +"
-
-            +
-            fmt(reward)
-
-          );
-
-        }
-
-      }
-
-    );
-
-}
-
-
-function renderContracts(){
-
-  $("contractsList")
-    .innerHTML =
-
-    game.contracts
-    .map(
-
-      contract => {
-
-        const data =
-          CONTRACT_TYPES[
-            contract.type
-          ];
-
-
-        const percent =
-          Math.min(
-
-            100,
-
-            contract.progress
-
-            /
-
-            data.target
-
-            *
-
-            100
-
-          );
-
-
-        return `
-
-        <div class="contract">
-
-          <div class="contract-name">
-
-            ${
-              contract.done
-              ? "✓ "
-              : ""
-            }
-
-            ${data[language]}
-
-          </div>
-
-          <div class="progress">
-
-            <div
-              style="
-                width:
-                ${percent}%
-              ">
-            </div>
-
-          </div>
-
-          <div class="small">
-
-            ${fmt(contract.progress)}
-
-            /
-
-            ${fmt(data.target)}
-
-            · ♱
-
-            ${fmt(data.reward)}
-
-          </div>
-
-        </div>
-
-        `;
-
-      }
-
-    )
-    .join("");
-
-}
-
-
-/* =========================================================
-   SOULS
-========================================================= */
-
-function addSoulsRaw(
-  amount
-){
-
-  game.souls +=
-    amount;
-
-
-  game.lifetime +=
-    amount;
-
-}
-
-
-function addSouls(
-  amount
-){
-
-  addSoulsRaw(
-    amount
-  );
-
-
-  progressContract(
-    "souls",
-    amount
-  );
-
-}
-
-
-/* =========================================================
-   CLICK
-========================================================= */
-
-let combo = 0;
-
-let lastClick = 0;
-
-let rageActive = false;
-
-
-$("character")
-.addEventListener(
-
-  "pointerdown",
-
-  event => {
-
-    /*
-    Убираем double tap zoom именно
-    при клике по тыкве.
-    */
-
-    if(
-      event.pointerType
-      === "touch"
-    ){
-
-      event.preventDefault();
-
-    }
-
-
-    haptic(
-      "light"
-    );
-
-
-    const now =
-      Date.now();
-
-
-    combo =
-
-      now
-      -
-      lastClick
-      <
-      480
-
-      ? combo + 1
-
-      : 1;
-
-
-    lastClick =
-      now;
-
-
-    const speed =
-
-      game.currentRoom
-      === "dj"
-
-      ? 2
-
-      : 1;
-
-
-    const comboMulti =
-
-      Math.min(
-
-        2.2,
-
-        1
-
-        +
-
-        (
-          combo
-          -
-          1
-        )
-
-        *
-
-        .021
-
-        *
-
-        speed
-
-      );
-
-
-    let amount =
-
-      baseClick()
-
-      *
-
-      clickMulti()
-
-      *
-
-      globalMulti()
-
-      *
-
-      comboMulti;
-
-
-    const critical =
-
-      Math.random()
-
-      <
-
-      critChance();
-
-
-    if(critical){
-
-      amount *=
-        critPower();
-
-
-      game.criticals++;
-
-
-      haptic(
-        "heavy"
-      );
-
-    }
-
-
-    if(
-      rageActive
-    ){
-
-      amount *=
-        5;
-
-    }
-
-
-    amount =
-      Math.ceil(
-        amount
-      );
-
-
-    if(
-      bossActive
-    ){
-
-      damageBoss(
-        amount
-      );
-
-    }
-
-    else{
-
-      addSouls(
-        amount
-      );
-
-    }
-
-
-    game.clicks++;
-
-
-    game.rage =
-      Math.min(
-
-        100,
-
-        game.rage
-        +
-        .55
-
-      );
-
-
-    progressContract(
-      "clicks",
-      1
-    );
-
-
-    floatingText(
-
-      event.clientX,
-
-      event.clientY,
-
-      critical
-
-      ? tx("critical")
-        +
-        " +"
-        +
-        fmt(amount)
-
-      : "+"
-        +
-        fmt(amount),
-
-      critical
-
-    );
-
-
-    $("combo")
-      .textContent =
-
-      tx("combo")
-
-      +
-      " "
-
-      +
-      combo
-
-      +
-      " · x"
-
-      +
-      comboMulti
-      .toFixed(2);
-
-
-    $("combo")
-      .classList
-      .add(
-        "show"
-      );
-
-
-    $("character")
-      .classList
-      .add(
-        "hit"
-      );
-
-
-    setTimeout(
-
-      () =>
-        $("character")
-        .classList
-        .remove(
-          "hit"
-        ),
-
-      70
-
-    );
-
-
-    updateUI();
-
-  },
-
-  {
-    passive:false
-  }
-
-);
-
-
-setInterval(
-
-  () => {
-
-    if(
-      Date.now()
-      -
-      lastClick
-      >
-      850
-    ){
-
-      combo = 0;
-
-
-      $("combo")
-        .classList
-        .remove(
-          "show"
-        );
-
-    }
-
-  },
-
-  150
-
-);
-
-
-/* =========================================================
-   RAGE
-========================================================= */
-
-$("rageButton")
-.onclick =
-() => {
-
-  if(
-    game.rage
-    <
-    100
-  )
-    return;
-
-
-  game.rage = 0;
-
-  rageActive = true;
-
-
-  haptic(
-    "success"
-  );
-
-
-  message(
-
-    language === "ru"
-
-    ? "Квартира входит в ритм · нажатия x5"
-
-    : "KVARTIRA enters the rhythm · clicks x5"
-
-  );
-
-
-  setTimeout(
-
-    () => {
-
-      rageActive =
-        false;
-
+      haptic("success");
 
       message(
-
-        language === "ru"
-
-        ? "Ритм стих."
-
-        : "The rhythm faded."
-
+        (lang==="ru"?"Задание выполнено · +":"Task completed · +")+
+        fmt(reward)
       );
-
-    },
-
-    10000
-
-  );
-
-
-  updateUI();
-
-};
-
-
-/* =========================================================
-   SHOP
-========================================================= */
-
-const PRICE_MULTI = {
-
-  click:1.60,
-
-  auto:1.64,
-
-  ring:1.73,
-
-  crit:1.95,
-
-  critPower:2.1
-
-};
-
-
-function buy(type){
-
-  const costKey =
-    type
-    +
-    "Cost";
-
-
-  const levelKey =
-    type
-    +
-    "Lvl";
-
-
-  if(
-    game.souls
-    <
-    game[
-      costKey
-    ]
-  )
-    return;
-
-
-  game.souls -=
-    game[
-      costKey
-    ];
-
-
-  game[
-    levelKey
-  ]++;
-
-
-  game[
-    costKey
-  ] =
-    Math.floor(
-
-      game[
-        costKey
-      ]
-
-      *
-
-      PRICE_MULTI[
-        type
-      ]
-
-    );
-
-
-  progressContract(
-    "upgrades",
-    1
-  );
-
-
-  haptic(
-    "select"
-  );
-
-
-  saveGame();
-
-  updateUI();
-
+    }
+  });
 }
 
+function renderContracts(){
+  $("contracts").innerHTML=g.contracts.map(c=>{
+    const d=CONTRACTS[c.type];
+    const percent=Math.min(100,c.progress/d.target*100);
 
-$("buyClick")
-.onclick =
-() => buy("click");
+    return `
+      <div class="card">
+        <div class="card-name">
+          ${c.done?"✓ ":""}${d[lang]}
+        </div>
+        <div class="bar" style="width:100%">
+          <div class="bar-fill" style="width:${percent}%"></div>
+        </div>
+        <div class="card-info">
+          ${fmt(c.progress)} / ${fmt(d.target)}
+          · ♱ ${fmt(d.reward)}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
 
+/* =========================
+   ACHIEVEMENTS
+========================= */
 
-$("buyAuto")
-.onclick =
-() => buy("auto");
+function checkAchievements(){
+  ACHIEVEMENTS.forEach(a=>{
+    if(a.test()&&!g.achievements.includes(a.id)){
+      g.achievements.push(a.id);
 
+      const reward=2500*(g.achievements.length);
 
-$("buyRing")
-.onclick =
-() => buy("ring");
+      addSoulsRaw(reward);
 
-
-$("buyCrit")
-.onclick =
-() => buy("crit");
-
-
-$("buyCritPower")
-.onclick =
-() => buy("critPower");
-
-
-/* =========================================================
-   PASSIVE
-========================================================= */
-
-setInterval(
-
-  () => {
-
-    if(
-      !bossActive
-    ){
-
-      const gain =
-
-        passiveBase()
-
-        *
-
-        passiveMulti()
-
-        *
-
-        globalMulti()
-
-        /
-
-        10;
-
-
-      addSouls(
-        gain
+      rewardPopup(
+        lang==="ru"?"ДОСТИЖЕНИЕ":"ACHIEVEMENT",
+        a[lang]+" · +"+fmt(reward)
       );
+    }
+  });
+}
 
+function renderAchievements(){
+  $("achievementList").innerHTML=ACHIEVEMENTS.map(a=>{
+    const done=g.achievements.includes(a.id);
+
+    return `
+      <div class="card ${done?"selected":""}">
+        <div class="card-name">
+          ${done?"✓ ":"○ "}${a[lang]}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+/* =========================
+   SOULS
+========================= */
+
+function addSoulsRaw(amount){
+  g.souls+=amount;
+  g.lifetime+=amount;
+}
+
+function addSouls(amount){
+  addSoulsRaw(amount);
+  contractProgress("souls",amount);
+}
+
+/* =========================
+   CLICK
+========================= */
+
+let combo=0;
+let lastClick=0;
+
+$("character").addEventListener("pointerdown",e=>{
+  if(e.pointerType==="touch")e.preventDefault();
+
+  haptic("light");
+
+  const now=Date.now();
+
+  combo=now-lastClick<470?combo+1:1;
+  lastClick=now;
+
+  const comboSpeed=g.currentRoom==="dj"?2:1;
+
+  const comboMulti=Math.min(
+    2.35,
+    1+(combo-1)*.02*comboSpeed
+  );
+
+  let amount=baseClick()*clickMulti()*allMulti()*comboMulti;
+
+  let critical=false;
+  let jackpot=false;
+
+  const critRoll=Math.random();
+
+  if(critRoll<critChance()){
+    critical=true;
+
+    amount*=critPower();
+    g.criticals++;
+
+    /*
+    8% критов становятся супер-критом.
+    */
+    if(Math.random()<.08){
+      amount*=3;
     }
 
+    haptic("heavy");
+  }
 
-    updateUI();
+  /*
+  Очень редкий jackpot click.
+  */
+  if(Math.random()<.0025){
+    jackpot=true;
+    amount*=25;
+    haptic("success");
+  }
 
-  },
+  if(rageActive)amount*=5;
+  if(feverActive)amount*=2;
 
-  100
+  amount=Math.ceil(amount);
 
-);
+  if(bossActive){
+    bossDamage(amount);
+  }else{
+    addSouls(amount);
+  }
 
+  g.clicks++;
 
-/* =========================================================
-   BOSS
-========================================================= */
+  let rageGain=.5;
 
-let bossActive =
-  false;
+  if(g.currentRoom==="bath")rageGain*=1.5;
 
+  g.rage=Math.min(100,g.rage+rageGain);
 
-let bossHP =
-  0;
+  contractProgress("clicks",1);
 
+  let text="+"+fmt(amount);
+  let css="";
 
-let bossMaxHP =
-  0;
+  if(critical){
+    text=tx("critical")+" +"+fmt(amount);
+    css="crit";
+  }
 
+  if(jackpot){
+    text=tx("jackpot")+" +"+fmt(amount);
+    css="jackpot";
+  }
 
-let bossEnraged =
-  false;
+  floatText(e.clientX,e.clientY,text,css);
 
+  $("combo").textContent=
+    tx("combo")+" "+combo+" · x"+comboMulti.toFixed(2);
 
-$("bossButton")
-.onclick =
-() =>
-  startBoss();
+  $("combo").classList.add("show");
 
+  $("character").classList.add("hit");
 
-function startBoss(){
+  setTimeout(()=>$("character").classList.remove("hit"),65);
 
-  if(
-    bossActive
-  )
-    return;
+  /*
+  Комбо награды.
+  */
+  if(combo===50){
+    message(lang==="ru"?"Серия 50 · +5% ярости":"Combo 50 · +5% rage");
+    g.rage=Math.min(100,g.rage+5);
+  }
 
+  if(combo===100){
+    startFever();
+  }
 
-  bossActive =
-    true;
+  update();
+},{passive:false});
 
+setInterval(()=>{
+  if(Date.now()-lastClick>820){
+    combo=0;
+    $("combo").classList.remove("show");
+  }
+},150);
 
-  bossEnraged =
-    false;
+/* =========================
+   FEVER
+========================= */
 
+function startFever(){
+  if(feverActive)return;
 
-  bossMaxHP =
+  feverActive=true;
 
-    4200
-
-    *
-
-    Math.pow(
-
-      2.05,
-
-      game.bosses
-
-    )
-
-    *
-
-    (
-      1
-
-      +
-
-      game.prestiges
-
-      *
-
-      .35
-    );
-
-
-  bossHP =
-    bossMaxHP;
-
-
-  $("boss")
-    .classList
-    .add(
-      "show"
-    );
-
-
-  $("boss")
-    .classList
-    .remove(
-      "enraged"
-    );
-
-
-  $("bossName")
-    .textContent =
-    tx("boss");
-
-
-  $("bossPhase")
-    .textContent =
-    tx("phase1");
-
+  document.body.classList.add("fever");
 
   message(
-
-    language === "ru"
-
-    ? "БОСС КУКОЛДОВ пришёл в квартиру"
-
-    : "CUCKOLD BOSS entered the apartment"
-
+    lang==="ru"
+      ?"FEVER MODE · нажатия x2 на 15 секунд"
+      :"FEVER MODE · clicks x2 for 15 seconds"
   );
 
-
-  haptic(
-    "heavy"
-  );
-
-
-  updateBossUI();
-
+  setTimeout(()=>{
+    feverActive=false;
+    document.body.classList.remove("fever");
+  },15000);
 }
 
+/* =========================
+   RAGE
+========================= */
 
-function damageBoss(amount){
+$("rageButton").onclick=()=>{
+  if(g.rage<100)return;
 
-  if(
-    !bossActive
-  )
-    return;
+  g.rage=0;
+  rageActive=true;
 
-
-  if(
-    bossEnraged
-  ){
-
-    amount *=
-      .82;
-
-  }
-
-
-  bossHP -=
-    amount;
-
-
-  if(
-
-    !bossEnraged
-
-    &&
-
-    bossHP
-
-    <=
-
-    bossMaxHP
-
-    *
-
-    .5
-
-  ){
-
-    bossEnraged =
-      true;
-
-
-    $("boss")
-      .classList
-      .add(
-        "enraged"
-      );
-
-
-    $("bossPhase")
-      .textContent =
-      tx("phase2");
-
-
-    message(
-
-      language === "ru"
-
-      ? "БОСС КУКОЛДОВ В ЯРОСТИ · защита усилена"
-
-      : "CUCKOLD BOSS ENRAGED · defense increased"
-
-    );
-
-
-    haptic(
-      "heavy"
-    );
-
-  }
-
-
-  if(
-    bossHP <= 0
-  ){
-
-    killBoss();
-
-    return;
-
-  }
-
-
-  updateBossUI();
-
-}
-
-
-function updateBossUI(){
-
-  if(
-    !bossActive
-  )
-    return;
-
-
-  $("bossHP")
-    .style.width =
-
-    Math.max(
-
-      0,
-
-      bossHP
-      /
-      bossMaxHP
-      *
-      100
-
-    )
-
-    +
-    "%";
-
-
-  $("bossHPText")
-    .textContent =
-
-    fmt(
-      Math.max(
-        0,
-        bossHP
-      )
-    )
-
-    +
-    " / "
-
-    +
-    fmt(
-      bossMaxHP
-    )
-
-    +
-    " HP";
-
-}
-
-
-function killBoss(){
-
-  if(
-    !bossActive
-  )
-    return;
-
-
-  bossActive =
-    false;
-
-
-  game.bosses++;
-
-
-  $("boss")
-    .classList
-    .remove(
-      "show",
-      "enraged"
-    );
-
-
-  const reward =
-
-    bossMaxHP
-
-    *
-
-    .52
-
-    *
-
-    globalMulti();
-
-
-  addSouls(
-    reward
-  );
-
-
-  progressContract(
-    "boss",
-    1
-  );
-
-
-  generateLoot(
-    true
-  );
-
-
-  if(
-    Math.random()
-    <
-    .35
-  )
-    dropRecord();
-
-
-  haptic(
-    "success"
-  );
-
+  haptic("success");
 
   message(
-
-    language === "ru"
-
-    ? "БОСС КУКОЛДОВ побеждён · +"
-      + fmt(reward)
-
-    : "CUCKOLD BOSS defeated · +"
-      + fmt(reward)
-
+    lang==="ru"
+      ?"Вся квартира вошла в ритм · x5"
+      :"The whole apartment entered the rhythm · x5"
   );
 
+  setTimeout(()=>{
+    rageActive=false;
+  },10000);
 
-  saveGame();
-
-}
-
-
-$("leaveBoss")
-.onclick =
-() => {
-
-  bossActive =
-    false;
-
-
-  $("boss")
-    .classList
-    .remove(
-      "show",
-      "enraged"
-    );
-
-
-  haptic(
-    "error"
-  );
-
+  update();
 };
 
+/* =========================
+   SHOP
+========================= */
 
-/* =========================================================
-   TIGGO HTML
-========================================================= */
+const PRICE={
+  click:1.62,
+  auto:1.66,
+  ring:1.76,
+  crit:1.96,
+  critPower:2.12
+};
 
-function carHTML(){
+function buy(type){
+  const cost=type+"Cost";
+  const lvl=type+"Lvl";
 
-  return `
+  if(g.souls<g[cost])return;
 
-  <div class="car-roof"></div>
+  g.souls-=g[cost];
+  g[lvl]++;
+  g[cost]=Math.floor(g[cost]*PRICE[type]);
 
-  <div class="car-window"></div>
+  contractProgress("upgrades",1);
 
-  <div class="car-body">
+  haptic("select");
 
-    <div class="tiggo-logo">
-      TIGGO
-    </div>
-
-  </div>
-
-  <div class="wheel one"></div>
-
-  <div class="wheel two"></div>
-
-  `;
-
+  save();
+  update();
 }
 
+$("buyClick").onclick=()=>buy("click");
+$("buyAuto").onclick=()=>buy("auto");
+$("buyRing").onclick=()=>buy("ring");
+$("buyCrit").onclick=()=>buy("crit");
+$("buyCritPower").onclick=()=>buy("critPower");
 
-/* =========================================================
-   TIGGO
-========================================================= */
+/* =========================
+   PASSIVE
+========================= */
 
-function spawnTiggo(){
+setInterval(()=>{
+  if(!bossActive){
+    const gain=
+      passiveBase()
+      *passiveMulti()
+      *allMulti()
+      /10;
 
-  if(
-    document.querySelector(
-      ".tiggo"
-    )
-  )
+    addSouls(gain);
+  }
+
+  update();
+},100);
+
+/* =========================
+   BOSS
+========================= */
+
+let bossActive=false;
+let bossHP=0;
+let bossMax=0;
+let bossPhase=1;
+let bossShield=1;
+
+const BOSS_VARIANTS={
+  ru:[
+    "ОБЫЧНЫЙ БОСС КУКОЛДОВ",
+    "БОРДОВЫЙ БОСС КУКОЛДОВ",
+    "НОЧНОЙ БОСС КУКОЛДОВ",
+    "БОСС КУКОЛДОВ ИЗ КВ. 13",
+    "АБСОЛЮТНЫЙ БОСС КУКОЛДОВ"
+  ],
+  en:[
+    "REGULAR CUCKOLD BOSS",
+    "BURGUNDY CUCKOLD BOSS",
+    "NIGHT CUCKOLD BOSS",
+    "CUCKOLD BOSS FROM APT. 13",
+    "ABSOLUTE CUCKOLD BOSS"
+  ]
+};
+
+function startBoss(){
+  if(bossActive)return;
+
+  bossActive=true;
+  bossPhase=1;
+  bossShield=1;
+
+  bossMax=
+    5500*
+    Math.pow(2.12,g.bosses)*
+    (1+g.prestiges*.4);
+
+  bossHP=bossMax;
+
+  $("boss").classList.add("show");
+  $("boss").classList.remove("enraged");
+
+  $("bossName").textContent=
+    BOSS_VARIANTS[lang][g.bosses%BOSS_VARIANTS[lang].length];
+
+  $("bossSkill").textContent=
+    lang==="ru"?"ФАЗА I · смотрит":"PHASE I · watching";
+
+  updateBoss();
+
+  haptic("heavy");
+}
+
+$("bossButton").onclick=startBoss;
+
+function bossDamage(amount){
+  if(!bossActive)return;
+
+  amount*=bossShield;
+
+  bossHP-=amount;
+
+  if(bossHP<=bossMax*.65&&bossPhase===1){
+    bossPhase=2;
+    bossShield=.88;
+
+    $("boss").classList.add("enraged");
+
+    $("bossSkill").textContent=
+      lang==="ru"
+        ?"ФАЗА II · защита +12%"
+        :"PHASE II · defense +12%";
+
+    message(
+      lang==="ru"
+        ?"БОСС КУКОЛДОВ разозлился"
+        :"CUCKOLD BOSS became enraged"
+    );
+  }
+
+  if(bossHP<=bossMax*.25&&bossPhase===2){
+    bossPhase=3;
+    bossShield=.72;
+
+    $("bossSkill").textContent=
+      lang==="ru"
+        ?"ФАЗА III · защита +28%"
+        :"PHASE III · defense +28%";
+
+    /*
+    В третьей фазе отнимает часть ярости.
+    */
+    g.rage=Math.max(0,g.rage-20);
+
+    message(
+      lang==="ru"
+        ?"ФИНАЛЬНАЯ ФАЗА · босс украл 20% ритма"
+        :"FINAL PHASE · boss stole 20% rhythm"
+    );
+  }
+
+  if(bossHP<=0){
+    killBoss();
     return;
+  }
 
+  updateBoss();
+}
 
-  const car =
-    document.createElement(
-      "div"
+function updateBoss(){
+  $("bossHP").style.width=
+    Math.max(0,bossHP/bossMax*100)+"%";
+
+  $("bossHPText").textContent=
+    fmt(Math.max(0,bossHP))+" / "+fmt(bossMax)+" HP";
+}
+
+function killBoss(){
+  if(!bossActive)return;
+
+  bossActive=false;
+  g.bosses++;
+
+  $("boss").classList.remove("show","enraged");
+
+  const reward=bossMax*.55*allMulti();
+
+  addSouls(reward);
+
+  contractProgress("boss",1);
+
+  makeLoot(true);
+
+  if(Math.random()<.4)dropRecord();
+
+  if(Math.random()<.25)g.keys++;
+
+  haptic("success");
+
+  message(
+    (lang==="ru"?"БОСС КУКОЛДОВ побеждён · +":"CUCKOLD BOSS defeated · +")+
+    fmt(reward)
+  );
+
+  update();
+}
+
+$("leaveBoss").onclick=()=>{
+  bossActive=false;
+  $("boss").classList.remove("show","enraged");
+};
+
+/* =========================
+   TIGGO
+========================= */
+
+function carHTML(){
+  return `
+    <div class="car-roof"></div>
+    <div class="car-window"></div>
+    <div class="car-body">
+      <div class="car-logo">TIGGO</div>
+    </div>
+    <div class="wheel w1"></div>
+    <div class="wheel w2"></div>
+  `;
+}
+
+function spawnTiggo(kind="normal"){
+  if(document.querySelector(".tiggo"))return;
+
+  const car=document.createElement("div");
+
+  car.className=
+    "tiggo drive "+
+    (kind==="black"?"black-tiggo ":"")+
+    (kind==="golden"?"golden-tiggo ":"");
+
+  car.innerHTML=carHTML();
+
+  car.style.top=
+    (175+Math.random()*Math.max(40,innerHeight-390))+"px";
+
+  document.body.appendChild(car);
+
+  const timer=setTimeout(()=>{
+    if(car.isConnected)car.remove();
+  },7000);
+
+  car.onpointerdown=e=>{
+    e.preventDefault();
+    e.stopPropagation();
+
+    if(!car.isConnected)return;
+
+    clearTimeout(timer);
+
+    const r=car.getBoundingClientRect();
+
+    explosion(
+      r.left+r.width/2,
+      r.top+r.height/2
     );
-
-
-  car.className =
-    "tiggo normal";
-
-
-  car.innerHTML =
-    carHTML();
-
-
-  car.style.top =
-
-    (
-      180
-
-      +
-
-      Math.random()
-
-      *
-
-      Math.max(
-        40,
-        innerHeight - 390
-      )
-
-    )
-
-    +
-    "px";
-
-
-  document.body
-    .appendChild(
-      car
-    );
-
-
-  const timer =
-    setTimeout(
-
-      () => {
-
-        if(
-          car.isConnected
-        )
-          car.remove();
-
-      },
-
-      7000
-
-    );
-
-
-  car.onpointerdown =
-  event => {
-
-    event.preventDefault();
-
-    event.stopPropagation();
-
-
-    if(
-      !car.isConnected
-    )
-      return;
-
-
-    clearTimeout(
-      timer
-    );
-
-
-    const rect =
-      car
-      .getBoundingClientRect();
-
-
-    createExplosion(
-
-      rect.left
-      +
-      rect.width
-      /
-      2,
-
-      rect.top
-      +
-      rect.height
-      /
-      2
-
-    );
-
 
     car.remove();
 
+    g.tiggos++;
 
-    game.tiggos++;
+    let reward=
+      Math.max(1400,baseClick()*350)*
+      allMulti();
 
+    if(g.currentRoom==="kitchen")reward*=1.3;
 
-    const reward =
+    if(kind==="golden"){
+      reward*=8;
+      g.goldenTiggos++;
+      g.keys++;
 
-      Math.max(
-        1200,
-        baseClick() * 300
-      )
+      makeLoot(true);
 
-      *
-
-      globalMulti();
-
-
-    addSouls(
-      reward
-    );
-
-
-    progressContract(
-      "tiggo",
-      1
-    );
-
-
-    if(
-
-      Math.random()
-
-      <
-
-      .22
-      +
-      itemDropChance()
-
-    )
-      generateLoot();
-
-
-    if(
-      Math.random()
-      <
-      .05
-    )
-      dropRecord();
-
-
-    haptic(
-      "success"
-    );
-
-
-    message(
-      "TIGGO · +"
-      +
-      fmt(reward)
-    );
-
-
-    updateUI();
-
-  };
-
-}
-
-
-/* =========================================================
-   BLACK TIGGO
-========================================================= */
-
-let chaseActive =
-  false;
-
-
-function spawnBlackTiggo(){
-
-  if(
-    chaseActive
-    ||
-    document.querySelector(
-      ".tiggo"
-    )
-  )
-    return;
-
-
-  chaseActive =
-    true;
-
-
-  const car =
-    document.createElement(
-      "div"
-    );
-
-
-  car.className =
-    "tiggo black-tiggo";
-
-
-  car.innerHTML =
-    carHTML();
-
-
-  document.body
-    .appendChild(
-      car
-    );
-
-
-  const maxHP =
-
-    Math.max(
-      100,
-      baseClick() * 45
-    );
-
-
-  let hp =
-    maxHP;
-
-
-  let time =
-    14;
-
-
-  $("chase")
-    .classList
-    .add(
-      "show"
-    );
-
-
-  moveBlack(
-    car
-  );
-
-
-  const mover =
-    setInterval(
-
-      () =>
-        moveBlack(car),
-
-      720
-
-    );
-
-
-  const timer =
-    setInterval(
-
-      () => {
-
-        time--;
-
-
-        $("chaseTime")
-          .textContent =
-          time;
-
-
-        if(
-          time <= 0
-        ){
-
-          clearInterval(
-            timer
-          );
-
-
-          clearInterval(
-            mover
-          );
-
-
-          chaseActive =
-            false;
-
-
-          if(
-            car.isConnected
-          )
-            car.remove();
-
-
-          $("chase")
-            .classList
-            .remove(
-              "show"
-            );
-
-
-          haptic(
-            "error"
-          );
-
-        }
-
-      },
-
-      1000
-
-    );
-
-
-  car.onpointerdown =
-  event => {
-
-    event.preventDefault();
-
-    event.stopPropagation();
-
-
-    if(
-      !chaseActive
-    )
-      return;
-
-
-    haptic(
-      "light"
-    );
-
-
-    let damage =
-
-      baseClick()
-
-      *
-
-      clickMulti();
-
-
-    const critical =
-      Math.random()
-      <
-      critChance();
-
-
-    if(
-      critical
-    ){
-
-      damage *=
-        critPower();
-
-
-      haptic(
-        "heavy"
+      message(
+        lang==="ru"
+          ?"GOLDEN TIGGO · +1 ключ"
+          :"GOLDEN TIGGO · +1 key"
       );
-
     }
 
+    addSouls(reward);
 
-    if(
-      rageActive
-    )
-      damage *=
-        5;
+    contractProgress("tiggo",1);
 
+    if(Math.random()<.18+dropBonus()){
+      makeLoot();
+    }
 
-    hp -=
-      damage;
+    if(Math.random()<.05){
+      dropRecord();
+    }
 
+    haptic("success");
 
-    $("chaseHP")
-      .style.width =
+    update();
+  };
+}
 
-      Math.max(
+function scheduleTiggo(){
+  let base=20000+Math.random()*25000;
 
-        0,
+  if(g.currentRoom==="balcony"){
+    base*=.72;
+  }
 
-        hp
-        /
-        maxHP
-        *
-        100
+  setTimeout(()=>{
+    const roll=Math.random();
 
-      )
+    if(roll<.035){
+      spawnTiggo("golden");
+    }else if(roll<.20){
+      spawnBlackChase();
+    }else{
+      spawnTiggo();
+    }
 
-      +
-      "%";
+    scheduleTiggo();
+  },base);
+}
 
+/* =========================
+   BLACK TIGGO CHASE
+========================= */
 
-    $("chaseHPText")
-      .textContent =
+let chaseActive=false;
 
-      fmt(
-        Math.max(
-          0,
-          hp
-        )
-      )
+function spawnBlackChase(){
+  if(chaseActive||document.querySelector(".tiggo"))return;
 
-      +
-      " / "
+  chaseActive=true;
 
-      +
-      fmt(maxHP);
+  const car=document.createElement("div");
 
+  car.className="tiggo black-tiggo";
+  car.innerHTML=carHTML();
 
-    if(
-      hp <= 0
-    ){
+  document.body.appendChild(car);
 
-      clearInterval(
-        timer
+  const max=Math.max(140,baseClick()*55);
+  let hp=max;
+  let time=14;
+
+  $("chase").classList.add("show");
+
+  moveBlack(car);
+
+  const mover=setInterval(()=>moveBlack(car),700);
+
+  const timer=setInterval(()=>{
+    time--;
+
+    $("chaseTime").textContent=time;
+
+    if(time<=0){
+      clearInterval(timer);
+      clearInterval(mover);
+
+      chaseActive=false;
+
+      if(car.isConnected)car.remove();
+
+      $("chase").classList.remove("show");
+
+      haptic("error");
+    }
+  },1000);
+
+  car.onpointerdown=e=>{
+    e.preventDefault();
+    e.stopPropagation();
+
+    let damage=baseClick()*clickMulti();
+
+    if(Math.random()<critChance()){
+      damage*=critPower();
+      haptic("heavy");
+    }
+
+    if(rageActive)damage*=5;
+
+    hp-=damage;
+
+    $("chaseHP").style.width=Math.max(0,hp/max*100)+"%";
+
+    $("chaseHPText").textContent=
+      fmt(Math.max(0,hp))+" / "+fmt(max);
+
+    if(hp<=0){
+      clearInterval(timer);
+      clearInterval(mover);
+
+      chaseActive=false;
+
+      const r=car.getBoundingClientRect();
+
+      explosion(
+        r.left+r.width/2,
+        r.top+r.height/2
       );
-
-
-      clearInterval(
-        mover
-      );
-
-
-      chaseActive =
-        false;
-
-
-      const rect =
-        car
-        .getBoundingClientRect();
-
-
-      createExplosion(
-
-        rect.left
-        +
-        rect.width
-        /
-        2,
-
-        rect.top
-        +
-        rect.height
-        /
-        2
-
-      );
-
 
       car.remove();
 
+      $("chase").classList.remove("show");
 
-      $("chase")
-        .classList
-        .remove(
-          "show"
-        );
+      g.blackTiggos++;
 
+      const reward=
+        Math.max(7000,baseClick()*1500)*
+        allMulti();
 
-      game.blackTiggos++;
+      addSouls(reward);
 
+      makeLoot(true);
 
-      const reward =
+      if(Math.random()<.6)dropRecord();
+      if(Math.random()<.22)g.keys++;
 
-        Math.max(
-          6000,
-          baseClick() * 1200
-        )
+      haptic("success");
 
-        *
-
-        globalMulti();
-
-
-      addSouls(
-        reward
-      );
-
-
-      generateLoot(
-        true
-      );
-
-
-      if(
-        Math.random()
-        <
-        .55
-      )
-        dropRecord();
-
-
-      haptic(
-        "success"
-      );
-
-
-      updateUI();
-
+      update();
     }
-
   };
 
-
-  $("chaseHP")
-    .style.width =
-    "100%";
-
-
-  $("chaseHPText")
-    .textContent =
-
-    fmt(maxHP)
-
-    +
-    " / "
-
-    +
-    fmt(maxHP);
-
+  $("chaseHP").style.width="100%";
+  $("chaseHPText").textContent=fmt(max)+" / "+fmt(max);
 }
-
 
 function moveBlack(car){
+  if(!car.isConnected)return;
 
-  if(
-    !car.isConnected
-  )
-    return;
+  car.style.transition="left .58s ease,top .58s ease";
 
+  car.style.left=
+    (10+Math.random()*Math.max(50,innerWidth-260))+"px";
 
-  car.style.transition =
-    "left .6s ease, top .6s ease";
-
-
-  car.style.left =
-
-    (
-      15
-
-      +
-
-      Math.random()
-
-      *
-
-      Math.max(
-        40,
-        innerWidth - 260
-      )
-
-    )
-
-    +
-    "px";
-
-
-  car.style.top =
-
-    (
-      180
-
-      +
-
-      Math.random()
-
-      *
-
-      Math.max(
-        50,
-        innerHeight - 370
-      )
-
-    )
-
-    +
-    "px";
-
+  car.style.top=
+    (165+Math.random()*Math.max(40,innerHeight-355))+"px";
 }
 
+/* =========================
+   EXPLOSION
+========================= */
 
-/* =========================================================
-   TIGGO SCHEDULE
-========================================================= */
+function explosion(x,y){
+  const e=document.createElement("div");
 
-function scheduleTiggo(){
+  e.style.cssText=`
+    position:fixed;
+    left:${x}px;
+    top:${y}px;
+    z-index:5000;
+    pointer-events:none;
+  `;
 
-  setTimeout(
+  const core=document.createElement("div");
 
-    () => {
+  core.style.cssText=`
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    background:#fff2c6;
+    box-shadow:0 0 20px white,0 0 55px #c67938,0 0 95px #7b2932;
+    animation:boom .55s forwards;
+  `;
 
-      if(
-        Math.random()
-        <
-        .20
-      )
-        spawnBlackTiggo();
+  e.appendChild(core);
 
-      else
-        spawnTiggo();
+  document.body.appendChild(e);
 
-
-      scheduleTiggo();
-
-    },
-
-    19000
-
-    +
-
-    Math.random()
-    *
-    24000
-
-  );
-
+  setTimeout(()=>e.remove(),700);
 }
 
+/* =========================
+   CHEST
+========================= */
 
-/* =========================================================
-   DOORBELL
-========================================================= */
+const CHEST_CD=15*60*1000;
 
-let doorbellActive =
-  false;
-
-
-function startDoorbell(){
-
-  if(
-    doorbellActive
-  )
-    return;
-
-
-  doorbellActive =
-    true;
-
-
-  $("doorbell")
-    .classList
-    .add(
-      "show"
-    );
-
-
-  haptic(
-    "heavy"
-  );
-
-
-  setTimeout(
-
-    () => {
-
-      if(
-        doorbellActive
-      )
-        closeDoorbell();
-
-    },
-
-    10000
-
-  );
-
+function chestReady(){
+  return Date.now()-g.lastChest>=CHEST_CD;
 }
 
+$("chestButton").onclick=()=>{
+  if(!chestReady()||g.keys<1)return;
 
-function closeDoorbell(){
+  g.keys--;
+  g.lastChest=Date.now();
 
-  doorbellActive =
-    false;
+  const roll=Math.random();
 
-
-  $("doorbell")
-    .classList
-    .remove(
-      "show"
-    );
-
-}
-
-
-$("ignoreDoor")
-.onclick =
-  closeDoorbell;
-
-
-$("openDoor")
-.onclick =
-() => {
-
-  if(
-    !doorbellActive
-  )
-    return;
-
-
-  closeDoorbell();
-
-
-  const roll =
-    Math.random();
-
-
-  if(
-    roll < .45
-  ){
-
-    const reward =
-
-      Math.max(
-        1500,
-        passiveBase() * 300
-      )
-
-      *
-
-      globalMulti();
-
-
-    addSouls(
-      reward
-    );
-
+  if(roll<.55){
+    makeLoot(true);
+  }else if(roll<.8){
+    dropRecord();
+  }else{
+    const reward=Math.max(10000,passiveBase()*900)*allMulti();
+    addSouls(reward);
 
     message(
-
-      language === "ru"
-
-      ? "За дверью лежал конверт · +"
-        + fmt(reward)
-
-      : "An envelope was outside · +"
-        + fmt(reward)
-
+      (lang==="ru"?"В сундуке души · +":"Souls in the chest · +")+
+      fmt(reward)
     );
-
-
-    haptic(
-      "success"
-    );
-
   }
 
-  else if(
-    roll < .70
-  ){
+  haptic("success");
 
-    generateLoot();
-
-  }
-
-  else if(
-    roll < .90
-  ){
-
-    startBoss();
-
-  }
-
-  else{
-
-    eventMultiplier =
-      .65;
-
-
-    message(
-
-      language === "ru"
-
-      ? "Вы открыли не тому. Доход −35% на 20 секунд."
-
-      : "Wrong visitor. Income −35% for 20 seconds."
-
-    );
-
-
-    haptic(
-      "error"
-    );
-
-
-    setTimeout(
-
-      () => {
-
-        eventMultiplier =
-          1;
-
-      },
-
-      20000
-
-    );
-
-  }
-
+  update();
 };
 
+/* =========================
+   RANDOM EVENT
+========================= */
 
-/* =========================================================
+let eventOpen=false;
+
+function randomApartmentEvent(){
+  if(eventOpen)return;
+
+  eventOpen=true;
+
+  $("eventCard").classList.add("show");
+
+  const types=["door","mirror","phone"];
+
+  const type=types[Math.floor(Math.random()*types.length)];
+
+  if(type==="door"){
+    $("eventTitle").textContent=
+      lang==="ru"?"В дверь звонят":"Someone is ringing";
+
+    $("eventText").textContent=
+      lang==="ru"
+        ?"На площадке кто-то стоит."
+        :"Someone is outside.";
+  }
+
+  if(type==="mirror"){
+    $("eventTitle").textContent=
+      lang==="ru"?"Зеркало треснуло":"The mirror cracked";
+
+    $("eventText").textContent=
+      lang==="ru"
+        ?"Коснуться отражения?"
+        :"Touch the reflection?";
+  }
+
+  if(type==="phone"){
+    $("eventTitle").textContent=
+      lang==="ru"?"Звонит старый телефон":"The old phone is ringing";
+
+    $("eventText").textContent=
+      lang==="ru"
+        ?"Поднять трубку?"
+        :"Answer it?";
+  }
+
+  $("eventYes").textContent=
+    lang==="ru"?"ДА":"YES";
+
+  $("eventNo").textContent=
+    lang==="ru"?"НЕТ":"NO";
+
+  $("eventNo").onclick=closeEvent;
+
+  $("eventYes").onclick=()=>{
+    closeEvent();
+
+    const roll=Math.random();
+
+    if(roll<.36){
+      const reward=Math.max(2000,passiveBase()*350)*allMulti();
+
+      addSouls(reward);
+
+      message("+"+fmt(reward));
+    }else if(roll<.62){
+      makeLoot();
+    }else if(roll<.8){
+      startNightShift();
+    }else{
+      startBoss();
+    }
+  };
+
+  setTimeout(()=>{
+    if(eventOpen)closeEvent();
+  },10000);
+}
+
+function closeEvent(){
+  eventOpen=false;
+  $("eventCard").classList.remove("show");
+}
+
+/* =========================
    NIGHT SHIFT
-========================================================= */
+========================= */
 
-let nightActive =
-  false;
-
+let nightActive=false;
 
 function startNightShift(){
+  if(nightActive)return;
 
-  if(
-    nightActive
-  )
-    return;
+  nightActive=true;
+  eventMulti=2;
 
-
-  nightActive =
-    true;
-
-
-  document.body
-    .classList
-    .add(
-      "night-event"
-    );
-
-
-  eventMultiplier =
-    2;
-
+  document.body.classList.add("night");
 
   message(
-
-    language === "ru"
-
-    ? "Свет погас. Началась Ночная смена · доход x2"
-
-    : "Lights out. Night Shift started · income x2"
-
+    lang==="ru"
+      ?"НОЧНАЯ СМЕНА · весь доход x2 на 30 секунд"
+      :"NIGHT SHIFT · all income x2 for 30 seconds"
   );
 
-
-  setTimeout(
-
-    () => {
-
-      nightActive =
-        false;
-
-
-      eventMultiplier =
-        1;
-
-
-      document.body
-        .classList
-        .remove(
-          "night-event"
-        );
-
-
-      message(
-
-        language === "ru"
-
-        ? "Свет снова включился."
-
-        : "The lights came back on."
-
-      );
-
-    },
-
-    30000
-
-  );
-
+  setTimeout(()=>{
+    nightActive=false;
+    eventMulti=1;
+    document.body.classList.remove("night");
+  },30000);
 }
 
-
-/* =========================================================
-   APARTMENT EVENTS
-========================================================= */
-
-function scheduleApartmentEvent(){
-
-  setTimeout(
-
-    () => {
-
-      if(
-        Math.random()
-        <
-        .55
-      )
-        startDoorbell();
-
-      else
-        startNightShift();
-
-
-      scheduleApartmentEvent();
-
-    },
-
-    60000
-
-    +
-
-    Math.random()
-    *
-    70000
-
-  );
-
+function scheduleEvents(){
+  setTimeout(()=>{
+    randomApartmentEvent();
+    scheduleEvents();
+  },50000+Math.random()*65000);
 }
 
-
-/* =========================================================
+/* =========================
    DAILY
-========================================================= */
+========================= */
 
-const DAY =
-  86400000;
+const DAY=86400000;
 
-
-function updateDaily(){
-
-  const left =
-
-    DAY
-
-    -
-
-    (
-      Date.now()
-
-      -
-
-      game.lastDaily
-    );
-
-
-  if(
-    left <= 0
-  ){
-
-    $("dailyButton")
-      .disabled =
-      false;
-
-
-    $("dailyButton")
-      .textContent =
-      tx("daily");
-
-  }
-
-  else{
-
-    $("dailyButton")
-      .disabled =
-      true;
-
-
-    const h =
-      Math.floor(
-        left
-        /
-        3600000
-      );
-
-
-    const m =
-      Math.floor(
-
-        (
-          left
-          %
-          3600000
-        )
-
-        /
-
-        60000
-
-      );
-
-
-    $("dailyButton")
-      .textContent =
-      `${h}h ${m}m`;
-
-  }
-
+function dailyReady(){
+  return Date.now()-g.lastDaily>=DAY;
 }
 
+$("dailyButton").onclick=()=>{
+  if(!dailyReady())return;
 
-$("dailyButton")
-.onclick =
-() => {
+  g.lastDaily=Date.now();
 
-  if(
-    Date.now()
-    -
-    game.lastDaily
-    <
-    DAY
-  )
-    return;
+  const reward=
+    Math.max(3000,passiveBase()*700)*
+    allMulti();
 
+  addSouls(reward);
 
-  game.lastDaily =
-    Date.now();
+  if(Math.random()<.3)makeLoot();
 
-
-  const reward =
-
-    Math.max(
-      2000,
-      passiveBase() * 600
-    )
-
-    *
-
-    globalMulti();
-
-
-  addSouls(
-    reward
-  );
-
-
-  if(
-    Math.random()
-    <
-    .25
-  )
-    generateLoot();
-
-
-  haptic(
-    "success"
-  );
-
-
-  updateUI();
-
+  haptic("success");
+  update();
 };
 
-
-/* =========================================================
+/* =========================
    PRESTIGE
-========================================================= */
+========================= */
 
-$("prestigeButton")
-.onclick =
-() => {
+$("prestigeButton").onclick=()=>{
+  if(level()<50)return;
 
-  if(
-    level()
-    <
-    50
-  )
-    return;
+  const yes=confirm(
+    lang==="ru"
+      ?"Заключить Брак со Смертью?\n\nДуши и магазин сбросятся. Облики, комнаты, предметы, пластинки и ключи сохранятся."
+      :"Marry Death?\n\nSouls and upgrades reset. Skins, rooms, items, records and keys remain."
+  );
 
+  if(!yes)return;
 
-  const okay =
-    confirm(
+  g.prestiges++;
 
-      language === "ru"
+  g.souls=0;
+  g.lifetime=0;
+  g.clicks=0;
+  g.criticals=0;
 
-      ? "Заключить Брак со Смертью?\n\nДуши, уровень и магазин сбросятся. Облики, комнаты, вещи и пластинки останутся."
+  g.clickLvl=0;
+  g.autoLvl=0;
+  g.ringLvl=0;
+  g.critLvl=0;
+  g.critPowerLvl=0;
 
-      : "Marry Death?\n\nSouls, level and upgrades reset. Skins, rooms, objects and records stay."
+  g.clickCost=25;
+  g.autoCost=50;
+  g.ringCost=250;
+  g.critCost=650;
+  g.critPowerCost=1800;
 
-    );
-
-
-  if(
-    !okay
-  )
-    return;
-
-
-  game.prestiges++;
-
-
-  game.souls = 0;
-
-  game.lifetime = 0;
-
-  game.clicks = 0;
-
-  game.criticals = 0;
-
-
-  game.clickLvl = 0;
-
-  game.autoLvl = 0;
-
-  game.ringLvl = 0;
-
-  game.critLvl = 0;
-
-  game.critPowerLvl = 0;
-
-
-  game.clickCost = 25;
-
-  game.autoCost = 50;
-
-  game.ringCost = 250;
-
-  game.critCost = 650;
-
-  game.critPowerCost = 1800;
-
-
-  game.rage = 0;
-
+  g.rage=0;
 
   createContracts();
 
+  previousLevel=1;
 
-  haptic(
-    "success"
-  );
+  haptic("success");
 
-
-  saveGame();
-
-  updateUI();
-
+  save();
+  update();
 };
 
-
-/* =========================================================
+/* =========================
    OFFLINE
-========================================================= */
+========================= */
 
-function offlineReward(){
+function offline(){
+  const seconds=Math.min(
+    21600,
+    Math.max(0,(Date.now()-g.lastSeen)/1000)
+  );
 
-  const seconds =
-
-    Math.min(
-
-      21600,
-
-      Math.max(
-
-        0,
-
-        (
-          Date.now()
-
-          -
-
-          game.lastSeen
-        )
-
-        /
-
-        1000
-
-      )
-
-    );
-
-
-  if(
-    seconds > 60
-
-    &&
-
-    passiveBase()
-    >
-    0
-  ){
-
-    const reward =
-
-      passiveBase()
-
-      *
-
-      passiveMulti()
-
-      *
-
-      globalMulti()
-
-      *
-
-      seconds
-
-      *
-
+  if(seconds>60&&passiveBase()>0){
+    const reward=
+      passiveBase()*
+      passiveMulti()*
+      allMulti()*
+      seconds*
       .35;
 
+    addSouls(reward);
 
-    addSouls(
-      reward
-    );
-
-
-    setTimeout(
-
-      () => {
-
-        message(
-
-          language === "ru"
-
-          ? "Пока вас не было, квартира собрала "
-            + fmt(reward)
-            + " душ."
-
-          : "While you were away, the apartment collected "
-            + fmt(reward)
-            + " souls."
-
-        );
-
-      },
-
-      700
-
-    );
-
+    setTimeout(()=>{
+      message(
+        (lang==="ru"
+          ?"Квартира собрала без вас: +"
+          :"KVARTIRA collected while away: +"
+        )+fmt(reward)
+      );
+    },600);
   }
-
 }
 
+/* =========================
+   FLOAT / MESSAGE
+========================= */
 
-/* =========================================================
-   EXPLOSION
-========================================================= */
+function floatText(x,y,text,type=""){
+  const e=document.createElement("div");
 
-function createExplosion(
-  x,
-  y
-){
+  e.className="float "+type;
+  e.textContent=text;
+  e.style.left=x+"px";
+  e.style.top=y+"px";
 
-  const box =
-    document.createElement(
-      "div"
-    );
+  document.body.appendChild(e);
 
-
-  box.className =
-    "explosion";
-
-
-  box.style.left =
-    x + "px";
-
-
-  box.style.top =
-    y + "px";
-
-
-  box.innerHTML =
-    '<div class="explosion-core"></div>';
-
-
-  for(
-    let i=0;
-    i<20;
-    i++
-  ){
-
-    const particle =
-      document.createElement(
-        "div"
-      );
-
-
-    particle.className =
-      "explosion-particle";
-
-
-    const angle =
-      Math.random()
-      *
-      Math.PI
-      *
-      2;
-
-
-    const distance =
-      40
-      +
-      Math.random()
-      *
-      110;
-
-
-    particle.style
-      .setProperty(
-        "--x",
-        Math.cos(angle)
-        *
-        distance
-        +
-        "px"
-      );
-
-
-    particle.style
-      .setProperty(
-        "--y",
-        Math.sin(angle)
-        *
-        distance
-        +
-        "px"
-      );
-
-
-    box.appendChild(
-      particle
-    );
-
-  }
-
-
-  document.body
-    .appendChild(
-      box
-    );
-
-
-  setTimeout(
-
-    () =>
-      box.remove(),
-
-    1000
-
-  );
-
+  setTimeout(()=>e.remove(),800);
 }
-
-
-/* =========================================================
-   FLOAT
-========================================================= */
-
-function floatingText(
-  x,
-  y,
-  text,
-  critical
-){
-
-  const element =
-    document.createElement(
-      "div"
-    );
-
-
-  element.className =
-    "float"
-    +
-    (
-      critical
-      ? " critical"
-      : ""
-    );
-
-
-  element.textContent =
-    text;
-
-
-  element.style.left =
-    x + "px";
-
-
-  element.style.top =
-    y + "px";
-
-
-  document.body
-    .appendChild(
-      element
-    );
-
-
-  setTimeout(
-
-    () =>
-      element.remove(),
-
-    800
-
-  );
-
-}
-
-
-/* =========================================================
-   MESSAGE
-========================================================= */
 
 function message(text){
+  const e=document.createElement("div");
 
-  const element =
-    document.createElement(
-      "div"
-    );
+  e.className="message";
+  e.textContent=text;
 
+  document.body.appendChild(e);
 
-  element.className =
-    "message";
-
-
-  element.textContent =
-    text;
-
-
-  document.body
-    .appendChild(
-      element
-    );
-
-
-  setTimeout(
-
-    () =>
-      element.remove(),
-
-    2400
-
-  );
-
+  setTimeout(()=>e.remove(),2300);
 }
 
+/* =========================
+   MODAL MENUS
+========================= */
 
-/* =========================================================
-   TABS
-========================================================= */
+$("skinMenu").onclick=showSkins;
+$("roomMenu").onclick=showRooms;
+$("inventoryMenu").onclick=showInventory;
+$("recordsMenu").onclick=showRecords;
 
-document
-.querySelectorAll(
-  "[data-left]"
-)
-.forEach(
+$("mSkins").onclick=showSkins;
+$("mRooms").onclick=showRooms;
+$("mItems").onclick=showInventory;
 
-  button => {
-
-    button.onclick =
-    () => {
-
-      document
-      .querySelectorAll(
-        "[data-left]"
-      )
-      .forEach(
-
-        x =>
-          x.classList
-          .remove(
-            "active"
-          )
-
-      );
-
-
-      button.classList
-        .add(
-          "active"
-        );
-
-
-      [
-        "profile",
-        "wardrobe",
-        "collection"
-      ]
-      .forEach(
-
-        id =>
-          $(id)
-          .classList
-          .remove(
-            "active"
-          )
-
-      );
-
-
-      $(
-        button.dataset.left
-      )
-      .classList
-      .add(
-        "active"
-      );
-
-    };
-
-  }
-
-);
-
-
-document
-.querySelectorAll(
-  "[data-right]"
-)
-.forEach(
-
-  button => {
-
-    button.onclick =
-    () => {
-
-      document
-      .querySelectorAll(
-        "[data-right]"
-      )
-      .forEach(
-
-        x =>
-          x.classList
-          .remove(
-            "active"
-          )
-
-      );
-
-
-      button.classList
-        .add(
-          "active"
-        );
-
-
-      [
-        "shop",
-        "tasks",
-        "marriage"
-      ]
-      .forEach(
-
-        id =>
-          $(id)
-          .classList
-          .remove(
-            "active"
-          )
-
-      );
-
-
-      $(
-        button.dataset.right
-      )
-      .classList
-      .add(
-        "active"
-      );
-
-    };
-
-  }
-
-);
-
-
-/* =========================================================
-   MOBILE MODALS
-========================================================= */
-
-function showProfileModal(){
-
-  const html = `
-
-  <div class="stat">
-
-    ${
-      language === "ru"
-      ? "Всего душ"
-      : "Total souls"
-    }
-
-    <strong>
-      ${fmt(game.lifetime)}
-    </strong>
-
-  </div>
-
-  <div class="stat">
-
-    ${
-      language === "ru"
-      ? "Нажатий"
-      : "Clicks"
-    }
-
-    <strong>
-      ${fmt(game.clicks)}
-    </strong>
-
-  </div>
-
-  <div class="stat">
-
-    ${
-      language === "ru"
-      ? "Боссов"
-      : "Bosses"
-    }
-
-    <strong>
-      ${game.bosses}
-    </strong>
-
-  </div>
-
-  <button
-    class="action"
-    id="modalRage">
-
-    ${
-      game.rage >= 100
-      ? tx("rageReady")
-      : tx("rage")
-        + " "
-        + Math.floor(game.rage)
-        + "%"
-    }
-
-  </button>
-
-  `;
-
-
-  openModal(
+function profileModal(){
+  modal(
     tx("profile"),
-    html
+    `
+      <div class="stat">
+        ${lang==="ru"?"Всего душ":"Total souls"}
+        <strong>${fmt(g.lifetime)}</strong>
+      </div>
+
+      <div class="stat">
+        ${lang==="ru"?"Нажатий":"Clicks"}
+        <strong>${fmt(g.clicks)}</strong>
+      </div>
+
+      <div class="stat">
+        ${lang==="ru"?"Боссов":"Bosses"}
+        <strong>${g.bosses}</strong>
+      </div>
+
+      <div class="stat">
+        ${lang==="ru"?"Ключей":"Keys"}
+        <strong>${g.keys}</strong>
+      </div>
+
+      <button class="action" id="modalRage">
+        ${g.rage>=100?tx("rageReady"):tx("rage")+" "+Math.floor(g.rage)+"%"}
+      </button>
+    `
   );
 
-
-  $("modalRage")
-    .onclick =
-    () => {
-
-      closeModal();
-
-      $("rageButton")
-        .click();
-
-    };
-
+  $("modalRage").onclick=()=>{
+    closeModal();
+    $("rageButton").click();
+  };
 }
 
-
-function showShopModal(){
-
-  const html = `
-
-  <button
-    class="shop-item"
-    data-buy-mobile="click">
-
-    <b>
-      ${$("clickUpgradeName").textContent}
-    </b>
-
-    <span class="desc">
-      ${$("clickUpgradeDesc").textContent}
-    </span>
-
-    <div class="price">
-      ♱ ${fmt(game.clickCost)}
-    </div>
-
-  </button>
-
-
-  <button
-    class="shop-item"
-    data-buy-mobile="auto">
-
-    <b>
-      ${$("autoUpgradeName").textContent}
-    </b>
-
-    <span class="desc">
-      ${$("autoUpgradeDesc").textContent}
-    </span>
-
-    <div class="price">
-      ♱ ${fmt(game.autoCost)}
-    </div>
-
-  </button>
-
-
-  <button
-    class="shop-item"
-    data-buy-mobile="ring">
-
-    <b>
-      ${$("ringUpgradeName").textContent}
-    </b>
-
-    <span class="desc">
-      ${$("ringUpgradeDesc").textContent}
-    </span>
-
-    <div class="price">
-      ♱ ${fmt(game.ringCost)}
-    </div>
-
-  </button>
-
-
-  <button
-    class="shop-item"
-    data-buy-mobile="crit">
-
-    <b>
-      ${$("critUpgradeName").textContent}
-    </b>
-
-    <span class="desc">
-      ${$("critUpgradeDesc").textContent}
-    </span>
-
-    <div class="price">
-      ♱ ${fmt(game.critCost)}
-    </div>
-
-  </button>
-
-
-  <button
-    class="shop-item"
-    data-buy-mobile="critPower">
-
-    <b>
-      ${$("critPowerUpgradeName").textContent}
-    </b>
-
-    <span class="desc">
-      ${$("critPowerUpgradeDesc").textContent}
-    </span>
-
-    <div class="price">
-      ♱ ${fmt(game.critPowerCost)}
-    </div>
-
-  </button>
-
-  `;
-
-
-  openModal(
-    tx("shop"),
-    html
-  );
-
-
-  document
-  .querySelectorAll(
-    "[data-buy-mobile]"
-  )
-  .forEach(
-
-    button => {
-
-      button.onclick =
-      () => {
-
-        buy(
-          button.dataset
-          .buyMobile
-        );
-
-
-        showShopModal();
-
-      };
-
-    }
-
-  );
-
-}
-
-
-$("mobileProfile")
-.onclick =
-  showProfileModal;
-
-
-$("mobileShop")
-.onclick =
-  showShopModal;
-
-
-$("mobileWardrobe")
-.onclick =
-  showSkins;
-
-
-$("mobileInventory")
-.onclick =
-  showInventory;
-
-
-/* =========================================================
-   LANGUAGE
-========================================================= */
-
-function applyLanguage(){
-
-  document
-    .documentElement
-    .lang =
-    language;
-
-
-  $("ruButton")
-    .classList
-    .toggle(
-      "active",
-      language === "ru"
-    );
-
-
-  $("enButton")
-    .classList
-    .toggle(
-      "active",
-      language === "en"
-    );
-
-
-  $("introNote")
-    .textContent =
-    tx("intro");
-
-
-  $("quickSkinLabel")
-    .textContent =
-    tx("skin");
-
-
-  $("quickRoomLabel")
-    .textContent =
-    tx("room");
-
-
-  $("spsLabel")
-    .textContent =
-    tx("soulSec");
-
-
-  $("clickLabel")
-    .textContent =
-    tx("click");
-
-
-  $("levelLabel")
-    .textContent =
-    tx("level");
-
-
-  $("mobileProfile")
-    .textContent =
-    tx("profile");
-
-
-  $("mobileShop")
-    .textContent =
-    tx("shop");
-
-
-  $("mobileWardrobe")
-    .textContent =
-    tx("wardrobe");
-
-
-  $("mobileInventory")
-    .textContent =
-    tx("items");
-
-
-  $("doorbellTitle")
-    .textContent =
-    tx("door");
-
-
-  $("doorbellText")
-    .textContent =
-    tx("doorQuestion");
-
-
-  $("openDoor")
-    .textContent =
-    tx("open");
-
-
-  $("ignoreDoor")
-    .textContent =
-    tx("ignore");
-
-
-  $("tgLabel")
-    .textContent =
-    tx("telegram");
-
-
-  if(
-    language === "ru"
-  ){
-
-    $("clickUpgradeName")
-      .textContent =
-      "Старинный нож";
-
-
-    $("clickUpgradeDesc")
-      .textContent =
-      "+1 к силе нажатия";
-
-
-    $("autoUpgradeName")
-      .textContent =
-      "Свеча на пианино";
-
-
-    $("autoUpgradeDesc")
-      .textContent =
-      "+1 душа в секунду";
-
-
-    $("ringUpgradeName")
-      .textContent =
-      "Кольцо виконтессы";
-
-
-    $("ringUpgradeDesc")
-      .textContent =
-      "+5 душ в секунду";
-
-
-    $("critUpgradeName")
-      .textContent =
-      "Бордовая перчатка";
-
-
-    $("critUpgradeDesc")
-      .textContent =
-      "+2% шанс крита";
-
-
-    $("critPowerUpgradeName")
-      .textContent =
-      "Семейная брошь";
-
-
-    $("critPowerUpgradeDesc")
-      .textContent =
-      "+1 к силе критического удара";
-
-  }
-
-  else{
-
-    $("clickUpgradeName")
-      .textContent =
-      "Antique Knife";
-
-
-    $("clickUpgradeDesc")
-      .textContent =
-      "+1 click power";
-
-
-    $("autoUpgradeName")
-      .textContent =
-      "Candle on the Piano";
-
-
-    $("autoUpgradeDesc")
-      .textContent =
-      "+1 soul per second";
-
-
-    $("ringUpgradeName")
-      .textContent =
-      "Viscountess Ring";
-
-
-    $("ringUpgradeDesc")
-      .textContent =
-      "+5 souls per second";
-
-
-    $("critUpgradeName")
-      .textContent =
-      "Burgundy Glove";
-
-
-    $("critUpgradeDesc")
-      .textContent =
-      "+2% critical chance";
-
-
-    $("critPowerUpgradeName")
-      .textContent =
-      "Family Brooch";
-
-
-    $("critPowerUpgradeDesc")
-      .textContent =
-      "+1 critical power";
-
-  }
-
-}
-
-
-function setLanguage(
-  value
-){
-
-  language =
-    value;
-
-
-  localStorage.setItem(
-    "dm-language",
-    language
-  );
-
-
-  applyLanguage();
-
-  applySkin();
-
-  applyRoom();
-
-  updateUI();
-
-}
-
-
-/* =========================================================
-   UPDATE
-========================================================= */
-
-function updateUI(){
-
-  checkUnlocks();
-
-
-  $("souls")
-    .textContent =
-    fmt(
-      game.souls
-    );
-
-
-  $("sps")
-    .textContent =
-    fmt(
-
-      passiveBase()
-
-      *
-
-      passiveMulti()
-
-      *
-
-      globalMulti()
-
-    );
-
-
-  $("power")
-    .textContent =
-    fmt(
-
-      baseClick()
-
-      *
-
-      clickMulti()
-
-      *
-
-      globalMulti()
-
-    );
-
-
-  $("totalMultiplier")
-    .textContent =
-    globalMulti()
-      .toFixed(2);
-
-
-  $("level")
-    .textContent =
-    level();
-
-
-  $("levelBar")
-    .style.width =
-
-    Math.max(
-
-      0,
-
-      Math.min(
-        100,
-        levelProgress()
-      )
-
-    )
-
-    +
-    "%";
-
-
-  $("rageBar")
-    .style.width =
-
-    Math.min(
-      100,
-      game.rage
-    )
-
-    +
-    "%";
-
-
-  $("lifetime")
-    .textContent =
-    fmt(
-      game.lifetime
-    );
-
-
-  $("clicksStat")
-    .textContent =
-    fmt(
-      game.clicks
-    );
-
-
-  $("critStat")
-    .textContent =
-    fmt(
-      game.criticals
-    );
-
-
-  $("bossStat")
-    .textContent =
-    game.bosses;
-
-
-  $("tiggoStat")
-    .textContent =
-    game.tiggos;
-
-
-  $("blackStat")
-    .textContent =
-    game.blackTiggos;
-
-
-  const types = [
-    "click",
-    "auto",
-    "ring",
-    "crit",
-    "critPower"
+function shopModal(){
+  const types=[
+    ["click","clickName","clickDesc"],
+    ["auto","autoName","autoDesc"],
+    ["ring","ringName","ringDesc"],
+    ["crit","critName","critDesc"],
+    ["critPower","critPowerName","critPowerDesc"]
   ];
 
-
-  types.forEach(
-
-    type => {
-
-      $(
-        type
-        +
-        "Cost"
-      )
-      .textContent =
-      fmt(
-        game[
-          type
-          +
-          "Cost"
-        ]
-      );
-
-
-      $(
-        type
-        +
-        "Lvl"
-      )
-      .textContent =
-
-      (
-        language === "ru"
-        ? "ур. "
-        : "lvl "
-      )
-
-      +
-
-      game[
-        type
-        +
-        "Lvl"
-      ];
-
-
-      const id =
-
-        "buy"
-
-        +
-
-        type
-        .charAt(0)
-        .toUpperCase()
-
-        +
-
-        type
-        .slice(1);
-
-
-      $(id)
-        .disabled =
-
-        game.souls
-
-        <
-
-        game[
-          type
-          +
-          "Cost"
-        ];
-
-    }
-
+  modal(
+    tx("shop"),
+    types.map(([type,name,desc])=>`
+      <button class="shop-item" data-mbuy="${type}">
+        <b>${$(name).textContent}</b>
+        <span class="desc">${$(desc).textContent}</span>
+        <div class="price">♱ ${fmt(g[type+"Cost"])}</div>
+      </button>
+    `).join("")
   );
 
+  document.querySelectorAll("[data-mbuy]").forEach(b=>{
+    b.onclick=()=>{
+      buy(b.dataset.mbuy);
+      shopModal();
+    };
+  });
+}
 
-  $("rageButton")
-    .disabled =
-    game.rage
-    <
-    100;
+$("mProfile").onclick=profileModal;
+$("mShop").onclick=shopModal;
 
+/* =========================
+   TABS
+========================= */
 
-  $("rageButton")
-    .textContent =
+document.querySelectorAll("[data-left]").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll("[data-left]").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
 
-    game.rage >= 100
+    ["profile","collection","achievements"].forEach(id=>$(id).classList.remove("active"));
 
-    ? tx("rageReady")
+    $(b.dataset.left).classList.add("active");
+  };
+});
 
-    : tx("rage")
-      +
-      " "
-      +
-      Math.floor(
-        game.rage
-      )
-      +
-      "%";
+document.querySelectorAll("[data-right]").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll("[data-right]").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
 
+    ["shop","tasks","marriage"].forEach(id=>$(id).classList.remove("active"));
 
-  $("dailyButton")
-    .textContent =
-    tx("daily");
+    $(b.dataset.right).classList.add("active");
+  };
+});
 
+/* =========================
+   LANGUAGE
+========================= */
 
-  $("bossButton")
-    .textContent =
-    tx("bossButton");
+function setLanguage(value){
+  lang=value;
 
+  localStorage.setItem("dm-language",lang);
 
-  $("prestigeMultiplier")
-    .textContent =
-    prestigeMulti()
-      .toFixed(2);
+  applyLanguage();
+  applySkin();
+  applyRoom();
+  update();
+}
 
+$("ruBtn").onclick=()=>setLanguage("ru");
+$("enBtn").onclick=()=>setLanguage("en");
 
-  $("prestigeButton")
-    .disabled =
-    level()
-    <
-    50;
+function applyLanguage(){
+  document.documentElement.lang=lang;
 
+  $("ruBtn").classList.toggle("active",lang==="ru");
+  $("enBtn").classList.toggle("active",lang==="en");
 
-  $("prestigeButton")
-    .textContent =
+  $("skinLabel").textContent=tx("skin");
+  $("roomLabel").textContent=tx("room");
 
-    level() >= 50
+  $("spsText").textContent=tx("soulsSec");
+  $("clickText").textContent=tx("click");
+  $("levelText").textContent=tx("level");
 
-    ? tx("prestigeReady")
+  $("profileTab").textContent=tx("profile");
+  $("collectionTab").textContent=tx("collection");
+  $("achievementTab").textContent=tx("goals");
 
-    : tx("prestigeLocked");
+  $("shopTab").textContent=tx("shop");
+  $("tasksTab").textContent=tx("tasks");
+  $("marriageTab").textContent=tx("marriage");
 
+  $("mProfile").textContent=tx("profile");
+  $("mShop").textContent=tx("shop");
+  $("mSkins").textContent=tx("skins");
+  $("mRooms").textContent=tx("rooms");
+  $("mItems").textContent=tx("items");
+
+  $("skinMenu").textContent=tx("skins");
+  $("roomMenu").textContent=tx("rooms");
+  $("inventoryMenu").textContent=tx("items");
+  $("recordsMenu").textContent=tx("records");
+
+  $("leaveBoss").textContent=tx("leave");
+
+  if(lang==="ru"){
+    $("profileTitle").textContent="Житель квартиры";
+    $("totalLabel").textContent="Всего душ";
+    $("clicksLabel").textContent="Нажатий";
+    $("bossesLabel").textContent="Боссов";
+    $("keysLabel").textContent="Ключей";
+
+    $("clickName").textContent="Старинный нож";
+    $("clickDesc").textContent="+1 к нажатию";
+
+    $("autoName").textContent="Свеча на пианино";
+    $("autoDesc").textContent="+1 душа / сек.";
+
+    $("ringName").textContent="Кольцо виконтессы";
+    $("ringDesc").textContent="+5 душ / сек.";
+
+    $("critName").textContent="Бордовая перчатка";
+    $("critDesc").textContent="+2% шанс крита";
+
+    $("critPowerName").textContent="Семейная брошь";
+    $("critPowerDesc").textContent="+1 множитель крита";
+
+    $("marriageTitle").textContent="Брак со Смертью";
+    $("marriageInfo").textContent=
+      "После 50 уровня можно начать новый цикл. Коллекция и открытые части квартиры сохраняются.";
+  }else{
+    $("profileTitle").textContent="The Resident";
+    $("totalLabel").textContent="Total souls";
+    $("clicksLabel").textContent="Clicks";
+    $("bossesLabel").textContent="Bosses";
+    $("keysLabel").textContent="Keys";
+
+    $("clickName").textContent="Antique Knife";
+    $("clickDesc").textContent="+1 click";
+
+    $("autoName").textContent="Candle on the Piano";
+    $("autoDesc").textContent="+1 soul / sec.";
+
+    $("ringName").textContent="Viscountess Ring";
+    $("ringDesc").textContent="+5 souls / sec.";
+
+    $("critName").textContent="Burgundy Glove";
+    $("critDesc").textContent="+2% critical chance";
+
+    $("critPowerName").textContent="Family Brooch";
+    $("critPowerDesc").textContent="+1 critical multiplier";
+
+    $("marriageTitle").textContent="Marriage With Death";
+    $("marriageInfo").textContent=
+      "After level 50 you may begin a new cycle. Your collection and unlocked apartment remain.";
+  }
+}
+
+/* =========================
+   UPDATE
+========================= */
+
+function update(){
+  checkUnlocks();
+  checkAchievements();
+
+  $("souls").textContent=fmt(g.souls);
+
+  $("sps").textContent=fmt(
+    passiveBase()*passiveMulti()*allMulti()
+  );
+
+  $("clickPower").textContent=fmt(
+    baseClick()*clickMulti()*allMulti()
+  );
+
+  $("allMulti").textContent=allMulti().toFixed(2);
+
+  $("level").textContent=level();
+
+  $("levelBar").style.width=
+    Math.max(0,Math.min(100,levelProgress()))+"%";
+
+  $("rageBar").style.width=Math.min(100,g.rage)+"%";
+
+  $("lifetime").textContent=fmt(g.lifetime);
+  $("clicks").textContent=fmt(g.clicks);
+  $("bosses").textContent=g.bosses;
+  $("tiggos").textContent=g.tiggos;
+  $("keys").textContent=g.keys;
+
+  const types=["click","auto","ring","crit","critPower"];
+
+  types.forEach(type=>{
+    $(type+"Cost").textContent=fmt(g[type+"Cost"]);
+
+    $(type+"Lvl").textContent=
+      (lang==="ru"?"ур. ":"lvl ")+g[type+"Lvl"];
+
+    $("buy"+type[0].toUpperCase()+type.slice(1)).disabled=
+      g.souls<g[type+"Cost"];
+  });
+
+  $("rageButton").disabled=g.rage<100;
+
+  $("rageButton").textContent=
+    g.rage>=100
+      ?tx("rageReady")
+      :tx("rage")+" "+Math.floor(g.rage)+"%";
+
+  $("dailyButton").disabled=!dailyReady();
+
+  $("dailyButton").textContent=tx("mail");
+
+  $("bossButton").textContent=tx("callBoss");
+
+  const chestRemaining=CHEST_CD-(Date.now()-g.lastChest);
+
+  $("chestButton").disabled=
+    !chestReady()||g.keys<1;
+
+  $("chestButton").textContent=
+    chestReady()
+      ?tx("chest")+" · 🔑 "+g.keys
+      :tx("chest")+" · "+Math.ceil(chestRemaining/60000)+"m";
+
+  $("prestigeMulti").textContent=prestigeMulti().toFixed(2);
+
+  $("prestigeButton").disabled=level()<50;
+
+  $("prestigeButton").textContent=
+    level()>=50?tx("prestigeReady"):tx("prestigeLocked");
 
   applySkin();
-
   applyRoom();
 
   renderContracts();
-
-  updateDaily();
-
+  renderAchievements();
 }
 
-
-/* =========================================================
+/* =========================
    MUSIC
-========================================================= */
+========================= */
 
-const music =
-  $("music");
+const music=$("music");
+const musicButton=$("musicButton");
+const volume=$("volume");
 
+let musicPlaying=false;
 
-const musicButton =
-  $("musicButton");
+const savedVolume=localStorage.getItem("dm-volume");
 
-
-const volume =
-  $("volume");
-
-
-let musicPlaying =
-  false;
-
-
-const savedVolume =
-  localStorage.getItem(
-    "dm-volume"
-  );
-
-
-if(
-  savedVolume !== null
-){
-
-  volume.value =
-    savedVolume;
-
+if(savedVolume!==null){
+  volume.value=savedVolume;
 }
 
-
-music.volume =
-  Number(
-    volume.value
-  );
-
+music.volume=Number(volume.value);
 
 async function playMusic(){
-
   try{
-
     await music.play();
-
-
-    musicPlaying =
-      true;
-
-
-    musicButton
-      .textContent =
-      "♫";
-
-  }
-
-  catch(error){}
-
+    musicPlaying=true;
+    musicButton.textContent="♫";
+  }catch(e){}
 }
 
+document.addEventListener("pointerdown",playMusic,{once:true});
 
-document.addEventListener(
+musicButton.onclick=async e=>{
+  e.stopPropagation();
 
-  "pointerdown",
-
-  playMusic,
-
-  {
-    once:true
-  }
-
-);
-
-
-musicButton
-.onclick =
-async event => {
-
-  event.stopPropagation();
-
-
-  if(
-    musicPlaying
-  ){
-
+  if(musicPlaying){
     music.pause();
-
-
-    musicPlaying =
-      false;
-
-
-    musicButton
-      .textContent =
-      "♪";
-
-  }
-
-  else{
-
+    musicPlaying=false;
+    musicButton.textContent="♪";
+  }else{
     await playMusic();
-
   }
-
 };
 
-
-volume
-.oninput =
-() => {
-
-  music.volume =
-    Number(
-      volume.value
-    );
-
-
-  localStorage.setItem(
-    "dm-volume",
-    volume.value
-  );
-
+volume.oninput=()=>{
+  music.volume=Number(volume.value);
+  localStorage.setItem("dm-volume",volume.value);
 };
 
-
-/* =========================================================
+/* =========================
    SAVE
-========================================================= */
+========================= */
 
-function saveGame(){
-
-  game.lastSeen =
-    Date.now();
-
+function save(){
+  g.lastSeen=Date.now();
 
   localStorage.setItem(
-
     SAVE_KEY,
-
-    JSON.stringify(
-      game
-    )
-
+    JSON.stringify(g)
   );
-
 }
 
+/* =========================
+   LOADING
+========================= */
 
-/* =========================================================
-   INTRO
-========================================================= */
+setTimeout(()=>{
+  $("loading").classList.add("hide");
+},2200);
 
-setTimeout(
-
-  () =>
-    $("intro")
-    .classList
-    .add(
-      "hide"
-    ),
-
-  3000
-
-);
-
-
-$("intro")
-.onclick =
-() =>
-  $("intro")
-  .classList
-  .add(
-    "hide"
-  );
-
-
-/* =========================================================
+/* =========================
    START
-========================================================= */
+========================= */
 
 initTelegram();
 
 applyLanguage();
 
-offlineReward();
+offline();
 
 applySkin();
-
 applyRoom();
 
-updateUI();
+update();
 
 scheduleTiggo();
+scheduleEvents();
 
-scheduleApartmentEvent();
+setInterval(save,3000);
 
-
-setInterval(
-  saveGame,
-  3000
-);
-
-
-window.addEventListener(
-  "beforeunload",
-  saveGame
-);
-
+window.addEventListener("beforeunload",save);
 </script>
-
 </body>
 </html>
