@@ -2,8 +2,9 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<!-- Жесткий фикс масштабирования -->
+<!-- Жесткий запрет зума и масштабирования -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
 <title>DEATHMARRIED KVARTIRA</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -14,11 +15,10 @@
 
 <style>
 /* =========================================================
-   БАЗОВЫЙ СТИЛЬ И ФИКСЫ
+   БАЗОВЫЕ НАСТРОЙКИ (ФИКС ЗУМА)
 ========================================================= */
 :root {
     --wine: #702831;
-    --wine-l: #913a44;
     --gold: #aa8246;
     --ink: #2d1e19;
     --bg: #ded0b5;
@@ -29,6 +29,7 @@
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     -webkit-user-select: none;
+    touch-action: none; /* Запрещаем все стандартные жесты, кроме того что разрешим вручную */
 }
 
 html, body {
@@ -36,25 +37,32 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Запрет скролла всей страницы */
-    background: var(--bg);
+    overflow: hidden;
+    background: #ded0b5;
     font-family: "Montserrat", sans-serif;
-    position: fixed; /* Фикс для iOS, чтобы не прыгало */
 }
 
-/* Фон */
 .wallpaper {
     position: fixed;
     inset: 0;
     z-index: -1;
     background: linear-gradient(rgba(231,215,189,0.3), rgba(231,215,189,0.3)), 
                 url("wallpaper.jpg") center/cover no-repeat;
+    transition: filter 0.5s;
+}
+
+.floor {
+    position: fixed;
+    bottom: 0; width: 100%; height: 12vh;
+    background: #493127;
+    border-top: 5px solid #38261e;
+    z-index: -1;
 }
 
 /* =========================================================
    ЗАСТАВКА
 ========================================================= */
-.loader {
+.intro {
     position: fixed;
     inset: 0;
     z-index: 10000;
@@ -62,58 +70,109 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.5s;
+    transition: opacity 0.6s;
 }
-.loader.hide { opacity: 0; pointer-events: none; }
-.loader-text {
+.intro.hide { opacity: 0; pointer-events: none; }
+.intro-text {
     font-family: "Cormorant Garamond", serif;
     font-size: 32px;
     font-weight: 600;
     color: var(--wine);
-    letter-spacing: 0.1em;
-}
-
-/* =========================================================
-   HUD (СТАТИСТИКА СВЕРХУ)
-========================================================= */
-.top-hud {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    padding-top: 20px;
+    letter-spacing: 0.2em;
     text-align: center;
-    z-index: 100;
-    pointer-events: none;
-}
-.souls-display {
-    font-family: "Cormorant Garamond", serif;
-    font-size: 42px;
-    font-weight: 700;
-    color: var(--wine);
-}
-.sps-display {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: -5px;
-}
-.level-bar-container {
-    width: 180px;
-    height: 4px;
-    background: rgba(0,0,0,0.1);
-    margin: 10px auto;
-    border-radius: 2px;
-    overflow: hidden;
-    pointer-events: auto;
-}
-.level-bar-fill {
-    height: 100%;
-    width: 0%;
-    background: var(--wine);
-    transition: width 0.3s;
 }
 
 /* =========================================================
-   ИГРОВАЯ ЗОНА
+   HUD СТАТИСТИКА
+========================================================= */
+header {
+    position: fixed;
+    top: 10px; width: 100%; text-align: center;
+    z-index: 100; pointer-events: none;
+}
+.logo-text { font-family: "Cormorant Garamond", serif; font-size: 34px; color: var(--wine); margin: 0; }
+
+.stats-hud {
+    position: fixed;
+    top: 60px; left: 50%; transform: translateX(-50%);
+    text-align: center; width: 100%; z-index: 100;
+}
+.souls-val { font-family: "Cormorant Garamond", serif; font-size: 40px; font-weight: 700; color: var(--ink); }
+
+.bar-box {
+    width: 220px; height: 4px; background: rgba(0,0,0,0.1);
+    margin: 8px auto; border-radius: 2px; overflow: hidden;
+}
+.bar-fill { height: 100%; width: 0%; background: var(--wine); transition: width 0.3s; }
+
+/* =========================================================
+   ПЕРЕКЛЮЧАТЕЛИ (ОБЛИКИ И КОМНАТЫ) - ТЕПЕРЬ СЛЕВА СВЕРХУ
+========================================================= */
+.quick-access {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.qa-item {
+    background: rgba(238, 222, 195, 0.9);
+    border: 1px solid var(--gold);
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.qa-btn {
+    width: 30px; height: 30px;
+    background: var(--wine);
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.qa-label {
+    width: 100px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--ink);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   ГРОМКОСТЬ (ФИКС)
+========================================================= */
+.volume-control {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 500;
+    background: rgba(238, 222, 195, 0.9);
+    border: 1px solid var(--gold);
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.volume-control input {
+    touch-action: pan-x; /* РАЗРЕШАЕМ ДВИЖЕНИЕ ПАЛЬЦА ДЛЯ ПОЛЗУНКА */
+    cursor: pointer;
+    width: 80px;
+    accent-color: var(--wine);
+}
+
+/* =========================================================
+   ГЕЙМПЛЕЙ (ТЫКВА)
 ========================================================= */
 .game-container {
     position: absolute;
@@ -123,426 +182,343 @@ html, body {
     justify-content: center;
     z-index: 10;
 }
+
 .character {
     position: relative;
-    width: 320px;
-    height: 320px;
+    width: 340px;
+    height: 340px;
     cursor: pointer;
     touch-action: manipulation;
 }
-.character:active { transform: scale(0.95); }
 
-.pumpkin-body {
+.pumpkin-main {
     position: absolute;
-    width: 200px;
-    height: 160px;
+    width: 220px;
+    height: 180px;
     background: #d98446;
     border-radius: 50%;
     left: 60px;
     top: 80px;
-    box-shadow: inset -15px -10px 30px rgba(0,0,0,0.3);
+    box-shadow: inset -15px -10px 40px rgba(0,0,0,0.4);
+    transition: background 0.3s;
 }
 
-.headphones-line {
+.headphones {
     position: absolute;
-    width: 240px;
-    height: 120px;
-    border: 12px solid #222;
+    width: 260px;
+    height: 140px;
+    border: 15px solid #1a1a1a;
     border-bottom: none;
-    border-radius: 120px 120px 0 0;
+    border-radius: 130px 130px 0 0;
     left: 40px;
     top: 50px;
 }
 
 /* =========================================================
-   ИНТЕРФЕЙС ПАНЕЛЕЙ (ПК И МОБИЛКА)
+   МЕНЮ И ШТОРКИ
 ========================================================= */
-
-/* Десктопные панели (скрыты на малых экранах) */
-.pc-panel {
+.pc-panels {
     position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 300px;
+    top: 50%; transform: translateY(-50%);
+    width: 280px;
     background: rgba(238, 222, 195, 0.98);
     border: 1px solid var(--gold);
-    padding: 20px;
-    z-index: 500;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-.pc-left { left: 20px; }
-.pc-right { right: 20px; }
-
-/* Мобильное меню (снизу) */
-.mobile-menu {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: #eee3cb;
-    grid-template-columns: repeat(4, 1fr);
+    padding: 15px;
     z-index: 1000;
-    border-top: 1px solid var(--gold);
-    padding-bottom: env(safe-area-inset-bottom);
 }
-.mobile-menu button {
-    padding: 15px 5px;
-    border: none;
-    background: none;
-    font-size: 9px;
-    font-weight: 600;
-    color: var(--wine);
-    text-transform: uppercase;
-}
+.p-left { left: 20px; }
+.p-right { right: 20px; }
 
-/* Всплывающие окна (Шторки) */
-.sheet-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 2000;
-    display: none;
-    align-items: flex-end;
-}
-.sheet-content {
-    width: 100%;
-    background: #f1e7d0;
-    border-radius: 20px 20px 0 0;
-    padding: 20px;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-/* Кнопки действий */
-.btn-action {
+.btn {
     width: 100%;
     padding: 12px;
-    margin-bottom: 10px;
-    background: #e7d7bd;
+    margin-bottom: 8px;
+    background: #f1e7d0;
     border: 1px solid var(--gold);
-    color: var(--ink);
     font-weight: 600;
+    cursor: pointer;
     font-family: inherit;
 }
 
-/* Переключатели облика */
-.skin-selector {
-    position: fixed;
-    left: 20px;
-    top: 120px;
-    z-index: 200;
-    background: rgba(238, 222, 195, 0.9);
-    padding: 10px;
-    border: 1px solid var(--gold);
-}
-
-/* Босс КУКОЛДОВ */
-.boss-box {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: #fff;
-    border: 2px solid var(--wine);
-    padding: 10px;
-    width: 220px;
-    z-index: 3000;
+/* Мобильная панель */
+.mob-nav {
     display: none;
+    position: fixed;
+    bottom: 0; width: 100%;
+    background: #eee3cb;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--gold);
+    z-index: 2000;
+    padding-bottom: env(safe-area-inset-bottom);
 }
+.mob-nav button { padding: 15px 5px; border: none; background: none; color: var(--wine); font-size: 9px; font-weight: 700; }
 
-@media (max-width: 1100px) {
-    .pc-panel { display: none; }
-    .mobile-menu { display: grid; }
-    .skin-selector { top: auto; bottom: 80px; left: 10px; }
+.sheet-modal {
+    position: fixed;
+    inset: 0; background: rgba(0,0,0,0.6);
+    z-index: 3000; display: none;
+    align-items: flex-end;
+}
+.sheet-inner {
+    width: 100%; background: #f1e7d0;
+    border-radius: 20px 20px 0 0;
+    padding: 25px; max-height: 80vh; overflow-y: auto;
 }
 
 /* Анимация клика */
-.floating-souls {
+.soul-particle {
     position: fixed;
     pointer-events: none;
-    font-family: "Cormorant Garamond", serif;
+    font-family: serif;
     font-weight: bold;
     color: var(--wine);
-    z-index: 5000;
-    animation: moveUp 0.8s ease-out forwards;
+    animation: fadeUp 0.8s forwards;
+    z-index: 10000;
 }
-@keyframes moveUp {
-    to { transform: translateY(-100px); opacity: 0; }
+@keyframes fadeUp { to { transform: translateY(-100px); opacity: 0; } }
+
+@media (max-width: 1100px) {
+    .pc-panels { display: none; }
+    .mob-nav { display: grid; }
+    .character { transform: scale(0.85); }
+    .quick-access { top: auto; bottom: 85px; left: 10px; }
 }
 </style>
 </head>
+
 <body>
 
-<div class="loader" id="loader">
-    <div class="loader-text">DEATHMARRIED KVARTIRA</div>
+<div class="intro" id="intro">
+    <div class="intro-text">DEATHMARRIED<br>KVARTIRA</div>
 </div>
 
-<div class="wallpaper"></div>
+<div class="wallpaper" id="wall"></div>
 <div class="floor"></div>
 <div class="vignette"></div>
 
-<!-- HUD -->
-<div class="top-hud">
-    <div class="souls-display">† <span id="souls-count">0</span></div>
-    <div class="sps-display"><span id="lang-sps">душ / сек.</span>: <span id="sps-count">0</span></div>
-    <div class="level-bar-container"><div class="level-bar-fill" id="exp-fill"></div></div>
-    <div style="font-size: 10px; color: var(--wine);"><span id="lang-lvl">Уровень</span> <span id="lvl-num">1</span></div>
+<!-- Громкость -->
+<div class="volume-control">
+    <span style="font-size:12px">♪</span>
+    <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.5">
 </div>
 
-<!-- GAME -->
+<!-- Облики и комнаты (Слева) -->
+<div class="quick-access">
+    <div class="qa-item">
+        <button class="qa-btn" onpointerdown="switchSkin(-1)">‹</button>
+        <div class="qa-label" id="cur-skin">Death Head</div>
+        <button class="qa-btn" onpointerdown="switchSkin(1)">›</button>
+    </div>
+    <div class="qa-item">
+        <button class="qa-btn" onpointerdown="switchRoom(-1)">‹</button>
+        <div class="qa-label" id="cur-room">Прихожая</div>
+        <button class="qa-btn" onpointerdown="switchRoom(1)">›</button>
+    </div>
+</div>
+
+<header>
+    <h1 class="logo-text">DeathMarried</h1>
+</header>
+
+<div class="stats-hud">
+    <div class="souls-val">† <span id="souls-text">0</span></div>
+    <div class="minor"><span id="lang-sps">душ / сек</span>: <span id="sps-text">0</span></div>
+    <div class="bar-box"><div class="bar-fill" id="exp-fill"></div></div>
+    <div class="minor" style="color:var(--wine)">Уровень <span id="lvl-text">1</span></div>
+</div>
+
 <div class="game-container">
-    <div class="character" id="pumpkin-dj">
-        <div class="headphones-line"></div>
-        <div class="pumpkin-body"></div>
+    <div class="character" id="main-target">
+        <div class="headphones"></div>
+        <div class="pumpkin-main" id="pumpkin-color"></div>
     </div>
 </div>
 
-<!-- ПК ПАНЕЛИ -->
-<div class="pc-panel pc-left">
-    <h3 id="lang-profile">ПРОФИЛЬ</h3>
-    <div class="stat"><span id="lang-all-souls">Всего душ</span>: <strong id="lifetime-count">0</strong></div>
-    <div class="stat"><span id="lang-keys">Ключей</span>: <strong id="keys-count">0</strong></div>
-    <button class="btn-action" onpointerdown="openChest()">ОТКРЫТЬ СУНДУК</button>
-    <button class="btn-action" onpointerdown="setLang('ru')">RU</button>
-    <button class="btn-action" onpointerdown="setLang('en')">EN</button>
+<!-- ПК Интерфейс -->
+<div class="pc-panels p-left">
+    <h3>Профиль</h3>
+    <div class="stat">Всего душ: <strong id="all-souls">0</strong></div>
+    <button class="btn" onpointerdown="setLang('ru')">RU</button>
+    <button class="btn" onpointerdown="setLang('en')">EN</button>
 </div>
 
-<div class="pc-panel pc-right">
-    <h3 id="lang-shop">МАГАЗИН</h3>
-    <button class="btn-action" onpointerdown="buy('click')">Нож (ур. <span id="l-click">0</span>) - <span id="c-click">25</span> †</button>
-    <button class="btn-action" onpointerdown="buy('auto')">Свеча (ур. <span id="l-auto">0</span>) - <span id="c-auto">50</span> †</button>
-    <button class="btn-action" onpointerdown="spawnBoss()">ВЫЗВАТЬ БОССА</button>
+<div class="pc-panels p-right">
+    <h3>Магазин</h3>
+    <button class="btn" onpointerdown="buyUp('click')">Нож (ур. <span id="u-click">0</span>)</button>
+    <button class="btn" onpointerdown="buyUp('auto')">Свеча (ур. <span id="u-auto">0</span>)</button>
 </div>
 
-<!-- МОБИЛЬНОЕ МЕНЮ -->
-<div class="mobile-menu">
-    <button onpointerdown="openSheet('profile')">ПРОФИЛЬ</button>
-    <button onpointerdown="openSheet('shop')">МАГАЗИН</button>
-    <button onpointerdown="openSheet('skins')">ОБЛИКИ</button>
-    <button onpointerdown="openSheet('items')">ВЕЩИ</button>
+<!-- Мобильное Меню -->
+<div class="mob-nav">
+    <button onpointerdown="openModal('profile')">ПРОФИЛЬ</button>
+    <button onpointerdown="openModal('shop')">МАГАЗИН</button>
+    <button onpointerdown="openModal('skins')">ГАРДЕРОБ</button>
+    <button onpointerdown="openModal('items')">ВЕЩИ</button>
 </div>
 
-<!-- ШТОРКА -->
-<div class="sheet-overlay" id="sheet">
-    <div class="sheet-content">
-        <div id="sheet-data"></div>
-        <button class="btn-action" onpointerdown="closeSheet()" style="background: var(--wine); color: #fff;">ЗАКРЫТЬ</button>
+<!-- Шторка -->
+<div class="sheet-modal" id="modal">
+    <div class="sheet-inner">
+        <div id="modal-content"></div>
+        <button class="btn" style="background:var(--wine); color:white; margin-top:20px;" onpointerdown="closeModal()">ЗАКРЫТЬ</button>
     </div>
 </div>
 
-<!-- БОСС -->
-<div class="boss-box" id="boss-ui">
-    <div style="font-size: 9px; color: gray;">АКТИВНОЕ СОБЫТИЕ</div>
-    <div style="font-weight: bold; color: var(--wine);">БОСС КУКОЛДОВ</div>
-    <div class="level-bar-container" style="width: 100%;"><div class="level-bar-fill" id="boss-hp" style="width: 100%;"></div></div>
-    <button class="btn-action" style="font-size: 10px; padding: 5px;" onpointerdown="leaveBoss()">СБЕЖАТЬ</button>
-</div>
-
-<audio id="bg-music" loop><source src="music.mp3" type="audio/mpeg"></audio>
+<audio id="music-player" loop><source src="music.mp3" type="audio/mpeg"></audio>
 
 <script>
 /* =========================================================
-   ЯДРО ИГРЫ
+   ЛОГИКА ИГРЫ (V5)
 ========================================================= */
 
-let g = {
+let state = {
     souls: 0,
     lifetime: 0,
     lvl: 1,
-    keys: 0,
     upgrades: { click: 0, auto: 0 },
-    lang: 'ru',
-    currentSkin: 'default',
-    items: []
+    currentSkin: 0,
+    currentRoom: 0,
+    unlockedSkins: [0],
+    unlockedRooms: [0],
+    lang: 'ru'
 };
 
-// Загрузка
-const save = localStorage.getItem('dm_kvartira_v4');
-if(save) g = Object.assign(g, JSON.parse(save));
+const SKINS = ["Death Head", "DJ Pumpkin", "Horned", "Viscount", "Void"];
+const ROOMS = ["Прихожая", "Гостиная", "DJ-Студия", "Спальня", "Секретная"];
+const COLORS = ["#d98446", "#762b33", "#35566a", "#a9844c", "#2d1e19"];
 
-const soulsVal = $("souls-count");
-const expFill = $("exp-fill");
+// Загрузка
+const saved = localStorage.getItem('dm_final_v5');
+if(saved) state = Object.assign(state, JSON.parse(saved));
+
+const soulsDisplay = document.getElementById("souls-text");
+const pumpkin = document.getElementById("main-target");
+const music = document.getElementById("music-player");
 
 function updateUI() {
-    soulsVal.innerText = fmt(g.souls);
-    $("sps-count").innerText = fmt(getSPS());
-    $("lvl-num").innerText = g.lvl;
-    $("lifetime-count").innerText = fmt(g.lifetime);
-    $("keys-count").innerText = g.keys;
-
+    soulsDisplay.innerText = Math.floor(state.souls).toLocaleString();
+    document.getElementById("sps-text").innerText = (state.upgrades.auto * 2).toLocaleString();
+    document.getElementById("lvl-text").innerText = state.lvl;
+    document.getElementById("all-souls").innerText = Math.floor(state.lifetime).toLocaleString();
+    
     // Опыт
-    let target = Math.pow(g.lvl, 2) * 250;
-    let prev = Math.pow(g.lvl - 1, 2) * 250;
-    let progress = ((g.lifetime - prev) / (target - prev)) * 100;
-    expFill.style.width = Math.min(100, progress) + "%";
+    let target = Math.pow(state.lvl, 2) * 300;
+    let prev = Math.pow(state.lvl - 1, 2) * 300;
+    let progress = ((state.lifetime - prev) / (target - prev)) * 100;
+    document.getElementById("exp-fill").style.width = Math.min(100, progress) + "%";
 
     if(progress >= 100) {
-        g.lvl++;
-        g.keys++;
-        haptic('success');
+        state.lvl++;
+        if(tg) tg.HapticFeedback.notificationOccurred('success');
+        checkUnlocks();
     }
 
-    // Кнопки магазина
-    $("l-click").innerText = g.upgrades.click;
-    $("c-click").innerText = fmt(25 * Math.pow(1.6, g.upgrades.click));
-    $("l-auto").innerText = g.upgrades.auto;
-    $("c-auto").innerText = fmt(50 * Math.pow(1.6, g.upgrades.auto));
+    // Магазин
+    document.getElementById("u-click").innerText = state.upgrades.click;
+    document.getElementById("u-auto").innerText = state.upgrades.auto;
+    
+    document.getElementById("cur-skin").innerText = SKINS[state.currentSkin];
+    document.getElementById("cur-room").innerText = ROOMS[state.currentRoom];
+    document.getElementById("pumpkin-color").style.background = COLORS[state.currentSkin];
 }
 
-function getSPS() {
-    return g.upgrades.auto * 2 * (1 + (g.prestiges || 0) * 0.2);
-}
-
-function fmt(n) {
-    if(n < 1000) return Math.floor(n);
-    if(n < 1000000) return (n/1000).toFixed(1) + "k";
-    return (n/1000000).toFixed(2) + "m";
-}
-
-/* КЛИК СИСТЕМА (МГНОВЕННАЯ) */
-$("pumpkin-dj").onpointerdown = (e) => {
+/* МГНОВЕННЫЙ КЛИК */
+pumpkin.onpointerdown = (e) => {
     e.preventDefault();
-    haptic('light');
-
-    let power = (1 + g.upgrades.click) * (1 + g.items.length * 0.1);
+    let p = 1 + state.upgrades.click;
+    state.souls += p;
+    state.lifetime += p;
     
-    if(bossActive) {
-        bossHP -= power;
-        updateBoss();
-    } else {
-        g.souls += power;
-        g.lifetime += power;
-    }
+    if(tg) tg.HapticFeedback.impactOccurred('light');
     
-    showFloat(e.clientX, e.clientY, "+" + Math.floor(power));
+    createParticle(e.clientX, e.clientY, "+" + p);
     updateUI();
 };
 
-/* БОСС КУКОЛДОВ */
-let bossActive = false;
-let bossHP = 0;
-let bossMax = 0;
-
-function spawnBoss() {
-    if(bossActive) return;
-    bossActive = true;
-    bossMax = g.lvl * 2000;
-    bossHP = bossMax;
-    $("boss-ui").style.display = "block";
-    haptic('heavy');
+function createParticle(x, y, text) {
+    let p = document.createElement("div");
+    p.className = "soul-particle";
+    p.innerText = text;
+    p.style.left = x + "px";
+    p.style.top = y + "px";
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 800);
 }
 
-function updateBoss() {
-    $("boss-hp").style.width = (bossHP/bossMax)*100 + "%";
-    if(bossHP <= 0) {
-        bossActive = false;
-        $("boss-ui").style.display = "none";
-        let rew = bossMax * 0.6;
-        g.souls += rew;
-        g.lifetime += rew;
-        g.keys += 1;
-        message("Босс побежден! Награда: " + fmt(rew));
+/* ПЕРЕКЛЮЧАТЕЛИ */
+function switchSkin(dir) {
+    state.currentSkin = (state.currentSkin + dir + SKINS.length) % SKINS.length;
+    haptic('select');
+    updateUI();
+}
+
+function switchRoom(dir) {
+    state.currentRoom = (state.currentRoom + dir + ROOMS.length) % ROOMS.length;
+    haptic('select');
+    updateUI();
+}
+
+function buyUp(type) {
+    let cost = type === 'click' ? 25 * Math.pow(1.6, state.upgrades.click) : 50 * Math.pow(1.6, state.upgrades.auto);
+    if(state.souls >= cost) {
+        state.souls -= cost;
+        state.upgrades[type]++;
         haptic('success');
-    }
-}
-
-function leaveBoss() {
-    bossActive = false;
-    $("boss-ui").style.display = "none";
-}
-
-/* МАГАЗИН */
-function buy(type) {
-    let cost = type === 'click' ? 25 * Math.pow(1.6, g.upgrades.click) : 50 * Math.pow(1.6, g.upgrades.auto);
-    if(g.souls >= cost) {
-        g.souls -= cost;
-        g.upgrades[type]++;
-        haptic('select');
         updateUI();
         save();
     }
 }
 
-/* МОБИЛЬНЫЙ ИНТЕРФЕЙС (ШТОРКА) */
-function openSheet(type) {
-    let data = $("sheet-data");
-    if(type === 'profile') {
-        data.innerHTML = `<h2>Профиль</h2><p>Всего душ: ${fmt(g.lifetime)}</p><p>Ключей: ${g.keys}</p>`;
-    } else if(type === 'shop') {
-        data.innerHTML = `<h2>Магазин</h2>
-        <button class="btn-action" onpointerdown="buy('click')">Улучшить нож (${fmt(25 * Math.pow(1.6, g.upgrades.click))} †)</button>
-        <button class="btn-action" onpointerdown="buy('auto')">Купить свечу (${fmt(50 * Math.pow(1.6, g.upgrades.auto))} †)</button>`;
+/* ГРОМКОСТЬ (ФИКС ДЛЯ ТЕЛЕФОНА) */
+const volSlider = document.getElementById("vol-slider");
+volSlider.addEventListener('input', () => {
+    music.volume = volSlider.value;
+});
+
+/* МОБИЛЬНЫЕ ОКНА */
+function openModal(type) {
+    let content = document.getElementById("modal-content");
+    if(type === 'shop') {
+        content.innerHTML = `<h2>Магазин</h2>
+        <button class="btn" onpointerdown="buyUp('click')">Улучшить Нож</button>
+        <button class="btn" onpointerdown="buyUp('auto')">Купить Свечу</button>`;
+    } else if(type === 'profile') {
+        content.innerHTML = `<h2>Профиль</h2><p>Всего собрано: ${fmt(state.lifetime)}</p><p>Уровень: ${state.lvl}</p>`;
     } else {
-        data.innerHTML = `<h2>${type}</h2><p>Скоро в обновлении!</p>`;
+        content.innerHTML = `<h2>Инвентарь</h2><p>Пока здесь пусто...</p>`;
     }
-    $("sheet").style.display = "flex";
+    document.getElementById("modal").style.display = "flex";
 }
 
-function closeSheet() { $("sheet").style.display = "none"; }
+function closeModal() { document.getElementById("modal").style.display = "none"; }
 
-/* ТЕХНИЧЕСКОЕ */
-function haptic(style) {
-    if(tg) {
-        if(style === 'light') tg.HapticFeedback.impactOccurred('light');
-        if(style === 'heavy') tg.HapticFeedback.impactOccurred('heavy');
-        if(style === 'success') tg.HapticFeedback.notificationOccurred('success');
-        if(style === 'select') tg.HapticFeedback.selectionChanged();
-    }
+function checkUnlocks() {
+    // В будущем тут можно открывать новые скины за уровни
 }
 
-function showFloat(x, y, text) {
-    let el = document.createElement("div");
-    el.className = "floating-souls";
-    el.innerText = text;
-    el.style.left = x + "px";
-    el.style.top = y + "px";
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 800);
-}
-
-function message(txt) {
-    tg?.MainButton.setText(txt).show();
-    setTimeout(() => tg?.MainButton.hide(), 3000);
-}
-
-function save() { localStorage.setItem('dm_kvartira_v4', JSON.stringify(g)); }
+function fmt(n) { return Math.floor(n).toLocaleString(); }
+function haptic(s) { if(tg) tg.HapticFeedback.impactOccurred(s); }
+function save() { localStorage.setItem('dm_final_v5', JSON.stringify(state)); }
 
 window.onload = () => {
-    setTimeout(() => $("loader").classList.add("hide"), 2000);
-    applyLanguage(); // Применяем тексты
+    setTimeout(() => document.getElementById("intro").classList.add("hide"), 2000);
+    initTelegram();
     updateUI();
     
-    // Автодоход
     setInterval(() => {
-        if(!bossActive) {
-            let gain = getSPS() / 10;
-            g.souls += gain;
-            g.lifetime += gain;
-            updateUI();
-        }
+        let gain = (state.upgrades.auto * 2) / 10;
+        state.souls += gain;
+        state.lifetime += gain;
+        updateUI();
     }, 100);
-    setInterval(save, 5000);
-    
-    // Музыка при первом клике
+
+    // Музыка по первому касанию
     document.body.addEventListener('pointerdown', () => {
-        let m = $("bg-music");
-        if(m.paused) m.play().catch(()=>{});
+        if(music.paused) music.play().catch(()=>{});
     }, {once: true});
 };
 
-function setLang(l) { g.lang = l; save(); location.reload(); }
-
-function applyLanguage() {
-    if(g.lang === 'en') {
-        $("lang-sps").innerText = "souls / sec";
-        $("lang-lvl").innerText = "Level";
-        $("lang-profile").innerText = "PROFILE";
-        $("lang-shop").innerText = "SHOP";
-        // и т.д.
-    }
-}
-
-function $("id") { return document.getElementById($("id")); } // shortcut для id
-function $(id) { return document.getElementById(id); }
+function setLang(l) { state.lang = l; save(); location.reload(); }
 </script>
 </body>
 </html>
