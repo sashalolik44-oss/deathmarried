@@ -1,0 +1,9582 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<title>DEATHMARRIED — KVARTIRA</title>
+
+<!-- TELEGRAM MINI APP -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<!-- ШРИФТЫ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600&display=swap"
+rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   COLORS
+========================================================= */
+
+:root{
+    --cream:#e8d8be;
+    --paper:#dcc7a7;
+    --paper2:#efe0c8;
+
+    --wine:#762b33;
+    --wine2:#4b1c23;
+
+    --wood:#38261e;
+
+    --gold:#a9844c;
+
+    --blue:#35566a;
+
+    --ink:#2d1e19;
+
+    --muted:#7e675b;
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*{
+    box-sizing:border-box;
+
+    user-select:none;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+html,
+body{
+    margin:0;
+
+    width:100%;
+
+    min-height:100%;
+}
+
+body{
+    min-height:100vh;
+
+    overflow:hidden;
+
+    color:var(--ink);
+
+    font-family:
+        "Montserrat",
+        Arial,
+        sans-serif;
+
+    background:#d5bd99;
+}
+
+button{
+    font-family:inherit;
+
+    touch-action:
+        manipulation;
+}
+
+
+/* =========================================================
+   INTRO
+========================================================= */
+
+.intro{
+    position:fixed;
+
+    inset:0;
+
+    z-index:10000;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+        radial-gradient(
+            circle,
+            #f3e8d7,
+            #ddc7a6 70%,
+            #b6956b
+        );
+
+    transition:
+        opacity 1.2s,
+        visibility 1.2s;
+}
+
+.intro.hide{
+    opacity:0;
+
+    visibility:hidden;
+
+    pointer-events:none;
+}
+
+.intro::before,
+.intro::after{
+    content:"";
+
+    position:absolute;
+
+    pointer-events:none;
+
+    border:
+        1px solid
+        #79594366;
+}
+
+.intro::before{
+    inset:22px;
+}
+
+.intro::after{
+    inset:32px;
+
+    border-color:
+        #a77e4f55;
+}
+
+.intro-content{
+    text-align:center;
+
+    animation:
+        introIn 1.2s ease both;
+}
+
+.intro-emblem{
+    width:68px;
+
+    height:68px;
+
+    margin:
+        0 auto 22px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border:
+        1px solid var(--gold);
+
+    border-radius:50%;
+
+    color:var(--wine);
+
+    font:
+        italic 31px
+        "Cormorant Garamond",
+        serif;
+}
+
+.intro-title{
+    color:#3e231f;
+
+    font:
+        500
+        clamp(45px,8vw,88px)
+        /.8
+        "Cormorant Garamond",
+        serif;
+
+    letter-spacing:.08em;
+}
+
+.intro-sub{
+    margin-top:24px;
+
+    color:var(--wine);
+
+    font-size:10px;
+
+    letter-spacing:.7em;
+}
+
+.intro-line{
+    width:0;
+
+    height:1px;
+
+    margin:
+        24px auto;
+
+    background:
+        var(--gold);
+
+    animation:
+        line 2s .4s forwards;
+}
+
+.intro-note{
+    color:#826b5b;
+
+    font:
+        italic 13px
+        "Cormorant Garamond",
+        serif;
+}
+
+@keyframes introIn{
+    from{
+        opacity:0;
+
+        transform:
+            translateY(15px);
+    }
+}
+
+@keyframes line{
+    to{
+        width:250px;
+    }
+}
+
+
+/* =========================================================
+   ROOMS
+========================================================= */
+
+.room-bg{
+    position:fixed;
+
+    inset:0;
+
+    pointer-events:none;
+
+    transition:
+        background 1s ease;
+}
+
+
+/* ПРИХОЖАЯ */
+
+body.room-hall
+.room-bg{
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0 85px,
+            #6a3c2d0a
+            86px 87px
+        ),
+        linear-gradient(
+            #e3d2b8,
+            #cbb08c
+        );
+}
+
+
+/* ГОСТИНАЯ */
+
+body.room-salon
+.room-bg{
+    background:
+        radial-gradient(
+            ellipse at 50% 58%,
+            #9b474944 0 25%,
+            transparent 48%
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent 0 80px,
+            #69332d0b 82px 83px
+        ),
+        linear-gradient(
+            #dfcab0,
+            #bfa07f
+        );
+}
+
+
+/* DJ ROOM */
+
+body.room-dj
+.room-bg{
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            #4e657d44,
+            transparent 35%
+        ),
+        linear-gradient(
+            #c2c1b5,
+            #8e9190
+        );
+}
+
+
+/* BEDROOM */
+
+body.room-bedroom
+.room-bg{
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            #7b485244,
+            transparent 35%
+        ),
+        linear-gradient(
+            #cab6aa,
+            #9d8580
+        );
+}
+
+
+/* SECRET ROOM */
+
+body.room-secret
+.room-bg{
+    background:
+        radial-gradient(
+            circle at 50% 42%,
+            #a16c4f55,
+            transparent 23%
+        ),
+        linear-gradient(
+            #766057,
+            #382b29
+        );
+}
+
+
+.wall-pattern{
+    position:fixed;
+
+    inset:0;
+
+    pointer-events:none;
+
+    opacity:.09;
+
+    background:
+        radial-gradient(
+            ellipse,
+            transparent 0 40%,
+            #713039 42% 44%,
+            transparent 46%
+        );
+
+    background-size:
+        105px 105px;
+}
+
+
+.floor{
+    position:fixed;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:14vh;
+
+    pointer-events:none;
+
+    border-top:
+        6px solid #3d2922;
+
+    background:
+        repeating-linear-gradient(
+            100deg,
+            #553a2d 0 70px,
+            #3b2921 71px 74px,
+            #654436 75px 145px
+        );
+}
+
+
+.vignette{
+    position:fixed;
+
+    inset:0;
+
+    pointer-events:none;
+
+    box-shadow:
+        inset 0 0 170px
+        rgba(52,28,20,.22);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header{
+    position:fixed;
+
+    top:14px;
+
+    width:100%;
+
+    z-index:20;
+
+    text-align:center;
+}
+
+.logo{
+    color:var(--wine);
+
+    font:
+        600
+        clamp(31px,4vw,52px)
+        /.9
+        "Cormorant Garamond",
+        serif;
+
+    letter-spacing:.12em;
+}
+
+.tag{
+    margin-top:7px;
+
+    color:#806357;
+
+    font-size:8px;
+
+    letter-spacing:.45em;
+}
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+.language{
+    position:fixed;
+
+    left:18px;
+    top:16px;
+
+    z-index:1200;
+
+    display:flex;
+
+    border:
+        1px solid #927255;
+
+    background:#dec8a8ee;
+}
+
+.language button{
+    padding:
+        7px 10px;
+
+    border:0;
+
+    color:#796357;
+
+    background:
+        transparent;
+
+    font:
+        600 9px
+        Montserrat,
+        sans-serif;
+
+    cursor:pointer;
+}
+
+.language button.active{
+    color:white;
+
+    background:
+        var(--wine);
+}
+
+
+/* =========================================================
+   TELEGRAM PROFILE
+========================================================= */
+
+.telegram-player{
+    position:fixed;
+
+    left:18px;
+    top:57px;
+
+    z-index:1100;
+
+    display:none;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:
+        6px 9px;
+
+    color:#5b4035;
+
+    background:#dec8a8e8;
+
+    border:
+        1px solid #9b7a5b;
+
+    font-size:8px;
+}
+
+.telegram-player.show{
+    display:flex;
+}
+
+.telegram-avatar{
+    display:none;
+
+    width:29px;
+    height:29px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    border:
+        1px solid #a5815d;
+}
+
+.telegram-name{
+    color:var(--wine);
+
+    font-weight:600;
+}
+
+.telegram-label{
+    margin-top:2px;
+
+    color:#8d7263;
+
+    font-size:7px;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+    position:fixed;
+
+    left:50%;
+    top:88px;
+
+    transform:
+        translateX(-50%);
+
+    z-index:20;
+
+    width:390px;
+
+    text-align:center;
+}
+
+.souls{
+    color:var(--wine2);
+
+    font:
+        600 36px
+        "Cormorant Garamond",
+        serif;
+}
+
+.small{
+    color:#826b5f;
+
+    font-size:9px;
+}
+
+.level-text{
+    margin-top:5px;
+
+    color:#60473d;
+
+    font:
+        italic 13px
+        "Cormorant Garamond",
+        serif;
+}
+
+.bar{
+    width:265px;
+
+    height:6px;
+
+    margin:
+        6px auto;
+
+    overflow:hidden;
+
+    border:
+        1px solid #957b62;
+
+    background:#b49c82;
+}
+
+.bar div{
+    width:0;
+
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #552129,
+            #89333b
+        );
+}
+
+#rageBar{
+    background:
+        linear-gradient(
+            90deg,
+            #a15b35,
+            #c89a51
+        );
+}
+
+
+/* =========================================================
+   CHARACTER
+========================================================= */
+
+.game{
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+}
+
+.character{
+    position:relative;
+
+    width:360px;
+
+    height:350px;
+
+    cursor:pointer;
+
+    touch-action:
+        manipulation;
+
+    transition:
+        transform .07s;
+
+    filter:
+        drop-shadow(
+            0 28px 23px
+            rgba(54,30,21,.42)
+        );
+}
+
+.character:hover{
+    transform:
+        scale(1.025);
+}
+
+.character.hit{
+    transform:
+        scale(.9)
+        rotate(-2deg);
+}
+
+
+/* =========================================================
+   PUMPKIN
+========================================================= */
+
+.pumpkin{
+    position:absolute;
+
+    left:60px;
+
+    top:72px;
+
+    width:240px;
+
+    height:190px;
+}
+
+.stem{
+    position:absolute;
+
+    left:104px;
+
+    top:-39px;
+
+    width:31px;
+
+    height:52px;
+
+    border-radius:9px;
+
+    transform:
+        rotate(7deg);
+
+    background:
+        linear-gradient(
+            90deg,
+            #382619,
+            #81633a,
+            #322218
+        );
+}
+
+.lobe{
+    position:absolute;
+
+    top:0;
+
+    height:185px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle at 42% 25%,
+            #d98446,
+            transparent 27%
+        ),
+        linear-gradient(
+            90deg,
+            #74301f,
+            #b65a31,
+            #722c20
+        );
+
+    box-shadow:
+        inset 0 -18px 25px
+        #49181466;
+}
+
+.a{
+    width:100px;
+    left:0;
+}
+
+.b{
+    width:122px;
+    left:38px;
+    z-index:1;
+}
+
+.c{
+    width:100px;
+    right:0;
+}
+
+.d{
+    width:122px;
+    right:38px;
+    z-index:1;
+}
+
+
+/* =========================================================
+   FACE
+========================================================= */
+
+.face{
+    position:absolute;
+
+    inset:0;
+
+    z-index:5;
+}
+
+.eye{
+    position:absolute;
+
+    top:68px;
+
+    width:46px;
+
+    height:31px;
+
+    background:#241411;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 28%,
+            72% 100%,
+            14% 72%
+        );
+}
+
+.eye::after{
+    content:"";
+
+    position:absolute;
+
+    left:17px;
+
+    top:11px;
+
+    width:12px;
+
+    height:6px;
+
+    background:#d09357;
+
+    box-shadow:
+        0 0 7px #ad5137;
+}
+
+.eye.left{
+    left:49px;
+}
+
+.eye.right{
+    right:49px;
+
+    transform:
+        scaleX(-1);
+}
+
+.mouth{
+    position:absolute;
+
+    left:64px;
+
+    top:120px;
+
+    width:112px;
+
+    height:47px;
+
+    background:#24130f;
+
+    clip-path:
+        polygon(
+            0 25%,
+            15% 38%,
+            25% 10%,
+            39% 44%,
+            51% 6%,
+            64% 43%,
+            77% 12%,
+            88% 41%,
+            100% 22%,
+            90% 78%,
+            70% 88%,
+            50% 72%,
+            30% 89%,
+            10% 77%
+        );
+}
+
+
+/* =========================================================
+   HEADPHONES
+========================================================= */
+
+.phones{
+    position:absolute;
+
+    left:42px;
+
+    top:38px;
+
+    width:275px;
+
+    height:190px;
+
+    z-index:9;
+
+    pointer-events:none;
+}
+
+.band{
+    position:absolute;
+
+    left:28px;
+
+    width:219px;
+
+    height:155px;
+
+    border:
+        20px solid #24201e;
+
+    border-bottom:none;
+
+    border-radius:
+        130px 130px 0 0;
+
+    box-shadow:
+        inset 0 0 0
+        3px #584b44;
+}
+
+.ear{
+    position:absolute;
+
+    top:100px;
+
+    width:51px;
+
+    height:85px;
+
+    border:
+        4px solid #493b35;
+
+    border-radius:17px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #171312,
+            #3b302c,
+            #161211
+        );
+}
+
+.ear::after{
+    content:"";
+
+    position:absolute;
+
+    inset:15px 9px;
+
+    border-radius:10px;
+
+    background:
+        var(--wine);
+}
+
+.ear.left{
+    left:4px;
+
+    transform:
+        rotate(-7deg);
+}
+
+.ear.right{
+    right:4px;
+
+    transform:
+        rotate(7deg);
+}
+
+
+/* =========================================================
+   SKIN ELEMENTS
+========================================================= */
+
+.dj-console,
+.horns,
+.crown,
+.void-aura{
+    display:none;
+
+    pointer-events:none;
+}
+
+
+/* DJ */
+
+.dj-console{
+    position:absolute;
+
+    left:54px;
+
+    top:229px;
+
+    width:252px;
+
+    height:78px;
+
+    z-index:15;
+
+    border:
+        5px solid #442e27;
+
+    background:
+        linear-gradient(
+            #762d35,
+            #3b1e20
+        );
+
+    transform:
+        perspective(300px)
+        rotateX(20deg);
+}
+
+.deck{
+    position:absolute;
+
+    top:14px;
+
+    width:49px;
+
+    height:49px;
+
+    border:
+        5px solid #ae8850;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #772b32 0 9%,
+            #28201e 10% 55%,
+            #5b4437 57%
+        );
+}
+
+.deck.left{
+    left:18px;
+}
+
+.deck.right{
+    right:18px;
+}
+
+.mixer{
+    position:absolute;
+
+    left:90px;
+
+    top:13px;
+}
+
+.mixer span{
+    display:inline-block;
+
+    width:6px;
+
+    height:39px;
+
+    margin:3px;
+
+    background:
+        linear-gradient(
+            #ddc69f,
+            #a98246,
+            #4b2022
+        );
+}
+
+.skin-dj
+.dj-console{
+    display:block;
+}
+
+.skin-dj
+.deck{
+    animation:
+        disc 1.6s linear infinite;
+}
+
+@keyframes disc{
+    to{
+        transform:
+            rotate(360deg);
+    }
+}
+
+
+/* HORNS */
+
+.horns{
+    position:absolute;
+
+    left:70px;
+
+    top:34px;
+
+    width:220px;
+
+    z-index:7;
+
+    justify-content:
+        space-between;
+}
+
+.horn{
+    width:48px;
+
+    height:75px;
+
+    background:
+        linear-gradient(
+            #68413a,
+            #211414
+        );
+
+    clip-path:
+        polygon(
+            50% 0,
+            100% 100%,
+            25% 80%
+        );
+}
+
+.horn:last-child{
+    transform:
+        scaleX(-1);
+}
+
+.skin-hell
+.horns{
+    display:flex;
+}
+
+
+/* CROWN */
+
+.crown{
+    position:absolute;
+
+    left:130px;
+
+    top:5px;
+
+    z-index:15;
+
+    color:#b18c50;
+
+    font:
+        75px Georgia,
+        serif;
+}
+
+.skin-king
+.crown{
+    display:block;
+}
+
+
+/* VOID */
+
+.void-aura{
+    position:absolute;
+
+    left:40px;
+
+    top:43px;
+
+    width:280px;
+
+    height:245px;
+
+    z-index:-1;
+
+    border-radius:50%;
+
+    background:#64273b20;
+
+    box-shadow:
+        0 0 70px
+        #67273a55;
+
+    animation:
+        aura 1s alternate infinite;
+}
+
+.skin-void
+.void-aura{
+    display:block;
+}
+
+.skin-void
+.lobe{
+    background:
+        radial-gradient(
+            circle at 42% 25%,
+            #8c5a61,
+            transparent 24%
+        ),
+        linear-gradient(
+            90deg,
+            #29161a,
+            #5e2931,
+            #221215
+        );
+}
+
+@keyframes aura{
+    to{
+        transform:
+            scale(1.1);
+    }
+}
+
+
+/* =========================================================
+   COMBO
+========================================================= */
+
+.combo{
+    position:absolute;
+
+    bottom:17px;
+
+    width:100%;
+
+    text-align:center;
+
+    color:#732d34;
+
+    font:
+        italic 16px
+        "Cormorant Garamond",
+        serif;
+
+    opacity:0;
+}
+
+.combo.show{
+    opacity:1;
+}
+
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.panel{
+    position:fixed;
+
+    z-index:30;
+
+    width:310px;
+
+    padding:14px;
+
+    color:#402d27;
+
+    border:
+        1px solid #907052;
+
+    background:
+        rgba(
+            222,
+            202,
+            171,
+            .94
+        );
+
+    box-shadow:
+        0 8px 30px
+        rgba(60,34,23,.17);
+
+    backdrop-filter:
+        blur(9px);
+}
+
+.panel::after{
+    content:"";
+
+    position:absolute;
+
+    inset:5px;
+
+    pointer-events:none;
+
+    border:
+        1px solid #6f4e362b;
+}
+
+.left-panel{
+    left:20px;
+
+    top:50%;
+
+    transform:
+        translateY(-50%);
+}
+
+.right-panel{
+    right:20px;
+
+    top:50%;
+
+    transform:
+        translateY(-50%);
+}
+
+.title{
+    position:relative;
+
+    color:var(--wine2);
+
+    font:
+        600 18px
+        "Cormorant Garamond",
+        serif;
+
+    letter-spacing:.08em;
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+.tabs{
+    position:relative;
+
+    display:flex;
+
+    gap:2px;
+
+    margin-bottom:9px;
+}
+
+.tab{
+    flex:1;
+
+    min-height:31px;
+
+    border:0;
+
+    border-bottom:
+        1px solid #a28769;
+
+    padding:
+        7px 2px;
+
+    color:#765f53;
+
+    background:
+        transparent;
+
+    font:
+        600 7px
+        Montserrat,
+        sans-serif;
+
+    cursor:pointer;
+}
+
+.tab.active{
+    color:var(--wine);
+
+    border-bottom:
+        2px solid var(--wine);
+}
+
+.tabcontent{
+    position:relative;
+
+    display:none;
+}
+
+.tabcontent.active{
+    display:block;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.item,
+.action{
+    position:relative;
+
+    width:100%;
+
+    margin-top:7px;
+
+    padding:
+        9px 10px;
+
+    border:
+        1px solid #9e8164;
+
+    background:#efdec3a0;
+
+    color:#453028;
+
+    cursor:pointer;
+
+    transition:.14s;
+}
+
+.item{
+    text-align:left;
+}
+
+.item:hover,
+.action:hover{
+    background:#f1e3cd;
+
+    border-color:
+        var(--wine);
+}
+
+.item:disabled,
+.action:disabled{
+    opacity:.4;
+
+    cursor:not-allowed;
+}
+
+.item b{
+    display:block;
+
+    color:#59352d;
+
+    font:
+        600 15px
+        "Cormorant Garamond",
+        serif;
+}
+
+.desc{
+    color:#836b60;
+
+    font-size:8px;
+}
+
+.cost{
+    margin-top:4px;
+
+    color:var(--wine);
+
+    font:
+        600 13px
+        "Cormorant Garamond",
+        serif;
+}
+
+.stat{
+    padding:
+        5px 0;
+
+    border-bottom:
+        1px dotted #5d3d2e44;
+
+    color:#745d52;
+
+    font:
+        13px
+        "Cormorant Garamond",
+        serif;
+}
+
+.stat span{
+    float:right;
+
+    color:#432d26;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card{
+    margin:6px 0;
+
+    padding:8px;
+
+    border:
+        1px solid #aa8d6e;
+
+    background:#efdcbf73;
+}
+
+.card.selected{
+    border-color:
+        var(--wine);
+
+    background:#8e333a11;
+}
+
+.card.locked{
+    opacity:.57;
+}
+
+.card-name{
+    color:#57342c;
+
+    font:
+        600 14px
+        "Cormorant Garamond",
+        serif;
+}
+
+.card-info{
+    margin-top:2px;
+
+    color:#80695d;
+
+    font-size:8px;
+}
+
+.card button{
+    width:100%;
+
+    min-height:30px;
+
+    margin-top:5px;
+
+    padding:5px;
+
+    border:
+        1px solid #927356;
+
+    background:#dec7a6;
+
+    color:#53312a;
+
+    font-size:8px;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   CONTRACTS
+========================================================= */
+
+.contract{
+    padding:8px;
+
+    margin:6px 0;
+
+    border:
+        1px solid #ab8e70;
+
+    background:#efdcbf73;
+
+    font:
+        13px
+        "Cormorant Garamond",
+        serif;
+}
+
+.progress{
+    height:4px;
+
+    margin-top:5px;
+
+    overflow:hidden;
+
+    background:#b6a087;
+}
+
+.progress div{
+    height:100%;
+
+    background:var(--wine);
+}
+
+
+/* =========================================================
+   COLLECTION
+========================================================= */
+
+.loot,
+.record{
+    padding:
+        7px 3px;
+
+    border-bottom:
+        1px dotted #987b61;
+
+    font:
+        13px
+        "Cormorant Garamond",
+        serif;
+}
+
+.rare{
+    color:#315b75;
+}
+
+.epic{
+    color:#70446c;
+}
+
+.legendary{
+    color:#856321;
+}
+
+
+/* =========================================================
+   BOSS
+========================================================= */
+
+.boss-ui{
+    position:fixed;
+
+    right:20px;
+
+    top:18px;
+
+    z-index:1500;
+
+    width:300px;
+
+    padding:13px;
+
+    display:none;
+
+    color:#412b26;
+
+    border:
+        1px solid #8b674c;
+
+    background:#e8d7bcf4;
+
+    box-shadow:
+        0 10px 35px
+        #3d211d44;
+}
+
+.boss-kicker{
+    color:#8a6b5a;
+
+    font-size:7px;
+
+    letter-spacing:.25em;
+}
+
+.boss-name{
+    margin-top:3px;
+
+    color:var(--wine2);
+
+    font:
+        600 21px
+        "Cormorant Garamond",
+        serif;
+}
+
+.hpbar{
+    height:8px;
+
+    margin:
+        7px 0 4px;
+
+    overflow:hidden;
+
+    background:#ad9378;
+}
+
+.hp{
+    width:100%;
+
+    height:100%;
+
+    background:
+        var(--wine);
+}
+
+.leave-boss{
+    width:100%;
+
+    margin-top:7px;
+
+    padding:6px;
+
+    border:
+        1px solid #9d7f61;
+
+    background:
+        transparent;
+
+    color:#79584a;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   BLACK TIGGO PANEL
+========================================================= */
+
+.chase-ui{
+    position:fixed;
+
+    left:50%;
+
+    top:150px;
+
+    transform:
+        translateX(-50%);
+
+    z-index:1500;
+
+    width:340px;
+
+    padding:10px;
+
+    display:none;
+
+    text-align:center;
+
+    border:
+        1px solid #89664d;
+
+    background:#e6d4b9f2;
+
+    color:#4c3029;
+}
+
+
+/* =========================================================
+   TIGGO
+========================================================= */
+
+.tiggo{
+    position:fixed;
+
+    z-index:1400;
+
+    width:235px;
+
+    height:115px;
+
+    cursor:pointer;
+
+    touch-action:
+        manipulation;
+
+    filter:
+        drop-shadow(
+            0 14px 10px
+            #36201888
+        );
+}
+
+.normal-tiggo{
+    left:-260px;
+
+    animation:
+        drive 7s linear forwards;
+}
+
+@keyframes drive{
+    to{
+        left:
+            calc(
+                100vw + 270px
+            );
+    }
+}
+
+.car-body{
+    position:absolute;
+
+    left:5px;
+
+    bottom:20px;
+
+    width:220px;
+
+    height:59px;
+
+    border:
+        2px solid #69605b;
+
+    border-radius:
+        40px 52px 18px 18px;
+
+    background:
+        linear-gradient(
+            #d4d0c6,
+            #9b9992 48%,
+            #4b4947
+        );
+}
+
+.roof{
+    position:absolute;
+
+    left:54px;
+
+    bottom:70px;
+
+    width:125px;
+
+    height:40px;
+
+    background:#aaa79f;
+
+    clip-path:
+        polygon(
+            20% 100%,
+            35% 10%,
+            74% 7%,
+            100% 100%
+        );
+}
+
+.window{
+    position:absolute;
+
+    left:82px;
+
+    bottom:74px;
+
+    width:83px;
+
+    height:28px;
+
+    background:#344b55;
+
+    clip-path:
+        polygon(
+            7% 100%,
+            20% 12%,
+            70% 10%,
+            100% 100%
+        );
+}
+
+.wheel{
+    position:absolute;
+
+    bottom:5px;
+
+    width:43px;
+
+    height:43px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #8b8176 0 20%,
+            #25211f 22% 65%,
+            #100d0c 67%
+        );
+
+    z-index:4;
+}
+
+.w1{
+    left:31px;
+}
+
+.w2{
+    right:31px;
+}
+
+.carlogo{
+    position:absolute;
+
+    left:82px;
+
+    bottom:40px;
+
+    color:#322b27;
+
+    font-weight:600;
+
+    letter-spacing:3px;
+}
+
+.headlight{
+    position:absolute;
+
+    right:2px;
+
+    bottom:49px;
+
+    width:23px;
+
+    height:10px;
+
+    background:#ead7a6;
+
+    box-shadow:
+        15px 0 25px
+        #d5b976;
+}
+
+.black-tiggo
+.car-body{
+    border-color:#342623;
+
+    background:
+        linear-gradient(
+            #342a28,
+            #171311 55%,
+            #080706
+        );
+}
+
+.black-tiggo
+.roof{
+    background:#241d1b;
+}
+
+.black-tiggo
+.carlogo{
+    color:#b65760;
+}
+
+
+/* =========================================================
+   EXPLOSION
+========================================================= */
+
+.explosion{
+    position:fixed;
+
+    z-index:2500;
+
+    pointer-events:none;
+}
+
+.core{
+    position:absolute;
+
+    width:25px;
+
+    height:25px;
+
+    border-radius:50%;
+
+    background:#fae4a8;
+
+    box-shadow:
+        0 0 20px #fff0bd,
+        0 0 50px #bc7937,
+        0 0 100px #79272e;
+
+    animation:
+        boom .55s forwards;
+}
+
+@keyframes boom{
+    to{
+        transform:
+            scale(10);
+
+        opacity:0;
+    }
+}
+
+.particle{
+    position:absolute;
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:#bb793c;
+
+    animation:
+        particle .8s forwards;
+}
+
+@keyframes particle{
+    to{
+        transform:
+            translate(
+                var(--x),
+                var(--y)
+            )
+            scale(0);
+
+        opacity:0;
+    }
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.message{
+    position:fixed;
+
+    left:50%;
+
+    top:23%;
+
+    transform:
+        translateX(-50%);
+
+    z-index:3000;
+
+    min-width:280px;
+
+    max-width:
+        calc(100% - 30px);
+
+    padding:
+        13px 22px;
+
+    text-align:center;
+
+    color:#532f29;
+
+    border:
+        1px solid #956e50;
+
+    background:#eadac0f4;
+
+    font:
+        italic 18px
+        "Cormorant Garamond",
+        serif;
+
+    pointer-events:none;
+
+    animation:
+        msg 2.5s forwards;
+}
+
+@keyframes msg{
+    0%{
+        opacity:0;
+
+        transform:
+            translate(-50%,15px);
+    }
+
+    15%,
+    80%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0;
+
+        transform:
+            translate(-50%,-30px);
+    }
+}
+
+
+/* =========================================================
+   FLOAT
+========================================================= */
+
+.float{
+    position:fixed;
+
+    z-index:2600;
+
+    pointer-events:none;
+
+    color:var(--wine);
+
+    font:
+        600 25px
+        "Cormorant Garamond",
+        serif;
+
+    animation:
+        fly .8s forwards;
+}
+
+.float.crit{
+    color:#692631;
+
+    font-size:32px;
+}
+
+@keyframes fly{
+    to{
+        transform:
+            translateY(-100px);
+
+        opacity:0;
+    }
+}
+
+
+/* =========================================================
+   UNLOCK
+========================================================= */
+
+.unlock{
+    position:fixed;
+
+    inset:0;
+
+    z-index:4000;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    pointer-events:none;
+
+    background:#33201888;
+
+    animation:
+        unlock 3s forwards;
+}
+
+.unlock-box{
+    width:
+        min(
+            510px,
+            85vw
+        );
+
+    padding:
+        35px 25px;
+
+    text-align:center;
+
+    color:#53322b;
+
+    border:
+        1px solid #8c694e;
+
+    outline:
+        1px solid #b49570;
+
+    outline-offset:-8px;
+
+    background:#e8d8bd;
+}
+
+.unlock-title{
+    color:var(--wine);
+
+    font-size:8px;
+
+    letter-spacing:.42em;
+}
+
+.unlock-name{
+    margin-top:12px;
+
+    font:
+        600 35px
+        "Cormorant Garamond",
+        serif;
+}
+
+@keyframes unlock{
+    0%,
+    80%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0;
+    }
+}
+
+
+/* =========================================================
+   MUSIC
+========================================================= */
+
+.music{
+    position:fixed;
+
+    right:18px;
+
+    bottom:15px;
+
+    z-index:1600;
+
+    display:flex;
+
+    gap:7px;
+
+    align-items:center;
+
+    padding:
+        6px 9px;
+
+    border:
+        1px solid #896b52;
+
+    background:#d9c3a3ee;
+}
+
+.music button{
+    width:34px;
+
+    height:34px;
+
+    border:
+        1px solid #8c6950;
+
+    border-radius:50%;
+
+    background:#e8d7bb;
+
+    color:var(--wine);
+
+    cursor:pointer;
+}
+
+.music input{
+    width:75px;
+
+    accent-color:
+        var(--wine);
+}
+
+
+/* =========================================================
+   MOBILE / TELEGRAM
+========================================================= */
+
+@media(max-width:1000px){
+
+    body{
+        overflow-y:auto;
+
+        overflow-x:hidden;
+
+        min-height:1750px;
+    }
+
+    header{
+        top:
+            calc(
+                12px +
+                env(
+                    safe-area-inset-top
+                )
+            );
+    }
+
+    .language{
+        left:8px;
+
+        top:
+            calc(
+                9px +
+                env(
+                    safe-area-inset-top
+                )
+            );
+    }
+
+    .telegram-player{
+        left:8px;
+
+        top:
+            calc(
+                50px +
+                env(
+                    safe-area-inset-top
+                )
+            );
+    }
+
+    .stats{
+        top:
+            calc(
+                100px +
+                env(
+                    safe-area-inset-top
+                )
+            );
+    }
+
+    .game{
+        position:relative;
+
+        height:620px;
+
+        padding-top:
+            env(
+                safe-area-inset-top
+            );
+    }
+
+    .character{
+        transform:
+            scale(.92);
+    }
+
+    .character:hover{
+        transform:
+            scale(.92);
+    }
+
+    .character.hit{
+        transform:
+            scale(.84)
+            rotate(-2deg);
+    }
+
+    .panel{
+        position:relative;
+
+        left:auto;
+
+        right:auto;
+
+        top:auto;
+
+        transform:none;
+
+        width:
+            calc(
+                100% - 16px
+            );
+
+        max-width:450px;
+
+        margin:
+            8px auto;
+    }
+
+    .item,
+    .action{
+        min-height:48px;
+    }
+
+    .tab{
+        min-height:38px;
+    }
+
+    .right-panel{
+        margin-bottom:100px;
+    }
+
+    .boss-ui{
+        left:8px;
+
+        right:8px;
+
+        top:
+            calc(
+                72px +
+                env(
+                    safe-area-inset-top
+                )
+            );
+
+        width:auto;
+    }
+
+    .chase-ui{
+        top:
+            calc(
+                125px +
+                env(
+                    safe-area-inset-top
+                )
+            );
+
+        width:
+            calc(
+                100% - 20px
+            );
+    }
+
+    .music{
+        right:8px;
+
+        bottom:
+            calc(
+                8px +
+                env(
+                    safe-area-inset-bottom
+                )
+            );
+    }
+}
+
+</style>
+</head>
+
+<body class="room-hall">
+
+
+<!-- ======================================================
+     INTRO
+====================================================== -->
+
+<div class="intro" id="intro">
+
+    <div class="intro-content">
+
+        <div class="intro-emblem">
+            DM
+        </div>
+
+        <div class="intro-title">
+            DEATH<br>
+            MARRIED
+        </div>
+
+        <div class="intro-line"></div>
+
+        <div class="intro-sub">
+            KVARTIRA
+        </div>
+
+        <div class="intro-line"></div>
+
+        <div
+            class="intro-note"
+            id="introNote">
+
+            квартира для тех,
+            кто не ушёл
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     BACKGROUND
+====================================================== -->
+
+<div class="room-bg"></div>
+<div class="wall-pattern"></div>
+<div class="floor"></div>
+<div class="vignette"></div>
+
+
+<!-- ======================================================
+     LANGUAGE
+====================================================== -->
+
+<div class="language">
+
+    <button
+        id="ruButton"
+        onclick="setLanguage('ru')">
+
+        RU
+
+    </button>
+
+    <button
+        id="enButton"
+        onclick="setLanguage('en')">
+
+        EN
+
+    </button>
+
+</div>
+
+
+<!-- ======================================================
+     TELEGRAM PLAYER
+====================================================== -->
+
+<div
+    class="telegram-player"
+    id="telegramPlayer">
+
+    <img
+        id="telegramAvatar"
+        class="telegram-avatar"
+        alt="">
+
+    <div>
+
+        <div
+            class="telegram-name"
+            id="telegramName">
+
+            Telegram Resident
+
+        </div>
+
+        <div
+            class="telegram-label"
+            id="telegramLabel">
+
+            житель KVARTIRA
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     HEADER
+====================================================== -->
+
+<header>
+
+    <div class="logo">
+        DeathMarried
+    </div>
+
+    <div
+        class="tag"
+        id="tagline">
+
+        KVARTIRA • КЛИКЕР
+
+    </div>
+
+</header>
+
+
+<!-- ======================================================
+     STATS
+====================================================== -->
+
+<div class="stats">
+
+    <div class="souls">
+
+        ♱
+
+        <span id="souls">
+            0
+        </span>
+
+    </div>
+
+    <div class="small">
+
+        <span id="sps">
+            0
+        </span>
+
+        <span id="spsLabel">
+            душ / сек.
+        </span>
+
+        ·
+
+        <span id="clickLabel">
+            нажатие
+        </span>
+
+        <span id="power">
+            1
+        </span>
+
+        · x<span id="multi">
+            1.00
+        </span>
+
+    </div>
+
+    <div class="bar">
+
+        <div id="levelBar"></div>
+
+    </div>
+
+    <div class="level-text">
+
+        <span id="levelLabel">
+            уровень
+        </span>
+
+        <span id="level">
+            1
+        </span>
+
+        ·
+
+        <span id="skinTop">
+            Death Head
+        </span>
+
+        ·
+
+        <span id="roomTop">
+            Прихожая
+        </span>
+
+    </div>
+
+    <div class="bar">
+
+        <div id="rageBar"></div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     BOSS
+====================================================== -->
+
+<div
+    class="boss-ui"
+    id="bossUI">
+
+    <div
+        class="boss-kicker"
+        id="bossKicker">
+
+        В КВАРТИРЕ ГОСТЬ
+
+    </div>
+
+    <div
+        class="boss-name"
+        id="bossName">
+
+        БОСС КУКОЛДОВ
+
+    </div>
+
+    <div class="hpbar">
+
+        <div
+            class="hp"
+            id="bossHP">
+        </div>
+
+    </div>
+
+    <div
+        class="small"
+        id="bossText">
+    </div>
+
+    <button
+        class="leave-boss"
+        id="leaveBoss">
+
+        СБЕЖАТЬ ИЗ БОЯ
+
+    </button>
+
+</div>
+
+
+<!-- ======================================================
+     BLACK TIGGO
+====================================================== -->
+
+<div
+    class="chase-ui"
+    id="chaseUI">
+
+    <b id="chaseTitle">
+
+        BLACK TIGGO В КВАРТИРЕ
+
+    </b>
+
+    <div class="hpbar">
+
+        <div
+            class="hp"
+            id="chaseHP">
+        </div>
+
+    </div>
+
+    <div class="small">
+
+        <span id="chaseHPText">
+        </span>
+
+        ·
+
+        <span id="escapeLabel">
+            уедет через
+        </span>
+
+        <span id="chaseTime">
+            15
+        </span>
+
+        <span id="secondsLabel">
+            сек.
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     CHARACTER
+====================================================== -->
+
+<div class="game">
+
+    <div
+        class="character"
+        id="character">
+
+        <div class="void-aura"></div>
+
+        <div class="horns">
+
+            <div class="horn"></div>
+            <div class="horn"></div>
+
+        </div>
+
+        <div class="crown">
+            ♛
+        </div>
+
+        <div class="pumpkin">
+
+            <div class="stem"></div>
+
+            <div class="lobe a"></div>
+            <div class="lobe b"></div>
+            <div class="lobe c"></div>
+            <div class="lobe d"></div>
+
+            <div class="face">
+
+                <div class="eye left"></div>
+
+                <div class="eye right"></div>
+
+                <div class="mouth"></div>
+
+            </div>
+
+        </div>
+
+        <div class="phones">
+
+            <div class="band"></div>
+
+            <div class="ear left"></div>
+
+            <div class="ear right"></div>
+
+        </div>
+
+        <div class="dj-console">
+
+            <div class="deck left"></div>
+
+            <div class="mixer">
+
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+            <div class="deck right"></div>
+
+        </div>
+
+        <div
+            class="combo"
+            id="combo">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     LEFT PANEL
+====================================================== -->
+
+<div class="panel left-panel">
+
+    <div class="tabs">
+
+        <button
+            class="tab active"
+            id="profileTab"
+            data-left="profile">
+
+            ПРОФИЛЬ
+
+        </button>
+
+        <button
+            class="tab"
+            id="skinsTab"
+            data-left="skins">
+
+            ОБЛИКИ
+
+        </button>
+
+        <button
+            class="tab"
+            id="roomsTab"
+            data-left="rooms">
+
+            КОМНАТЫ
+
+        </button>
+
+        <button
+            class="tab"
+            id="collectionTab"
+            data-left="collection">
+
+            КОЛЛЕКЦИЯ
+
+        </button>
+
+    </div>
+
+
+    <!-- PROFILE -->
+
+    <div
+        class="tabcontent active"
+        id="profile">
+
+        <div
+            class="title"
+            id="profileTitle">
+
+            Житель квартиры
+
+        </div>
+
+        <div class="stat">
+
+            <span
+                id="lifetimeLabel"
+                style="float:none">
+
+                Всего собрано душ
+
+            </span>
+
+            <span id="lifetime">
+                0
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <span
+                id="clicksLabel"
+                style="float:none">
+
+                Нажатий
+
+            </span>
+
+            <span id="clicks">
+                0
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <span
+                id="critsLabel"
+                style="float:none">
+
+                Критических ударов
+
+            </span>
+
+            <span id="criticals">
+                0
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <span
+                id="bossesLabel"
+                style="float:none">
+
+                Боссов побеждено
+
+            </span>
+
+            <span id="bosses">
+                0
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            TIGGO
+
+            <span id="tiggos">
+                0
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            BLACK TIGGO
+
+            <span id="blackTiggos">
+                0
+            </span>
+
+        </div>
+
+        <div class="stat">
+
+            <span
+                id="recordsLabel"
+                style="float:none">
+
+                Пластинок
+
+            </span>
+
+            <span id="recordsCount">
+                0
+            </span>
+
+        </div>
+
+        <button
+            class="action"
+            id="rageButton"
+            disabled>
+        </button>
+
+        <button
+            class="action"
+            id="dailyButton">
+        </button>
+
+        <button
+            class="action"
+            id="bossButton">
+        </button>
+
+    </div>
+
+
+    <!-- SKINS -->
+
+    <div
+        class="tabcontent"
+        id="skins">
+
+        <div
+            class="title"
+            id="skinsTitle">
+
+            Гардероб
+
+        </div>
+
+        <div id="skinsList"></div>
+
+    </div>
+
+
+    <!-- ROOMS -->
+
+    <div
+        class="tabcontent"
+        id="rooms">
+
+        <div
+            class="title"
+            id="roomsTitle">
+
+            Комнаты KVARTIRA
+
+        </div>
+
+        <div
+            class="small"
+            id="roomsDescription">
+
+            Комнаты открываются
+            с уровнем.
+
+        </div>
+
+        <div id="roomsList"></div>
+
+    </div>
+
+
+    <!-- COLLECTION -->
+
+    <div
+        class="tabcontent"
+        id="collection">
+
+        <div
+            class="title"
+            id="collectionTitle">
+
+            Коллекция пластинок
+
+        </div>
+
+        <div
+            class="small"
+            id="collectionDescription">
+
+            Каждая уникальная пластинка
+            даёт постоянные +5%.
+
+        </div>
+
+        <div id="recordsList"></div>
+
+        <div
+            class="title"
+            id="itemsTitle"
+            style="margin-top:12px">
+
+            Найденные вещи
+
+        </div>
+
+        <div id="lootList"></div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     RIGHT PANEL
+====================================================== -->
+
+<div class="panel right-panel">
+
+    <div class="tabs">
+
+        <button
+            class="tab active"
+            id="shopTab"
+            data-right="shop">
+
+            МАГАЗИН
+
+        </button>
+
+        <button
+            class="tab"
+            id="tasksTab"
+            data-right="tasks">
+
+            ЗАДАНИЯ
+
+        </button>
+
+        <button
+            class="tab"
+            id="marriageTab"
+            data-right="marriage">
+
+            БРАК
+
+        </button>
+
+    </div>
+
+
+    <!-- SHOP -->
+
+    <div
+        class="tabcontent active"
+        id="shop">
+
+        <button
+            class="item"
+            id="buyClick">
+
+            <b id="clickName">
+                Старинный нож
+            </b>
+
+            <span class="desc">
+
+                <span id="clickDescription">
+                    +1 к силе нажатия
+                </span>
+
+                ·
+
+                <span id="lvlA">
+                    ур.
+                </span>
+
+                <span id="clickLvl">
+                    0
+                </span>
+
+            </span>
+
+            <div class="cost">
+
+                ♱
+
+                <span id="clickCost">
+                    25
+                </span>
+
+            </div>
+
+        </button>
+
+
+        <button
+            class="item"
+            id="buyAuto">
+
+            <b id="autoName">
+                Свеча на пианино
+            </b>
+
+            <span class="desc">
+
+                <span id="autoDescription">
+                    +1 душа в секунду
+                </span>
+
+                ·
+
+                <span id="lvlB">
+                    ур.
+                </span>
+
+                <span id="autoLvl">
+                    0
+                </span>
+
+            </span>
+
+            <div class="cost">
+
+                ♱
+
+                <span id="autoCost">
+                    50
+                </span>
+
+            </div>
+
+        </button>
+
+
+        <button
+            class="item"
+            id="buyRing">
+
+            <b id="ringName">
+                Кольцо виконтессы
+            </b>
+
+            <span class="desc">
+
+                <span id="ringDescription">
+                    +5 душ в секунду
+                </span>
+
+                ·
+
+                <span id="lvlC">
+                    ур.
+                </span>
+
+                <span id="ringLvl">
+                    0
+                </span>
+
+            </span>
+
+            <div class="cost">
+
+                ♱
+
+                <span id="ringCost">
+                    250
+                </span>
+
+            </div>
+
+        </button>
+
+
+        <button
+            class="item"
+            id="buyCrit">
+
+            <b id="critName">
+                Бордовая перчатка
+            </b>
+
+            <span class="desc">
+
+                <span id="critDescription">
+                    +2% шанс крита
+                </span>
+
+                ·
+
+                <span id="lvlD">
+                    ур.
+                </span>
+
+                <span id="critLvl">
+                    0
+                </span>
+
+            </span>
+
+            <div class="cost">
+
+                ♱
+
+                <span id="critCost">
+                    500
+                </span>
+
+            </div>
+
+        </button>
+
+
+        <button
+            class="item"
+            id="buyCritPower">
+
+            <b id="critPowerName">
+                Семейная брошь
+            </b>
+
+            <span class="desc">
+
+                <span id="critPowerDescription">
+                    +1 к множителю крита
+                </span>
+
+                ·
+
+                <span id="lvlE">
+                    ур.
+                </span>
+
+                <span id="critPowerLvl">
+                    0
+                </span>
+
+            </span>
+
+            <div class="cost">
+
+                ♱
+
+                <span id="critPowerCost">
+                    1500
+                </span>
+
+            </div>
+
+        </button>
+
+    </div>
+
+
+    <!-- TASKS -->
+
+    <div
+        class="tabcontent"
+        id="tasks">
+
+        <div
+            class="title"
+            id="tasksTitle">
+
+            Записки на столе
+
+        </div>
+
+        <div id="contractsList"></div>
+
+    </div>
+
+
+    <!-- MARRIAGE -->
+
+    <div
+        class="tabcontent"
+        id="marriage">
+
+        <div
+            class="title"
+            id="marriageTitle">
+
+            Брак со Смертью
+
+        </div>
+
+        <div
+            class="small"
+            id="marriageDescription">
+
+            После 50 уровня
+            можно начать новый цикл.
+
+        </div>
+
+        <div style="
+            margin:18px;
+            text-align:center;
+            color:#762b33;
+            font:32px 'Cormorant Garamond',serif;
+        ">
+
+            x<span id="prestigeMulti">
+                1.00
+            </span>
+
+        </div>
+
+        <button
+            class="action"
+            id="prestigeButton"
+            disabled>
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     MUSIC
+====================================================== -->
+
+<audio
+    id="music"
+    loop
+    preload="auto">
+
+    <source
+        src="music.mp3"
+        type="audio/mpeg">
+
+</audio>
+
+
+<div class="music">
+
+    <button id="musicButton">
+        ♪
+    </button>
+
+    <input
+        id="volume"
+        type="range"
+        min="0"
+        max="1"
+        step=".01"
+        value=".35">
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   SHORTCUT
+========================================================= */
+
+const $ =
+    id =>
+        document.getElementById(id);
+
+
+/* =========================================================
+   TRANSLATION
+========================================================= */
+
+const TXT = {
+
+    ru: {
+
+        intro:
+            "квартира для тех, кто не ушёл",
+
+        tag:
+            "KVARTIRA • КЛИКЕР",
+
+        telegramResident:
+            "житель KVARTIRA",
+
+        soulSec:
+            "душ / сек.",
+
+        click:
+            "нажатие",
+
+        level:
+            "уровень",
+
+        profile:
+            "ПРОФИЛЬ",
+
+        skins:
+            "ОБЛИКИ",
+
+        rooms:
+            "КОМНАТЫ",
+
+        collection:
+            "КОЛЛЕКЦИЯ",
+
+        shop:
+            "МАГАЗИН",
+
+        tasks:
+            "ЗАДАНИЯ",
+
+        marriage:
+            "БРАК",
+
+        profileTitle:
+            "Житель квартиры",
+
+        lifetime:
+            "Всего собрано душ",
+
+        clicks:
+            "Нажатий",
+
+        crits:
+            "Критических ударов",
+
+        bosses:
+            "Боссов побеждено",
+
+        records:
+            "Пластинок",
+
+        skinsTitle:
+            "Гардероб",
+
+        roomsTitle:
+            "Комнаты KVARTIRA",
+
+        roomsDesc:
+            "Комнаты открываются с уровнем. Каждая меняет атмосферу и стиль игры.",
+
+        collectionTitle:
+            "Коллекция пластинок",
+
+        collectionDesc:
+            "Каждая уникальная пластинка навсегда увеличивает весь доход на 5%.",
+
+        itemsTitle:
+            "Найденные вещи",
+
+        tasksTitle:
+            "Записки на столе",
+
+        rage:
+            "РИТМ",
+
+        rageReady:
+            "ВКЛЮЧИТЬ ПОЛНЫЙ РИТМ",
+
+        dailyReady:
+            "ОТКРЫТЬ УТРЕННЮЮ ПОЧТУ",
+
+        mail:
+            "ПОЧТА",
+
+        callBoss:
+            "ПОЗВАТЬ БОССА",
+
+        bossKicker:
+            "В КВАРТИРЕ ГОСТЬ",
+
+        bossName:
+            "БОСС КУКОЛДОВ",
+
+        escapeBoss:
+            "СБЕЖАТЬ ИЗ БОЯ",
+
+        chase:
+            "BLACK TIGGO В КВАРТИРЕ",
+
+        escape:
+            "уедет через",
+
+        seconds:
+            "сек.",
+
+        lvl:
+            "ур.",
+
+        wear:
+            "НАДЕТЬ",
+
+        wearing:
+            "НАДЕТО",
+
+        enter:
+            "ВОЙТИ",
+
+        here:
+            "ВЫ ЗДЕСЬ",
+
+        unlock:
+            "Откроется на уровне",
+
+        noRecords:
+            "Пластинок пока нет.",
+
+        noItems:
+            "Пока ничего не найдено.",
+
+        marriageTitle:
+            "Брак со Смертью",
+
+        marriageDesc:
+            "После 50 уровня можно начать новый цикл. Гардероб, комнаты, пластинки и найденные вещи сохранятся. Каждый новый брак навсегда увеличивает весь доход на 25%.",
+
+        marriageReady:
+            "ЗАКЛЮЧИТЬ БРАК СО СМЕРТЬЮ",
+
+        marriageLocked:
+            "НУЖЕН 50 УРОВЕНЬ",
+
+        critical:
+            "КРИТ",
+
+        combo:
+            "серия",
+
+        clickName:
+            "Старинный нож",
+
+        clickDesc:
+            "+1 к силе нажатия",
+
+        autoName:
+            "Свеча на пианино",
+
+        autoDesc:
+            "+1 душа в секунду",
+
+        ringName:
+            "Кольцо виконтессы",
+
+        ringDesc:
+            "+5 душ в секунду",
+
+        critName:
+            "Бордовая перчатка",
+
+        critDesc:
+            "+2% к шансу критического удара",
+
+        critPowerName:
+            "Семейная брошь",
+
+        critPowerDesc:
+            "+1 к множителю крита",
+
+        skinUnlocked:
+            "НОВЫЙ ОБЛИК ОТКРЫТ",
+
+        roomUnlocked:
+            "НОВАЯ КОМНАТА ОТКРЫТА",
+
+        rageStart:
+            "Вся квартира звучит в одном ритме — нажатия x5",
+
+        rageEnd:
+            "Музыка стихла. В квартире снова тихо.",
+
+        bossArrived:
+            "В квартиру пришёл БОСС КУКОЛДОВ",
+
+        bossKilled:
+            "БОСС КУКОЛДОВ побеждён",
+
+        bossLeft:
+            "Вы покинули бой",
+
+        tiggo:
+            "TIGGO пойман",
+
+        blackEscape:
+            "BLACK TIGGO уехал",
+
+        blackKilled:
+            "BLACK TIGGO уничтожен",
+
+        recordDrop:
+            "Найдена новая пластинка",
+
+        duplicateRecord:
+            "Такая пластинка уже есть — получена компенсация",
+
+        itemDrop:
+            "Найден предмет",
+
+        taskDone:
+            "Записка выполнена",
+
+        offline:
+            "Квартира работала без вас",
+
+        dailyReward:
+            "Получена утренняя почта",
+
+        share:
+            "Поделиться квартирой"
+    },
+
+
+    en: {
+
+        intro:
+            "an apartment for those who never left",
+
+        tag:
+            "KVARTIRA • CLICKER",
+
+        telegramResident:
+            "KVARTIRA resident",
+
+        soulSec:
+            "souls / sec.",
+
+        click:
+            "click",
+
+        level:
+            "level",
+
+        profile:
+            "PROFILE",
+
+        skins:
+            "SKINS",
+
+        rooms:
+            "ROOMS",
+
+        collection:
+            "COLLECTION",
+
+        shop:
+            "SHOP",
+
+        tasks:
+            "TASKS",
+
+        marriage:
+            "MARRIAGE",
+
+        profileTitle:
+            "The Resident",
+
+        lifetime:
+            "Total souls collected",
+
+        clicks:
+            "Clicks",
+
+        crits:
+            "Critical hits",
+
+        bosses:
+            "Bosses defeated",
+
+        records:
+            "Records",
+
+        skinsTitle:
+            "The Wardrobe",
+
+        roomsTitle:
+            "Rooms of KVARTIRA",
+
+        roomsDesc:
+            "Rooms unlock with levels. Each one changes the atmosphere and play style.",
+
+        collectionTitle:
+            "Record Collection",
+
+        collectionDesc:
+            "Every unique record permanently increases all income by 5%.",
+
+        itemsTitle:
+            "Found Objects",
+
+        tasksTitle:
+            "Notes on the Table",
+
+        rage:
+            "RHYTHM",
+
+        rageReady:
+            "PLAY THE WHOLE ROOM",
+
+        dailyReady:
+            "OPEN MORNING MAIL",
+
+        mail:
+            "MAIL",
+
+        callBoss:
+            "CALL THE BOSS",
+
+        bossKicker:
+            "A GUEST IS IN THE KVARTIRA",
+
+        bossName:
+            "CUCKOLD BOSS",
+
+        escapeBoss:
+            "LEAVE THE FIGHT",
+
+        chase:
+            "BLACK TIGGO IN THE KVARTIRA",
+
+        escape:
+            "escapes in",
+
+        seconds:
+            "sec.",
+
+        lvl:
+            "lvl.",
+
+        wear:
+            "WEAR",
+
+        wearing:
+            "WEARING",
+
+        enter:
+            "ENTER",
+
+        here:
+            "YOU ARE HERE",
+
+        unlock:
+            "Unlocks at level",
+
+        noRecords:
+            "No records have been found yet.",
+
+        noItems:
+            "Nothing has been found yet.",
+
+        marriageTitle:
+            "Marriage With Death",
+
+        marriageDesc:
+            "After level 50 you can begin a new cycle. Wardrobe, rooms, records and found objects remain. Every new marriage permanently increases all income by 25%.",
+
+        marriageReady:
+            "MARRY DEATH",
+
+        marriageLocked:
+            "LEVEL 50 REQUIRED",
+
+        critical:
+            "CRITICAL",
+
+        combo:
+            "combo",
+
+        clickName:
+            "Antique Knife",
+
+        clickDesc:
+            "+1 click power",
+
+        autoName:
+            "Candle on the Piano",
+
+        autoDesc:
+            "+1 soul per second",
+
+        ringName:
+            "Viscountess Ring",
+
+        ringDesc:
+            "+5 souls per second",
+
+        critName:
+            "Burgundy Glove",
+
+        critDesc:
+            "+2% critical chance",
+
+        critPowerName:
+            "Family Brooch",
+
+        critPowerDesc:
+            "+1 critical multiplier",
+
+        skinUnlocked:
+            "NEW SKIN UNLOCKED",
+
+        roomUnlocked:
+            "NEW ROOM UNLOCKED",
+
+        rageStart:
+            "The whole apartment moves to one rhythm — clicks x5",
+
+        rageEnd:
+            "The music faded. The apartment is quiet again.",
+
+        bossArrived:
+            "CUCKOLD BOSS entered the apartment",
+
+        bossKilled:
+            "CUCKOLD BOSS defeated",
+
+        bossLeft:
+            "You left the fight",
+
+        tiggo:
+            "TIGGO caught",
+
+        blackEscape:
+            "BLACK TIGGO escaped",
+
+        blackKilled:
+            "BLACK TIGGO destroyed",
+
+        recordDrop:
+            "A new record was found",
+
+        duplicateRecord:
+            "Record already owned — compensation received",
+
+        itemDrop:
+            "Object found",
+
+        taskDone:
+            "Note completed",
+
+        offline:
+            "The apartment worked while you were away",
+
+        dailyReward:
+            "Morning mail collected",
+
+        share:
+            "Share your apartment"
+    }
+
+};
+
+
+let lang =
+    localStorage.getItem(
+        "dm-language"
+    )
+    || "ru";
+
+
+const t =
+    key =>
+        TXT[lang][key];
+
+
+/* =========================================================
+   GAME SAVE
+========================================================= */
+
+const defaults = {
+
+    souls:0,
+
+    lifetime:0,
+
+    clicks:0,
+
+    criticals:0,
+
+    bosses:0,
+
+    tiggos:0,
+
+    blackTiggos:0,
+
+    clickLvl:0,
+
+    autoLvl:0,
+
+    ringLvl:0,
+
+    critLvl:0,
+
+    critPowerLvl:0,
+
+    clickCost:25,
+
+    autoCost:50,
+
+    ringCost:250,
+
+    critCost:500,
+
+    critPowerCost:1500,
+
+    rage:0,
+
+    lastDaily:0,
+
+    prestiges:0,
+
+    loot:[],
+
+    records:[],
+
+    contracts:[],
+
+    currentSkin:
+        "default",
+
+    unlockedSkins:[
+        "default"
+    ],
+
+    currentRoom:
+        "hall",
+
+    unlockedRooms:[
+        "hall"
+    ],
+
+    lastSeen:
+        Date.now()
+
+};
+
+
+let g = {
+    ...defaults
+};
+
+
+try{
+
+    const saved =
+        JSON.parse(
+            localStorage.getItem(
+                "deathmarried-kvartira-telegram-v1"
+            )
+        );
+
+
+    if(saved){
+
+        g = {
+
+            ...g,
+
+            ...saved,
+
+            loot:
+                Array.isArray(
+                    saved.loot
+                )
+                ? saved.loot
+                : [],
+
+            records:
+                Array.isArray(
+                    saved.records
+                )
+                ? saved.records
+                : [],
+
+            contracts:
+                Array.isArray(
+                    saved.contracts
+                )
+                ? saved.contracts
+                : [],
+
+            unlockedSkins:
+                Array.isArray(
+                    saved.unlockedSkins
+                )
+                ? saved.unlockedSkins
+                : ["default"],
+
+            unlockedRooms:
+                Array.isArray(
+                    saved.unlockedRooms
+                )
+                ? saved.unlockedRooms
+                : ["hall"]
+
+        };
+
+    }
+
+}catch(error){}
+
+
+/* =========================================================
+   SKINS
+========================================================= */
+
+const SKINS = [
+
+    {
+
+        id:"default",
+
+        level:1,
+
+        ru:[
+            "Death Head",
+            "Классическая тыква в наушниках.",
+            "Первый житель квартиры."
+        ],
+
+        en:[
+            "Death Head",
+            "The classic pumpkin with headphones.",
+            "The first resident."
+        ]
+
+    },
+
+
+    {
+
+        id:"dj",
+
+        level:10,
+
+        ru:[
+            "DJ Pumpkin",
+            "Перед тыквой появляется DJ-пульт.",
+            "+25% к силе нажатия."
+        ],
+
+        en:[
+            "DJ Pumpkin",
+            "A DJ console appears in front of the pumpkin.",
+            "+25% click power."
+        ]
+
+    },
+
+
+    {
+
+        id:"hell",
+
+        level:20,
+
+        ru:[
+            "Рогатый житель",
+            "У тыквы появляются тёмные рога.",
+            "+1 к множителю критического удара."
+        ],
+
+        en:[
+            "The Horned Resident",
+            "The pumpkin grows dark horns.",
+            "+1 critical multiplier."
+        ]
+
+    },
+
+
+    {
+
+        id:"king",
+
+        level:30,
+
+        ru:[
+            "Виконт",
+            "Тыква получает старинную корону.",
+            "+25% ко всему доходу."
+        ],
+
+        en:[
+            "The Viscount",
+            "The pumpkin receives an antique crown.",
+            "+25% to all income."
+        ]
+
+    },
+
+
+    {
+
+        id:"void",
+
+        level:50,
+
+        ru:[
+            "Последний житель",
+            "Самая старая форма обитателя квартиры.",
+            "+50% ко всему доходу."
+        ],
+
+        en:[
+            "The Last Resident",
+            "The oldest known form of the resident.",
+            "+50% to all income."
+        ]
+
+    }
+
+];
+
+
+/* =========================================================
+   ROOMS
+========================================================= */
+
+const ROOMS = [
+
+    {
+
+        id:"hall",
+
+        level:1,
+
+        ru:[
+            "Прихожая",
+            "Здесь всё начинается.",
+            "+10% к силе нажатия."
+        ],
+
+        en:[
+            "Hallway",
+            "Everything begins here.",
+            "+10% click power."
+        ]
+
+    },
+
+
+    {
+
+        id:"salon",
+
+        level:8,
+
+        ru:[
+            "Гостиная",
+            "Старая мебель продолжает собирать души.",
+            "+20% к пассивному доходу."
+        ],
+
+        en:[
+            "Salon",
+            "The old furniture keeps collecting souls.",
+            "+20% passive income."
+        ]
+
+    },
+
+
+    {
+
+        id:"dj",
+
+        level:15,
+
+        ru:[
+            "Комната DJ",
+            "Ночью отсюда постоянно слышна музыка.",
+            "Комбо набирает силу вдвое быстрее."
+        ],
+
+        en:[
+            "DJ Room",
+            "Music can always be heard here at night.",
+            "Combo grows twice as fast."
+        ]
+
+    },
+
+
+    {
+
+        id:"bedroom",
+
+        level:25,
+
+        ru:[
+            "Спальня",
+            "Некоторые вещи лучше было не находить.",
+            "+15% к шансу выпадения предметов."
+        ],
+
+        en:[
+            "Bedroom",
+            "Some things were better left unfound.",
+            "+15% item drop chance."
+        ]
+
+    },
+
+
+    {
+
+        id:"secret",
+
+        level:40,
+
+        ru:[
+            "Закрытая комната",
+            "Дверь наконец открылась.",
+            "+35% ко всему доходу."
+        ],
+
+        en:[
+            "The Locked Room",
+            "The door has finally opened.",
+            "+35% to all income."
+        ]
+
+    }
+
+];
+
+
+/* =========================================================
+   RECORDS
+========================================================= */
+
+/*
+Пока это игровые вымышленные записи
+мира KVARTIRA, а не утверждение
+о реальной дискографии.
+*/
+
+const RECORDS = [
+
+    {
+        id:"r1",
+        title:"KVARTIRA 00:13"
+    },
+
+    {
+        id:"r2",
+        title:"THE LAST ROOM"
+    },
+
+    {
+        id:"r3",
+        title:"MARRIED AFTER MIDNIGHT"
+    },
+
+    {
+        id:"r4",
+        title:"DEAD FREQUENCY"
+    },
+
+    {
+        id:"r5",
+        title:"NO ONE LEFT THE SALON"
+    },
+
+    {
+        id:"r6",
+        title:"BLACK TIGGO / NIGHT DRIVE"
+    }
+
+];
+
+
+/* =========================================================
+   LOOT
+========================================================= */
+
+const LOOT = {
+
+    ru:[
+        "Бархатная перчатка",
+        "Сломанная брошь",
+        "Старинный ключ",
+        "Фарфоровое сердце",
+        "Синяя лента",
+        "Ключ от TIGGO",
+        "Серебряная пуговица",
+        "Чужое кольцо"
+    ],
+
+    en:[
+        "Velvet Glove",
+        "Broken Brooch",
+        "Antique Key",
+        "Porcelain Heart",
+        "Blue Ribbon",
+        "TIGGO Key",
+        "Silver Button",
+        "Someone's Ring"
+    ]
+
+};
+
+
+/* =========================================================
+   CONTRACT DATA
+========================================================= */
+
+const CONTRACT_DATA = {
+
+    click:{
+
+        target:100,
+
+        reward:500,
+
+        ru:
+            "Потревожить жителя 100 раз",
+
+        en:
+            "Disturb the resident 100 times"
+
+    },
+
+
+    souls:{
+
+        target:3000,
+
+        reward:1200,
+
+        ru:
+            "Собрать 3 000 душ",
+
+        en:
+            "Collect 3,000 souls"
+
+    },
+
+
+    buy:{
+
+        target:5,
+
+        reward:700,
+
+        ru:
+            "Купить 5 улучшений",
+
+        en:
+            "Buy 5 upgrades"
+
+    },
+
+
+    tiggo:{
+
+        target:2,
+
+        reward:1800,
+
+        ru:
+            "Поймать 2 TIGGO",
+
+        en:
+            "Catch 2 TIGGOs"
+
+    },
+
+
+    boss:{
+
+        target:1,
+
+        reward:2500,
+
+        ru:
+            "Победить БОССА КУКОЛДОВ",
+
+        en:
+            "Defeat the CUCKOLD BOSS"
+
+    }
+
+};
+
+
+/* =========================================================
+   FORMAT
+========================================================= */
+
+function fmt(number){
+
+    number =
+        Math.floor(
+            Number(number)
+            || 0
+        );
+
+
+    if(number < 1000){
+
+        return number.toLocaleString(
+            lang === "ru"
+            ? "ru-RU"
+            : "en-US"
+        );
+
+    }
+
+
+    if(number < 1e6){
+
+        return (
+            number / 1e3
+        ).toFixed(1)
+        + "K";
+
+    }
+
+
+    if(number < 1e9){
+
+        return (
+            number / 1e6
+        ).toFixed(1)
+        + "M";
+
+    }
+
+
+    if(number < 1e12){
+
+        return (
+            number / 1e9
+        ).toFixed(1)
+        + "B";
+
+    }
+
+
+    return (
+        number / 1e12
+    ).toFixed(1)
+    + "T";
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function level(){
+
+    return Math.floor(
+
+        Math.sqrt(
+            g.lifetime
+            / 150
+        )
+
+    ) + 1;
+
+}
+
+
+function levelProgress(){
+
+    const lvl =
+        level();
+
+
+    const start =
+        Math.pow(
+            lvl - 1,
+            2
+        )
+        * 150;
+
+
+    const end =
+        Math.pow(
+            lvl,
+            2
+        )
+        * 150;
+
+
+    return (
+        (
+            g.lifetime
+            - start
+        )
+        /
+        (
+            end
+            - start
+        )
+    )
+    * 100;
+
+}
+
+
+function prestigeMultiplier(){
+
+    return 1
+        + g.prestiges
+        * .25;
+
+}
+
+
+function lootMultiplier(){
+
+    return 1
+        +
+        g.loot.reduce(
+
+            (sum,item) =>
+                sum
+                +
+                (
+                    Number(
+                        item.bonus
+                    )
+                    || 0
+                ),
+
+            0
+
+        );
+
+}
+
+
+function recordMultiplier(){
+
+    return 1
+        +
+        g.records.length
+        * .05;
+
+}
+
+
+function skinGlobal(){
+
+    if(
+        g.currentSkin
+        === "king"
+    ){
+
+        return 1.25;
+
+    }
+
+
+    if(
+        g.currentSkin
+        === "void"
+    ){
+
+        return 1.5;
+
+    }
+
+
+    return 1;
+
+}
+
+
+function roomGlobal(){
+
+    return (
+        g.currentRoom
+        === "secret"
+    )
+    ? 1.35
+    : 1;
+
+}
+
+
+function globalMultiplier(){
+
+    return (
+        prestigeMultiplier()
+        *
+        lootMultiplier()
+        *
+        recordMultiplier()
+        *
+        skinGlobal()
+        *
+        roomGlobal()
+    );
+
+}
+
+
+function skinClick(){
+
+    return (
+        g.currentSkin
+        === "dj"
+    )
+    ? 1.25
+    : 1;
+
+}
+
+
+function roomClick(){
+
+    return (
+        g.currentRoom
+        === "hall"
+    )
+    ? 1.10
+    : 1;
+
+}
+
+
+function roomPassive(){
+
+    return (
+        g.currentRoom
+        === "salon"
+    )
+    ? 1.20
+    : 1;
+
+}
+
+
+function roomComboSpeed(){
+
+    return (
+        g.currentRoom
+        === "dj"
+    )
+    ? 2
+    : 1;
+
+}
+
+
+function itemDropBonus(){
+
+    return (
+        g.currentRoom
+        === "bedroom"
+    )
+    ? .15
+    : 0;
+
+}
+
+
+function power(){
+
+    return 1
+        + g.clickLvl;
+
+}
+
+
+function sps(){
+
+    return (
+        g.autoLvl
+        +
+        g.ringLvl
+        * 5
+    );
+
+}
+
+
+function critChance(){
+
+    return Math.min(
+
+        .5,
+
+        g.critLvl
+        * .02
+
+    );
+
+}
+
+
+function critPower(){
+
+    return (
+        3
+        +
+        g.critPowerLvl
+        +
+        (
+            g.currentSkin
+            === "hell"
+            ? 1
+            : 0
+        )
+    );
+
+}
+
+
+/* =========================================================
+   HAPTICS
+========================================================= */
+
+const tg =
+    window.Telegram?.WebApp
+    || null;
+
+
+function hapticLight(){
+
+    try{
+
+        tg?.HapticFeedback
+          ?.impactOccurred(
+              "light"
+          );
+
+    }catch(error){}
+
+}
+
+
+function hapticHeavy(){
+
+    try{
+
+        tg?.HapticFeedback
+          ?.impactOccurred(
+              "heavy"
+          );
+
+    }catch(error){}
+
+}
+
+
+function hapticSuccess(){
+
+    try{
+
+        tg?.HapticFeedback
+          ?.notificationOccurred(
+              "success"
+          );
+
+    }catch(error){}
+
+}
+
+
+function hapticError(){
+
+    try{
+
+        tg?.HapticFeedback
+          ?.notificationOccurred(
+              "error"
+          );
+
+    }catch(error){}
+
+}
+
+
+function hapticSelection(){
+
+    try{
+
+        tg?.HapticFeedback
+          ?.selectionChanged();
+
+    }catch(error){}
+
+}
+
+
+/* =========================================================
+   TELEGRAM INIT
+========================================================= */
+
+let telegramUser =
+    null;
+
+
+function initializeTelegram(){
+
+    if(!tg){
+
+        console.log(
+            "DeathMarried: browser mode"
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        tg.ready();
+
+        tg.expand();
+
+    }catch(error){}
+
+
+    /*
+    requestFullscreen доступен
+    не во всех клиентах Telegram.
+    */
+
+    try{
+
+        if(
+            typeof
+            tg.requestFullscreen
+            === "function"
+        ){
+
+            tg.requestFullscreen();
+
+        }
+
+    }catch(error){}
+
+
+    try{
+
+        tg.setHeaderColor(
+            "#4b1c23"
+        );
+
+        tg.setBackgroundColor(
+            "#d5bd99"
+        );
+
+    }catch(error){}
+
+
+    telegramUser =
+        tg.initDataUnsafe?.user
+        || null;
+
+
+    if(telegramUser){
+
+        showTelegramUser();
+
+    }
+
+}
+
+
+function showTelegramUser(){
+
+    if(!telegramUser){
+
+        return;
+
+    }
+
+
+    $("telegramPlayer")
+        .classList
+        .add(
+            "show"
+        );
+
+
+    let displayName;
+
+
+    if(
+        telegramUser.username
+    ){
+
+        displayName =
+            "@"
+            +
+            telegramUser.username;
+
+    }
+
+    else{
+
+        displayName = [
+
+            telegramUser.first_name,
+
+            telegramUser.last_name
+
+        ]
+        .filter(Boolean)
+        .join(" ");
+
+    }
+
+
+    $("telegramName")
+        .textContent =
+        displayName
+        || "Resident";
+
+
+    $("telegramLabel")
+        .textContent =
+        t("telegramResident");
+
+
+    if(
+        telegramUser.photo_url
+    ){
+
+        const avatar =
+            $("telegramAvatar");
+
+
+        avatar.src =
+            telegramUser.photo_url;
+
+
+        avatar.style.display =
+            "block";
+
+    }
+
+}
+
+
+function getTelegramUserId(){
+
+    return (
+        telegramUser?.id
+        || null
+    );
+
+}
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+function setLanguage(value){
+
+    if(
+        value !== "ru"
+        &&
+        value !== "en"
+    ){
+
+        return;
+
+    }
+
+
+    lang =
+        value;
+
+
+    localStorage.setItem(
+
+        "dm-language",
+
+        lang
+
+    );
+
+
+    applyLanguage();
+
+    update();
+
+}
+
+
+function applyLanguage(){
+
+    document.documentElement.lang =
+        lang;
+
+
+    $("ruButton")
+        .classList
+        .toggle(
+            "active",
+            lang === "ru"
+        );
+
+
+    $("enButton")
+        .classList
+        .toggle(
+            "active",
+            lang === "en"
+        );
+
+
+    $("introNote").textContent =
+        t("intro");
+
+
+    $("tagline").textContent =
+        t("tag");
+
+
+    $("spsLabel").textContent =
+        t("soulSec");
+
+
+    $("clickLabel").textContent =
+        t("click");
+
+
+    $("levelLabel").textContent =
+        t("level");
+
+
+    $("profileTab").textContent =
+        t("profile");
+
+
+    $("skinsTab").textContent =
+        t("skins");
+
+
+    $("roomsTab").textContent =
+        t("rooms");
+
+
+    $("collectionTab").textContent =
+        t("collection");
+
+
+    $("shopTab").textContent =
+        t("shop");
+
+
+    $("tasksTab").textContent =
+        t("tasks");
+
+
+    $("marriageTab").textContent =
+        t("marriage");
+
+
+    $("profileTitle").textContent =
+        t("profileTitle");
+
+
+    $("lifetimeLabel").textContent =
+        t("lifetime");
+
+
+    $("clicksLabel").textContent =
+        t("clicks");
+
+
+    $("critsLabel").textContent =
+        t("crits");
+
+
+    $("bossesLabel").textContent =
+        t("bosses");
+
+
+    $("recordsLabel").textContent =
+        t("records");
+
+
+    $("skinsTitle").textContent =
+        t("skinsTitle");
+
+
+    $("roomsTitle").textContent =
+        t("roomsTitle");
+
+
+    $("roomsDescription").textContent =
+        t("roomsDesc");
+
+
+    $("collectionTitle").textContent =
+        t("collectionTitle");
+
+
+    $("collectionDescription").textContent =
+        t("collectionDesc");
+
+
+    $("itemsTitle").textContent =
+        t("itemsTitle");
+
+
+    $("tasksTitle").textContent =
+        t("tasksTitle");
+
+
+    $("marriageTitle").textContent =
+        t("marriageTitle");
+
+
+    $("marriageDescription").textContent =
+        t("marriageDesc");
+
+
+    $("bossKicker").textContent =
+        t("bossKicker");
+
+
+    $("bossName").textContent =
+        t("bossName");
+
+
+    $("leaveBoss").textContent =
+        t("escapeBoss");
+
+
+    $("chaseTitle").textContent =
+        t("chase");
+
+
+    $("escapeLabel").textContent =
+        t("escape");
+
+
+    $("secondsLabel").textContent =
+        t("seconds");
+
+
+    $("clickName").textContent =
+        t("clickName");
+
+
+    $("clickDescription").textContent =
+        t("clickDesc");
+
+
+    $("autoName").textContent =
+        t("autoName");
+
+
+    $("autoDescription").textContent =
+        t("autoDesc");
+
+
+    $("ringName").textContent =
+        t("ringName");
+
+
+    $("ringDescription").textContent =
+        t("ringDesc");
+
+
+    $("critName").textContent =
+        t("critName");
+
+
+    $("critDescription").textContent =
+        t("critDesc");
+
+
+    $("critPowerName").textContent =
+        t("critPowerName");
+
+
+    $("critPowerDescription").textContent =
+        t("critPowerDesc");
+
+
+    [
+        "lvlA",
+        "lvlB",
+        "lvlC",
+        "lvlD",
+        "lvlE"
+    ]
+    .forEach(
+        id => {
+
+            $(id).textContent =
+                t("lvl");
+
+        }
+    );
+
+
+    if(telegramUser){
+
+        $("telegramLabel").textContent =
+            t("telegramResident");
+
+    }
+
+}
+
+
+/* =========================================================
+   INTRO
+========================================================= */
+
+setTimeout(
+
+    () => {
+
+        $("intro")
+            .classList
+            .add(
+                "hide"
+            );
+
+    },
+
+    3200
+
+);
+
+
+$("intro")
+.addEventListener(
+
+    "pointerdown",
+
+    () => {
+
+        $("intro")
+            .classList
+            .add(
+                "hide"
+            );
+
+    }
+
+);
+
+
+/* =========================================================
+   SKIN HELPERS
+========================================================= */
+
+function skinText(skin){
+
+    return skin[
+        lang === "ru"
+        ? "ru"
+        : "en"
+    ];
+
+}
+
+
+function roomText(room){
+
+    return room[
+        lang === "ru"
+        ? "ru"
+        : "en"
+    ];
+
+}
+
+
+/* =========================================================
+   UNLOCKS
+========================================================= */
+
+function checkUnlocks(){
+
+    SKINS.forEach(
+
+        skin => {
+
+            if(
+
+                level()
+                >= skin.level
+
+                &&
+
+                !g.unlockedSkins
+                    .includes(
+                        skin.id
+                    )
+
+            ){
+
+                g.unlockedSkins
+                    .push(
+                        skin.id
+                    );
+
+
+                bigUnlock(
+
+                    t(
+                        "skinUnlocked"
+                    ),
+
+                    skinText(
+                        skin
+                    )[0]
+
+                );
+
+            }
+
+        }
+
+    );
+
+
+    ROOMS.forEach(
+
+        room => {
+
+            if(
+
+                level()
+                >= room.level
+
+                &&
+
+                !g.unlockedRooms
+                    .includes(
+                        room.id
+                    )
+
+            ){
+
+                g.unlockedRooms
+                    .push(
+                        room.id
+                    );
+
+
+                bigUnlock(
+
+                    t(
+                        "roomUnlocked"
+                    ),
+
+                    roomText(
+                        room
+                    )[0]
+
+                );
+
+            }
+
+        }
+
+    );
+
+}
+
+
+function bigUnlock(
+    title,
+    name
+){
+
+    hapticSuccess();
+
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+
+    element.className =
+        "unlock";
+
+
+    element.innerHTML = `
+
+        <div class="unlock-box">
+
+            <div class="unlock-title">
+                ${title}
+            </div>
+
+            <div class="unlock-name">
+                ${name}
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body
+        .appendChild(
+            element
+        );
+
+
+    setTimeout(
+
+        () =>
+            element.remove(),
+
+        3000
+
+    );
+
+}
+
+
+/* =========================================================
+   SKINS
+========================================================= */
+
+function applySkin(){
+
+    const character =
+        $("character");
+
+
+    character.classList.remove(
+
+        "skin-dj",
+
+        "skin-hell",
+
+        "skin-king",
+
+        "skin-void"
+
+    );
+
+
+    if(
+        g.currentSkin
+        !== "default"
+    ){
+
+        character
+            .classList
+            .add(
+                "skin-"
+                +
+                g.currentSkin
+            );
+
+    }
+
+
+    const selected =
+        SKINS.find(
+
+            skin =>
+                skin.id
+                === g.currentSkin
+
+        )
+        || SKINS[0];
+
+
+    $("skinTop").textContent =
+        skinText(
+            selected
+        )[0];
+
+}
+
+
+function selectSkin(id){
+
+    if(
+        !g.unlockedSkins
+            .includes(id)
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        !SKINS.some(
+            skin =>
+                skin.id
+                === id
+        )
+    ){
+
+        return;
+
+    }
+
+
+    g.currentSkin =
+        id;
+
+
+    hapticSelection();
+
+
+    applySkin();
+
+    saveGame();
+
+    update();
+
+}
+
+
+function renderSkins(){
+
+    $("skinsList").innerHTML =
+
+        SKINS.map(
+
+            skin => {
+
+                const open =
+                    g.unlockedSkins
+                        .includes(
+                            skin.id
+                        );
+
+
+                const selected =
+                    g.currentSkin
+                    === skin.id;
+
+
+                const text =
+                    skinText(
+                        skin
+                    );
+
+
+                return `
+
+                <div class="
+                    card
+                    ${selected
+                        ? "selected"
+                        : ""
+                    }
+                    ${open
+                        ? ""
+                        : "locked"
+                    }
+                ">
+
+                    <div class="card-name">
+
+                        ${
+                            open
+                            ? text[0]
+                            : "🔒 ???"
+                        }
+
+                    </div>
+
+                    <div class="card-info">
+
+                        ${
+                            open
+                            ? text[1]
+                            : t("unlock")
+                              + " "
+                              + skin.level
+                        }
+
+                    </div>
+
+                    <div class="card-info">
+
+                        ${
+                            open
+                            ? text[2]
+                            : ""
+                        }
+
+                    </div>
+
+                    ${
+                        open
+                        ? `
+
+                        <button
+                            type="button"
+                            data-skin="${skin.id}"
+                            ${selected
+                                ? "disabled"
+                                : ""
+                            }>
+
+                            ${
+                                selected
+                                ? t("wearing")
+                                : t("wear")
+                            }
+
+                        </button>
+
+                        `
+                        : ""
+                    }
+
+                </div>
+
+                `;
+
+            }
+
+        )
+        .join("");
+
+
+    document
+    .querySelectorAll(
+        "[data-skin]"
+    )
+    .forEach(
+
+        button => {
+
+            button
+            .addEventListener(
+
+                "click",
+
+                event => {
+
+                    event
+                        .stopPropagation();
+
+
+                    selectSkin(
+                        button.dataset.skin
+                    );
+
+                }
+
+            );
+
+        }
+
+    );
+
+}
+
+
+/* =========================================================
+   ROOMS
+========================================================= */
+
+function applyRoom(){
+
+    document.body
+        .classList
+        .remove(
+
+            "room-hall",
+
+            "room-salon",
+
+            "room-dj",
+
+            "room-bedroom",
+
+            "room-secret"
+
+        );
+
+
+    document.body
+        .classList
+        .add(
+            "room-"
+            +
+            g.currentRoom
+        );
+
+
+    const selected =
+        ROOMS.find(
+
+            room =>
+                room.id
+                === g.currentRoom
+
+        )
+        || ROOMS[0];
+
+
+    $("roomTop").textContent =
+        roomText(
+            selected
+        )[0];
+
+}
+
+
+function selectRoom(id){
+
+    if(
+        !g.unlockedRooms
+            .includes(id)
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        !ROOMS.some(
+            room =>
+                room.id
+                === id
+        )
+    ){
+
+        return;
+
+    }
+
+
+    g.currentRoom =
+        id;
+
+
+    hapticSelection();
+
+
+    applyRoom();
+
+    saveGame();
+
+    update();
+
+}
+
+
+function renderRooms(){
+
+    $("roomsList").innerHTML =
+
+        ROOMS.map(
+
+            room => {
+
+                const open =
+                    g.unlockedRooms
+                        .includes(
+                            room.id
+                        );
+
+
+                const selected =
+                    g.currentRoom
+                    === room.id;
+
+
+                const text =
+                    roomText(
+                        room
+                    );
+
+
+                return `
+
+                <div class="
+                    card
+                    ${selected
+                        ? "selected"
+                        : ""
+                    }
+                    ${open
+                        ? ""
+                        : "locked"
+                    }
+                ">
+
+                    <div class="card-name">
+
+                        ${
+                            open
+                            ? text[0]
+                            : "🔒 ???"
+                        }
+
+                    </div>
+
+                    <div class="card-info">
+
+                        ${
+                            open
+                            ? text[1]
+                            : t("unlock")
+                              + " "
+                              + room.level
+                        }
+
+                    </div>
+
+                    <div class="card-info">
+
+                        ${
+                            open
+                            ? text[2]
+                            : ""
+                        }
+
+                    </div>
+
+                    ${
+                        open
+                        ? `
+
+                        <button
+                            type="button"
+                            data-room="${room.id}"
+                            ${selected
+                                ? "disabled"
+                                : ""
+                            }>
+
+                            ${
+                                selected
+                                ? t("here")
+                                : t("enter")
+                            }
+
+                        </button>
+
+                        `
+                        : ""
+                    }
+
+                </div>
+
+                `;
+
+            }
+
+        )
+        .join("");
+
+
+    document
+    .querySelectorAll(
+        "[data-room]"
+    )
+    .forEach(
+
+        button => {
+
+            button
+            .addEventListener(
+
+                "click",
+
+                event => {
+
+                    event
+                        .stopPropagation();
+
+
+                    selectRoom(
+                        button.dataset.room
+                    );
+
+                }
+
+            );
+
+        }
+
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE UI
+========================================================= */
+
+function update(){
+
+    checkUnlocks();
+
+
+    $("souls").textContent =
+        fmt(
+            g.souls
+        );
+
+
+    $("sps").textContent =
+        fmt(
+
+            sps()
+
+            *
+
+            roomPassive()
+
+            *
+
+            globalMultiplier()
+
+        );
+
+
+    $("power").textContent =
+        fmt(
+
+            power()
+
+            *
+
+            skinClick()
+
+            *
+
+            roomClick()
+
+            *
+
+            globalMultiplier()
+
+        );
+
+
+    $("multi").textContent =
+        globalMultiplier()
+        .toFixed(2);
+
+
+    $("level").textContent =
+        level();
+
+
+    $("levelBar").style.width =
+
+        Math.max(
+
+            0,
+
+            Math.min(
+
+                100,
+
+                levelProgress()
+
+            )
+
+        )
+        + "%";
+
+
+    $("rageBar").style.width =
+
+        Math.min(
+            100,
+            g.rage
+        )
+        + "%";
+
+
+    $("lifetime").textContent =
+        fmt(
+            g.lifetime
+        );
+
+
+    $("clicks").textContent =
+        fmt(
+            g.clicks
+        );
+
+
+    $("criticals").textContent =
+        fmt(
+            g.criticals
+        );
+
+
+    $("bosses").textContent =
+        g.bosses;
+
+
+    $("tiggos").textContent =
+        g.tiggos;
+
+
+    $("blackTiggos").textContent =
+        g.blackTiggos;
+
+
+    $("recordsCount").textContent =
+        g.records.length;
+
+
+    const types = [
+
+        "click",
+
+        "auto",
+
+        "ring",
+
+        "crit",
+
+        "critPower"
+
+    ];
+
+
+    types.forEach(
+
+        type => {
+
+            $(
+                type
+                +
+                "Lvl"
+            )
+            .textContent =
+                g[
+                    type
+                    +
+                    "Lvl"
+                ];
+
+
+            $(
+                type
+                +
+                "Cost"
+            )
+            .textContent =
+                fmt(
+                    g[
+                        type
+                        +
+                        "Cost"
+                    ]
+                );
+
+
+            const buttonId =
+
+                "buy"
+
+                +
+
+                type
+                .charAt(0)
+                .toUpperCase()
+
+                +
+
+                type
+                .slice(1);
+
+
+            $(buttonId).disabled =
+
+                g.souls
+
+                <
+
+                g[
+                    type
+                    +
+                    "Cost"
+                ];
+
+        }
+
+    );
+
+
+    $("rageButton").disabled =
+        g.rage < 100;
+
+
+    $("rageButton").textContent =
+
+        g.rage >= 100
+
+        ? t(
+            "rageReady"
+          )
+
+        : t(
+            "rage"
+          )
+          +
+          " "
+          +
+          Math.floor(
+              g.rage
+          )
+          +
+          "%";
+
+
+    $("bossButton").textContent =
+        t(
+            "callBoss"
+        );
+
+
+    $("prestigeMulti").textContent =
+        prestigeMultiplier()
+        .toFixed(2);
+
+
+    $("prestigeButton").disabled =
+        level() < 50;
+
+
+    $("prestigeButton").textContent =
+
+        level() >= 50
+
+        ? t(
+            "marriageReady"
+          )
+
+        : t(
+            "marriageLocked"
+          );
+
+
+    applySkin();
+
+    applyRoom();
+
+    renderSkins();
+
+    renderRooms();
+
+    renderRecords();
+
+    renderLoot();
+
+    renderContracts();
+
+    updateDaily();
+
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+document
+.querySelectorAll(
+    "[data-left]"
+)
+.forEach(
+
+    button => {
+
+        button.onclick =
+        () => {
+
+            document
+            .querySelectorAll(
+                "[data-left]"
+            )
+            .forEach(
+
+                element =>
+
+                    element
+                    .classList
+                    .remove(
+                        "active"
+                    )
+
+            );
+
+
+            button
+            .classList
+            .add(
+                "active"
+            );
+
+
+            [
+                "profile",
+                "skins",
+                "rooms",
+                "collection"
+            ]
+            .forEach(
+
+                id =>
+
+                    $(id)
+                    .classList
+                    .remove(
+                        "active"
+                    )
+
+            );
+
+
+            $(
+                button.dataset.left
+            )
+            .classList
+            .add(
+                "active"
+            );
+
+        };
+
+    }
+
+);
+
+
+document
+.querySelectorAll(
+    "[data-right]"
+)
+.forEach(
+
+    button => {
+
+        button.onclick =
+        () => {
+
+            document
+            .querySelectorAll(
+                "[data-right]"
+            )
+            .forEach(
+
+                element =>
+
+                    element
+                    .classList
+                    .remove(
+                        "active"
+                    )
+
+            );
+
+
+            button
+            .classList
+            .add(
+                "active"
+            );
+
+
+            [
+                "shop",
+                "tasks",
+                "marriage"
+            ]
+            .forEach(
+
+                id =>
+
+                    $(id)
+                    .classList
+                    .remove(
+                        "active"
+                    )
+
+            );
+
+
+            $(
+                button.dataset.right
+            )
+            .classList
+            .add(
+                "active"
+            );
+
+        };
+
+    }
+
+);
+
+
+/* =========================================================
+   CLICK
+========================================================= */
+
+let combo = 0;
+
+let lastClick = 0;
+
+let rageActive = false;
+
+
+$("character")
+.onpointerdown =
+event => {
+
+    hapticLight();
+
+
+    const now =
+        Date.now();
+
+
+    combo =
+
+        now
+        -
+        lastClick
+        <
+        500
+
+        ? combo + 1
+
+        : 1;
+
+
+    lastClick =
+        now;
+
+
+    const comboStep =
+
+        .025
+
+        *
+
+        roomComboSpeed();
+
+
+    const comboMultiplier =
+
+        Math.min(
+
+            2,
+
+            1
+            +
+            (
+                combo
+                - 1
+            )
+            *
+            comboStep
+
+        );
+
+
+    let amount =
+
+        power()
+
+        *
+
+        skinClick()
+
+        *
+
+        roomClick()
+
+        *
+
+        globalMultiplier()
+
+        *
+
+        comboMultiplier;
+
+
+    const critical =
+
+        Math.random()
+
+        <
+
+        critChance();
+
+
+    if(critical){
+
+        amount *=
+            critPower();
+
+
+        g.criticals++;
+
+
+        hapticHeavy();
+
+    }
+
+
+    if(rageActive){
+
+        amount *= 5;
+
+    }
+
+
+    amount =
+
+        Math.ceil(
+            amount
+        );
+
+
+    if(bossActive){
+
+        bossHP -=
+            amount;
+
+
+        if(
+            bossHP <= 0
+        ){
+
+            killBoss();
+
+        }
+
+        else{
+
+            updateBoss();
+
+        }
+
+    }
+
+    else{
+
+        addSouls(
+            amount
+        );
+
+    }
+
+
+    g.clicks++;
+
+
+    g.rage =
+
+        Math.min(
+
+            100,
+
+            g.rage
+            +
+            .7
+
+        );
+
+
+    contractProgress(
+
+        "click",
+
+        1
+
+    );
+
+
+    floatText(
+
+        event.clientX,
+
+        event.clientY,
+
+        critical
+
+        ? t(
+            "critical"
+          )
+          +
+          " +"
+          +
+          fmt(
+              amount
+          )
+
+        : "+"
+          +
+          fmt(
+              amount
+          ),
+
+        critical
+
+    );
+
+
+    $("combo").textContent =
+
+        t(
+            "combo"
+        )
+
+        +
+        " "
+        +
+        combo
+
+        +
+        " · x"
+
+        +
+        comboMultiplier
+        .toFixed(2);
+
+
+    $("combo")
+    .classList
+    .add(
+        "show"
+    );
+
+
+    const character =
+        $("character");
+
+
+    character
+    .classList
+    .remove(
+        "hit"
+    );
+
+
+    void character.offsetWidth;
+
+
+    character
+    .classList
+    .add(
+        "hit"
+    );
+
+
+    setTimeout(
+
+        () =>
+            character
+            .classList
+            .remove(
+                "hit"
+            ),
+
+        80
+
+    );
+
+
+    update();
+
+};
+
+
+/* =========================================================
+   COMBO RESET
+========================================================= */
+
+setInterval(
+
+    () => {
+
+        if(
+
+            Date.now()
+            -
+            lastClick
+            >
+            900
+
+        ){
+
+            combo = 0;
+
+
+            $("combo")
+            .classList
+            .remove(
+                "show"
+            );
+
+        }
+
+    },
+
+    200
+
+);
+
+
+/* =========================================================
+   ADD SOULS
+========================================================= */
+
+function addSouls(
+    amount
+){
+
+    g.souls +=
+        amount;
+
+
+    g.lifetime +=
+        amount;
+
+
+    contractProgress(
+
+        "souls",
+
+        amount
+
+    );
+
+}
+
+
+/* =========================================================
+   RAGE
+========================================================= */
+
+$("rageButton")
+.onclick =
+() => {
+
+    if(
+        g.rage < 100
+    ){
+
+        return;
+
+    }
+
+
+    g.rage = 0;
+
+
+    rageActive =
+        true;
+
+
+    hapticSuccess();
+
+
+    message(
+        t(
+            "rageStart"
+        )
+    );
+
+
+    setTimeout(
+
+        () => {
+
+            rageActive =
+                false;
+
+
+            message(
+                t(
+                    "rageEnd"
+                )
+            );
+
+        },
+
+        10000
+
+    );
+
+
+    update();
+
+};
+
+
+/* =========================================================
+   SHOP
+========================================================= */
+
+const priceMultipliers = {
+
+    click:1.52,
+
+    auto:1.57,
+
+    ring:1.68,
+
+    crit:1.85,
+
+    critPower:2
+
+};
+
+
+function buy(type){
+
+    const cost =
+        type
+        +
+        "Cost";
+
+
+    const lvl =
+        type
+        +
+        "Lvl";
+
+
+    if(
+        g.souls
+        <
+        g[cost]
+    ){
+
+        return;
+
+    }
+
+
+    g.souls -=
+        g[cost];
+
+
+    g[lvl]++;
+
+
+    g[cost] =
+
+        Math.floor(
+
+            g[cost]
+
+            *
+
+            priceMultipliers[
+                type
+            ]
+
+        );
+
+
+    hapticSelection();
+
+
+    contractProgress(
+
+        "buy",
+
+        1
+
+    );
+
+
+    saveGame();
+
+    update();
+
+}
+
+
+$("buyClick")
+.onclick =
+() => buy(
+    "click"
+);
+
+
+$("buyAuto")
+.onclick =
+() => buy(
+    "auto"
+);
+
+
+$("buyRing")
+.onclick =
+() => buy(
+    "ring"
+);
+
+
+$("buyCrit")
+.onclick =
+() => buy(
+    "crit"
+);
+
+
+$("buyCritPower")
+.onclick =
+() => buy(
+    "critPower"
+);
+
+
+/* =========================================================
+   PASSIVE
+========================================================= */
+
+setInterval(
+
+    () => {
+
+        if(
+            !bossActive
+        ){
+
+            addSouls(
+
+                sps()
+
+                *
+
+                roomPassive()
+
+                *
+
+                globalMultiplier()
+
+                /
+
+                10
+
+            );
+
+        }
+
+
+        update();
+
+    },
+
+    100
+
+);
+
+
+/* =========================================================
+   BOSS
+========================================================= */
+
+let bossActive =
+    false;
+
+
+let bossHP = 0;
+
+
+let bossMax = 0;
+
+
+$("bossButton")
+.onclick =
+() => {
+
+    if(
+        bossActive
+    ){
+
+        return;
+
+    }
+
+
+    bossActive =
+        true;
+
+
+    bossMax =
+
+        2500
+
+        *
+
+        Math.pow(
+
+            1.8,
+
+            g.bosses
+
+        );
+
+
+    bossHP =
+        bossMax;
+
+
+    $("bossUI")
+    .style
+    .display =
+        "block";
+
+
+    hapticHeavy();
+
+
+    message(
+        t(
+            "bossArrived"
+        )
+    );
+
+
+    updateBoss();
+
+};
+
+
+function updateBoss(){
+
+    if(
+        !bossActive
+    ){
+
+        return;
+
+    }
+
+
+    $("bossHP")
+    .style
+    .width =
+
+        Math.max(
+
+            0,
+
+            bossHP
+            /
+            bossMax
+            *
+            100
+
+        )
+        +
+        "%";
+
+
+    $("bossText").textContent =
+
+        fmt(
+
+            Math.max(
+                0,
+                bossHP
+            )
+
+        )
+
+        +
+        " / "
+
+        +
+        fmt(
+            bossMax
+        )
+
+        +
+        " HP · #"
+
+        +
+        (
+            g.bosses
+            + 1
+        );
+
+}
+
+
+function killBoss(){
+
+    if(
+        !bossActive
+    ){
+
+        return;
+
+    }
+
+
+    bossActive =
+        false;
+
+
+    g.bosses++;
+
+
+    const reward =
+
+        Math.floor(
+
+            bossMax
+
+            *
+
+            .8
+
+            *
+
+            globalMultiplier()
+
+        );
+
+
+    addSouls(
+        reward
+    );
+
+
+    contractProgress(
+
+        "boss",
+
+        1
+
+    );
+
+
+    $("bossUI")
+    .style
+    .display =
+        "none";
+
+
+    hapticSuccess();
+
+
+    message(
+
+        t(
+            "bossKilled"
+        )
+
+        +
+        " · +"
+
+        +
+        fmt(
+            reward
+        )
+
+    );
+
+
+    if(
+
+        Math.random()
+
+        <
+
+        .45
+        +
+        itemDropBonus()
+
+    ){
+
+        dropLoot(
+            true
+        );
+
+    }
+
+
+    if(
+        Math.random()
+        <
+        .35
+    ){
+
+        dropRecord();
+
+    }
+
+
+    saveGame();
+
+    update();
+
+}
+
+
+$("leaveBoss")
+.onclick =
+() => {
+
+    if(
+        !bossActive
+    ){
+
+        return;
+
+    }
+
+
+    bossActive =
+        false;
+
+
+    bossHP = 0;
+
+    bossMax = 0;
+
+
+    $("bossUI")
+    .style
+    .display =
+        "none";
+
+
+    hapticError();
+
+
+    message(
+        t(
+            "bossLeft"
+        )
+    );
+
+
+    update();
+
+};
+
+
+/* =========================================================
+   CAR HTML
+========================================================= */
+
+function carHTML(){
+
+    return `
+
+        <div class="roof">
+        </div>
+
+        <div class="window">
+        </div>
+
+        <div class="car-body">
+
+            <div class="carlogo">
+                TIGGO
+            </div>
+
+            <div class="headlight">
+            </div>
+
+        </div>
+
+        <div class="wheel w1">
+        </div>
+
+        <div class="wheel w2">
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   NORMAL TIGGO
+========================================================= */
+
+function spawnTiggo(){
+
+    if(
+        document.querySelector(
+            ".tiggo"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const car =
+        document.createElement(
+            "div"
+        );
+
+
+    car.className =
+        "tiggo normal-tiggo";
+
+
+    car.style.top =
+
+        (
+            190
+
+            +
+
+            Math.random()
+
+            *
+
+            Math.max(
+
+                30,
+
+                innerHeight
+                -
+                400
+
+            )
+
+        )
+
+        +
+        "px";
+
+
+    car.innerHTML =
+        carHTML();
+
+
+    document.body
+        .appendChild(
+            car
+        );
+
+
+    const timer =
+
+        setTimeout(
+
+            () => {
+
+                if(
+                    car.isConnected
+                ){
+
+                    car.remove();
+
+                }
+
+            },
+
+            7000
+
+        );
+
+
+    car.onpointerdown =
+    event => {
+
+        event.stopPropagation();
+
+
+        clearTimeout(
+            timer
+        );
+
+
+        if(
+            !car.isConnected
+        ){
+
+            return;
+
+        }
+
+
+        const rect =
+            car
+            .getBoundingClientRect();
+
+
+        explosion(
+
+            rect.left
+            +
+            rect.width
+            /
+            2,
+
+            rect.top
+            +
+            rect.height
+            /
+            2
+
+        );
+
+
+        car.remove();
+
+
+        g.tiggos++;
+
+
+        const reward =
+
+            Math.max(
+
+                1000,
+
+                power()
+                *
+                300,
+
+                sps()
+                *
+                60
+
+            )
+
+            *
+
+            globalMultiplier();
+
+
+        addSouls(
+            reward
+        );
+
+
+        contractProgress(
+
+            "tiggo",
+
+            1
+
+        );
+
+
+        hapticSuccess();
+
+
+        message(
+
+            t(
+                "tiggo"
+            )
+
+            +
+            " · +"
+
+            +
+            fmt(
+                reward
+            )
+
+        );
+
+
+        if(
+
+            Math.random()
+
+            <
+
+            .30
+            +
+            itemDropBonus()
+
+        ){
+
+            dropLoot(
+                false
+            );
+
+        }
+
+
+        if(
+            Math.random()
+            <
+            .08
+        ){
+
+            dropRecord();
+
+        }
+
+
+        update();
+
+    };
+
+}
+
+
+/* =========================================================
+   BLACK TIGGO
+========================================================= */
+
+let chaseActive =
+    false;
+
+
+let chaseToken =
+    0;
+
+
+function spawnBlackTiggo(){
+
+    if(
+
+        chaseActive
+
+        ||
+
+        document
+        .querySelector(
+            ".tiggo"
+        )
+
+    ){
+
+        return;
+
+    }
+
+
+    chaseActive =
+        true;
+
+
+    const token =
+        ++chaseToken;
+
+
+    const car =
+        document.createElement(
+            "div"
+        );
+
+
+    car.className =
+        "tiggo black-tiggo";
+
+
+    car.innerHTML =
+        carHTML();
+
+
+    document.body
+        .appendChild(
+            car
+        );
+
+
+    const maxHP =
+
+        Math.max(
+
+            50,
+
+            power()
+            *
+            25
+
+        );
+
+
+    let hp =
+        maxHP;
+
+
+    let time =
+        15;
+
+
+    $("chaseUI")
+    .style
+    .display =
+        "block";
+
+
+    moveBlackTiggo(
+        car
+    );
+
+
+    const movement =
+
+        setInterval(
+
+            () => {
+
+                if(
+
+                    !chaseActive
+
+                    ||
+
+                    token
+                    !==
+                    chaseToken
+
+                ){
+
+                    return;
+
+                }
+
+
+                moveBlackTiggo(
+                    car
+                );
+
+            },
+
+            750
+
+        );
+
+
+    const clock =
+
+        setInterval(
+
+            () => {
+
+                if(
+
+                    !chaseActive
+
+                    ||
+
+                    token
+                    !==
+                    chaseToken
+
+                ){
+
+                    clearInterval(
+                        clock
+                    );
+
+
+                    clearInterval(
+                        movement
+                    );
+
+
+                    return;
+
+                }
+
+
+                time--;
+
+
+                $("chaseTime")
+                .textContent =
+                    time;
+
+
+                if(
+                    time <= 0
+                ){
+
+                    clearInterval(
+                        clock
+                    );
+
+
+                    clearInterval(
+                        movement
+                    );
+
+
+                    chaseActive =
+                        false;
+
+
+                    if(
+                        car.isConnected
+                    ){
+
+                        car.remove();
+
+                    }
+
+
+                    $("chaseUI")
+                    .style
+                    .display =
+                        "none";
+
+
+                    hapticError();
+
+
+                    message(
+                        t(
+                            "blackEscape"
+                        )
+                    );
+
+                }
+
+            },
+
+            1000
+
+        );
+
+
+    car.onpointerdown =
+    event => {
+
+        event.stopPropagation();
+
+
+        if(
+
+            !chaseActive
+
+            ||
+
+            token
+            !==
+            chaseToken
+
+            ||
+
+            !car.isConnected
+
+        ){
+
+            return;
+
+        }
+
+
+        hapticLight();
+
+
+        let damage =
+
+            power()
+
+            *
+
+            skinClick()
+
+            *
+
+            roomClick();
+
+
+        const critical =
+
+            Math.random()
+
+            <
+
+            critChance();
+
+
+        if(
+            critical
+        ){
+
+            damage *=
+                critPower();
+
+
+            hapticHeavy();
+
+        }
+
+
+        if(
+            rageActive
+        ){
+
+            damage *= 5;
+
+        }
+
+
+        damage =
+
+            Math.ceil(
+                damage
+            );
+
+
+        hp -=
+            damage;
+
+
+        floatText(
+
+            event.clientX,
+
+            event.clientY,
+
+            "−"
+            +
+            fmt(
+                damage
+            ),
+
+            critical
+
+        );
+
+
+        $("chaseHP")
+        .style
+        .width =
+
+            Math.max(
+
+                0,
+
+                hp
+                /
+                maxHP
+                *
+                100
+
+            )
+
+            +
+            "%";
+
+
+        $("chaseHPText")
+        .textContent =
+
+            fmt(
+
+                Math.max(
+                    0,
+                    hp
+                )
+
+            )
+
+            +
+            " / "
+
+            +
+            fmt(
+                maxHP
+            );
+
+
+        if(
+            hp <= 0
+        ){
+
+            chaseActive =
+                false;
+
+
+            ++chaseToken;
+
+
+            clearInterval(
+                clock
+            );
+
+
+            clearInterval(
+                movement
+            );
+
+
+            const rect =
+                car
+                .getBoundingClientRect();
+
+
+            explosion(
+
+                rect.left
+                +
+                rect.width
+                /
+                2,
+
+                rect.top
+                +
+                rect.height
+                /
+                2
+
+            );
+
+
+            car.remove();
+
+
+            $("chaseUI")
+            .style
+            .display =
+                "none";
+
+
+            g.blackTiggos++;
+
+
+            const reward =
+
+                Math.max(
+
+                    5000,
+
+                    power()
+                    *
+                    1000
+
+                )
+
+                *
+
+                globalMultiplier();
+
+
+            addSouls(
+                reward
+            );
+
+
+            hapticSuccess();
+
+
+            message(
+
+                t(
+                    "blackKilled"
+                )
+
+                +
+                " · +"
+
+                +
+                fmt(
+                    reward
+                )
+
+            );
+
+
+            dropLoot(
+                true
+            );
+
+
+            if(
+                Math.random()
+                <
+                .60
+            ){
+
+                dropRecord();
+
+            }
+
+
+            update();
+
+        }
+
+    };
+
+
+    $("chaseHP")
+    .style
+    .width =
+        "100%";
+
+
+    $("chaseHPText")
+    .textContent =
+
+        fmt(
+            hp
+        )
+
+        +
+        " / "
+
+        +
+        fmt(
+            maxHP
+        );
+
+
+    $("chaseTime")
+    .textContent =
+        time;
+
+}
+
+
+function moveBlackTiggo(
+    car
+){
+
+    if(
+        !car.isConnected
+    ){
+
+        return;
+
+    }
+
+
+    const maxX =
+
+        Math.max(
+
+            50,
+
+            innerWidth
+            -
+            280
+
+        );
+
+
+    const maxY =
+
+        Math.max(
+
+            230,
+
+            innerHeight
+            -
+            180
+
+        );
+
+
+    car.style.transition =
+
+        "left .65s ease, top .65s ease";
+
+
+    car.style.left =
+
+        (
+            20
+
+            +
+
+            Math.random()
+
+            *
+
+            maxX
+
+        )
+
+        +
+        "px";
+
+
+    car.style.top =
+
+        (
+            180
+
+            +
+
+            Math.random()
+
+            *
+
+            Math.max(
+
+                20,
+
+                maxY
+                -
+                180
+
+            )
+
+        )
+
+        +
+        "px";
+
+}
+
+
+/* =========================================================
+   TIGGO SCHEDULE
+========================================================= */
+
+function scheduleTiggo(){
+
+    setTimeout(
+
+        () => {
+
+            if(
+                Math.random()
+                <
+                .20
+            ){
+
+                spawnBlackTiggo();
+
+            }
+
+            else{
+
+                spawnTiggo();
+
+            }
+
+
+            scheduleTiggo();
+
+        },
+
+        18000
+
+        +
+
+        Math.random()
+        *
+        22000
+
+    );
+
+}
+
+
+/* =========================================================
+   EXPLOSION
+========================================================= */
+
+function explosion(
+    x,
+    y
+){
+
+    const box =
+        document.createElement(
+            "div"
+        );
+
+
+    box.className =
+        "explosion";
+
+
+    box.style.left =
+        x
+        +
+        "px";
+
+
+    box.style.top =
+        y
+        +
+        "px";
+
+
+    box.innerHTML =
+        '<div class="core"></div>';
+
+
+    for(
+        let i = 0;
+        i < 24;
+        i++
+    ){
+
+        const particle =
+            document.createElement(
+                "div"
+            );
+
+
+        particle.className =
+            "particle";
+
+
+        const angle =
+
+            Math.random()
+
+            *
+
+            Math.PI
+
+            *
+
+            2;
+
+
+        const distance =
+
+            40
+
+            +
+
+            Math.random()
+            *
+            120;
+
+
+        particle.style
+            .setProperty(
+
+                "--x",
+
+                Math.cos(
+                    angle
+                )
+                *
+                distance
+                +
+                "px"
+
+            );
+
+
+        particle.style
+            .setProperty(
+
+                "--y",
+
+                Math.sin(
+                    angle
+                )
+                *
+                distance
+                +
+                "px"
+
+            );
+
+
+        box.appendChild(
+            particle
+        );
+
+    }
+
+
+    document.body
+        .appendChild(
+            box
+        );
+
+
+    setTimeout(
+
+        () =>
+            box.remove(),
+
+        1000
+
+    );
+
+}
+
+
+/* =========================================================
+   RECORDS
+========================================================= */
+
+function dropRecord(){
+
+    const candidate =
+
+        RECORDS[
+
+            Math.floor(
+
+                Math.random()
+
+                *
+
+                RECORDS.length
+
+            )
+
+        ];
+
+
+    if(
+        g.records
+        .includes(
+            candidate.id
+        )
+    ){
+
+        const compensation =
+
+            Math.max(
+
+                500,
+
+                power()
+                *
+                150
+
+            )
+
+            *
+
+            globalMultiplier();
+
+
+        addSouls(
+            compensation
+        );
+
+
+        message(
+
+            t(
+                "duplicateRecord"
+            )
+
+            +
+            " · +"
+
+            +
+            fmt(
+                compensation
+            )
+
+        );
+
+
+        return;
+
+    }
+
+
+    g.records.push(
+        candidate.id
+    );
+
+
+    hapticSuccess();
+
+
+    message(
+
+        t(
+            "recordDrop"
+        )
+
+        +
+        " · "
+
+        +
+        candidate.title
+
+    );
+
+
+    saveGame();
+
+}
+
+
+function renderRecords(){
+
+    if(
+        !g.records.length
+    ){
+
+        $("recordsList")
+        .innerHTML =
+
+            `
+            <div class="small">
+                ${t("noRecords")}
+            </div>
+            `;
+
+
+        return;
+
+    }
+
+
+    $("recordsList")
+    .innerHTML =
+
+        RECORDS
+
+        .filter(
+
+            record =>
+
+                g.records
+                .includes(
+                    record.id
+                )
+
+        )
+
+        .map(
+
+            (record,index) => `
+
+                <div class="record">
+
+                    ${
+                        String(
+                            index + 1
+                        )
+                        .padStart(
+                            2,
+                            "0"
+                        )
+                    }
+
+                    ·
+
+                    ${record.title}
+
+                    <div class="small">
+                        +5%
+                    </div>
+
+                </div>
+
+            `
+
+        )
+
+        .join("");
+
+}
+
+
+/* =========================================================
+   LOOT
+========================================================= */
+
+function dropLoot(
+    epicGuaranteed
+){
+
+    let rarity =
+        "rare";
+
+
+    let bonus =
+        .03;
+
+
+    if(
+        epicGuaranteed
+    ){
+
+        if(
+            Math.random()
+            <
+            .25
+        ){
+
+            rarity =
+                "legendary";
+
+
+            bonus =
+                .20;
+
+        }
+
+        else{
+
+            rarity =
+                "epic";
+
+
+            bonus =
+                .08;
+
+        }
+
+    }
+
+    else{
+
+        const roll =
+            Math.random();
+
+
+        if(
+            roll > .92
+        ){
+
+            rarity =
+                "legendary";
+
+
+            bonus =
+                .20;
+
+        }
+
+        else if(
+            roll > .65
+        ){
+
+            rarity =
+                "epic";
+
+
+            bonus =
+                .08;
+
+        }
+
+    }
+
+
+    const key =
+
+        Math.floor(
+
+            Math.random()
+
+            *
+
+            LOOT.ru.length
+
+        );
+
+
+    g.loot.push({
+
+        key,
+
+        rarity,
+
+        bonus
+
+    });
+
+
+    if(
+        g.loot.length
+        >
+        30
+    ){
+
+        g.loot.shift();
+
+    }
+
+
+    hapticSuccess();
+
+
+    message(
+
+        t(
+            "itemDrop"
+        )
+
+        +
+        " · "
+
+        +
+        LOOT[lang][key]
+
+    );
+
+}
+
+
+function renderLoot(){
+
+    if(
+        !g.loot.length
+    ){
+
+        $("lootList")
+        .innerHTML =
+
+            `
+            <div class="small">
+                ${t("noItems")}
+            </div>
+            `;
+
+
+        return;
+
+    }
+
+
+    $("lootList")
+    .innerHTML =
+
+        g.loot
+
+        .slice()
+
+        .reverse()
+
+        .map(
+
+            item => {
+
+                const key =
+
+                    Number.isInteger(
+                        item.key
+                    )
+
+                    ? item.key
+
+                    : 0;
+
+
+                return `
+
+                <div class="
+                    loot
+                    ${item.rarity || "rare"}
+                ">
+
+                    ◇
+
+                    ${
+                        LOOT[lang][key]
+                        ||
+                        LOOT[lang][0]
+                    }
+
+                    <div class="small">
+
+                        +${
+                            Math.round(
+
+                                (
+                                    Number(
+                                        item.bonus
+                                    )
+                                    || 0
+                                )
+
+                                *
+
+                                100
+
+                            )
+                        }%
+
+                    </div>
+
+                </div>
+
+                `;
+
+            }
+
+        )
+
+        .join("");
+
+}
+
+
+/* =========================================================
+   CONTRACTS
+========================================================= */
+
+function createContracts(){
+
+    g.contracts =
+
+        Object.keys(
+            CONTRACT_DATA
+        )
+
+        .sort(
+            () =>
+                Math.random()
+                -
+                .5
+        )
+
+        .slice(
+            0,
+            3
+        )
+
+        .map(
+
+            type => ({
+
+                type,
+
+                progress:0,
+
+                done:false
+
+            })
+
+        );
+
+}
+
+
+if(
+    !g.contracts.length
+){
+
+    createContracts();
+
+}
+
+
+function contractProgress(
+    type,
+    amount
+){
+
+    g.contracts
+    .forEach(
+
+        contract => {
+
+            if(
+
+                contract.type
+                !==
+                type
+
+                ||
+
+                contract.done
+
+            ){
+
+                return;
+
+            }
+
+
+            const data =
+
+                CONTRACT_DATA[
+                    contract.type
+                ];
+
+
+            contract.progress =
+
+                Math.min(
+
+                    data.target,
+
+                    contract.progress
+                    +
+                    amount
+
+                );
+
+
+            if(
+
+                contract.progress
+
+                >=
+
+                data.target
+
+            ){
+
+                contract.done =
+                    true;
+
+
+                const reward =
+
+                    data.reward
+
+                    *
+
+                    globalMultiplier();
+
+
+                g.souls +=
+                    reward;
+
+
+                g.lifetime +=
+                    reward;
+
+
+                hapticSuccess();
+
+
+                message(
+
+                    t(
+                        "taskDone"
+                    )
+
+                    +
+                    " · +"
+
+                    +
+                    fmt(
+                        reward
+                    )
+
+                );
+
+            }
+
+        }
+
+    );
+
+}
+
+
+function renderContracts(){
+
+    $("contractsList")
+    .innerHTML =
+
+        g.contracts
+
+        .map(
+
+            contract => {
+
+                const data =
+
+                    CONTRACT_DATA[
+                        contract.type
+                    ];
+
+
+                const percent =
+
+                    Math.min(
+
+                        100,
+
+                        contract.progress
+
+                        /
+
+                        data.target
+
+                        *
+
+                        100
+
+                    );
+
+
+                return `
+
+                <div class="contract">
+
+                    <b>
+
+                        ${
+                            contract.done
+                            ? "✓ "
+                            : ""
+                        }
+
+                        ${data[lang]}
+
+                    </b>
+
+                    <div class="progress">
+
+                        <div
+                            style="
+                                width:
+                                ${percent}%
+                            ">
+                        </div>
+
+                    </div>
+
+                    <div class="small">
+
+                        ${fmt(contract.progress)}
+
+                        /
+
+                        ${fmt(data.target)}
+
+                        · ♱
+
+                        ${fmt(data.reward)}
+
+                    </div>
+
+                </div>
+
+                `;
+
+            }
+
+        )
+
+        .join("");
+
+}
+
+
+/* =========================================================
+   DAILY
+========================================================= */
+
+const DAY =
+    86400000;
+
+
+function updateDaily(){
+
+    const button =
+        $("dailyButton");
+
+
+    const remaining =
+
+        DAY
+
+        -
+
+        (
+            Date.now()
+
+            -
+
+            g.lastDaily
+        );
+
+
+    if(
+        remaining <= 0
+    ){
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            t(
+                "dailyReady"
+            );
+
+    }
+
+    else{
+
+        button.disabled =
+            true;
+
+
+        const hours =
+
+            Math.floor(
+                remaining
+                /
+                3600000
+            );
+
+
+        const minutes =
+
+            Math.floor(
+
+                (
+                    remaining
+                    %
+                    3600000
+                )
+
+                /
+
+                60000
+
+            );
+
+
+        button.textContent =
+
+            t(
+                "mail"
+            )
+
+            +
+            " · "
+
+            +
+            hours
+
+            +
+            "h "
+
+            +
+            minutes
+
+            +
+            "m";
+
+    }
+
+}
+
+
+$("dailyButton")
+.onclick =
+() => {
+
+    if(
+
+        Date.now()
+
+        -
+
+        g.lastDaily
+
+        <
+
+        DAY
+
+    ){
+
+        return;
+
+    }
+
+
+    const reward =
+
+        Math.max(
+
+            1000,
+
+            sps()
+            *
+            600,
+
+            power()
+            *
+            250
+
+        )
+
+        *
+
+        globalMultiplier();
+
+
+    addSouls(
+        reward
+    );
+
+
+    g.lastDaily =
+        Date.now();
+
+
+    hapticSuccess();
+
+
+    message(
+
+        t(
+            "dailyReward"
+        )
+
+        +
+        " · +"
+
+        +
+        fmt(
+            reward
+        )
+
+    );
+
+
+    saveGame();
+
+    update();
+
+};
+
+
+/* =========================================================
+   PRESTIGE
+========================================================= */
+
+$("prestigeButton")
+.onclick =
+() => {
+
+    if(
+        level() < 50
+    ){
+
+        return;
+
+    }
+
+
+    const question =
+
+        lang === "ru"
+
+        ?
+
+        "Заключить Брак со Смертью?\n\nДуши, уровень и магазин будут сброшены. Облики, комнаты, пластинки и найденные вещи сохранятся."
+
+        :
+
+        "Marry Death?\n\nSouls, level and upgrades will reset. Skins, rooms, records and found objects will remain.";
+
+
+    if(
+        !confirm(
+            question
+        )
+    ){
+
+        return;
+
+    }
+
+
+    g.prestiges++;
+
+
+    g.souls = 0;
+
+    g.lifetime = 0;
+
+
+    g.clicks = 0;
+
+    g.criticals = 0;
+
+
+    g.clickLvl = 0;
+
+    g.autoLvl = 0;
+
+    g.ringLvl = 0;
+
+    g.critLvl = 0;
+
+    g.critPowerLvl = 0;
+
+
+    g.clickCost = 25;
+
+    g.autoCost = 50;
+
+    g.ringCost = 250;
+
+    g.critCost = 500;
+
+    g.critPowerCost = 1500;
+
+
+    g.rage = 0;
+
+
+    createContracts();
+
+
+    hapticSuccess();
+
+
+    saveGame();
+
+    update();
+
+};
+
+
+/* =========================================================
+   OFFLINE
+========================================================= */
+
+function offlineReward(){
+
+    const seconds =
+
+        Math.min(
+
+            28800,
+
+            Math.max(
+
+                0,
+
+                (
+                    Date.now()
+
+                    -
+
+                    g.lastSeen
+                )
+
+                /
+
+                1000
+
+            )
+
+        );
+
+
+    if(
+
+        seconds > 60
+
+        &&
+
+        sps() > 0
+
+    ){
+
+        const reward =
+
+            sps()
+
+            *
+
+            roomPassive()
+
+            *
+
+            seconds
+
+            *
+
+            .5
+
+            *
+
+            globalMultiplier();
+
+
+        addSouls(
+            reward
+        );
+
+
+        setTimeout(
+
+            () => {
+
+                message(
+
+                    t(
+                        "offline"
+                    )
+
+                    +
+                    " · +"
+
+                    +
+                    fmt(
+                        reward
+                    )
+
+                );
+
+            },
+
+            600
+
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   VISUALS
+========================================================= */
+
+function floatText(
+    x,
+    y,
+    text,
+    critical
+){
+
+    const element =
+
+        document
+        .createElement(
+            "div"
+        );
+
+
+    element.className =
+
+        "float"
+
+        +
+
+        (
+            critical
+            ? " crit"
+            : ""
+        );
+
+
+    element.textContent =
+        text;
+
+
+    element.style.left =
+        x
+        +
+        "px";
+
+
+    element.style.top =
+        y
+        +
+        "px";
+
+
+    document.body
+        .appendChild(
+            element
+        );
+
+
+    setTimeout(
+
+        () =>
+            element.remove(),
+
+        800
+
+    );
+
+}
+
+
+function message(text){
+
+    const element =
+
+        document
+        .createElement(
+            "div"
+        );
+
+
+    element.className =
+        "message";
+
+
+    element.textContent =
+        text;
+
+
+    document.body
+        .appendChild(
+            element
+        );
+
+
+    setTimeout(
+
+        () =>
+            element.remove(),
+
+        2500
+
+    );
+
+}
+
+
+/* =========================================================
+   MUSIC
+========================================================= */
+
+const music =
+    $("music");
+
+
+const musicButton =
+    $("musicButton");
+
+
+const volume =
+    $("volume");
+
+
+let musicPlaying =
+    false;
+
+
+const storedVolume =
+
+    localStorage.getItem(
+        "dm-volume"
+    );
+
+
+if(
+    storedVolume !== null
+){
+
+    volume.value =
+        storedVolume;
+
+}
+
+
+music.volume =
+
+    Number(
+        volume.value
+    );
+
+
+async function playMusic(){
+
+    try{
+
+        await music.play();
+
+
+        musicPlaying =
+            true;
+
+
+        musicButton.textContent =
+            "♫";
+
+    }
+
+    catch(error){}
+
+}
+
+
+document
+.addEventListener(
+
+    "pointerdown",
+
+    playMusic,
+
+    {
+        once:true
+    }
+
+);
+
+
+musicButton.onclick =
+async event => {
+
+    event.stopPropagation();
+
+
+    if(
+        musicPlaying
+    ){
+
+        music.pause();
+
+
+        musicPlaying =
+            false;
+
+
+        musicButton.textContent =
+            "♪";
+
+    }
+
+    else{
+
+        await playMusic();
+
+    }
+
+};
+
+
+volume.oninput =
+() => {
+
+    music.volume =
+
+        Number(
+            volume.value
+        );
+
+
+    localStorage.setItem(
+
+        "dm-volume",
+
+        volume.value
+
+    );
+
+};
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+function saveGame(){
+
+    g.lastSeen =
+        Date.now();
+
+
+    localStorage.setItem(
+
+        "deathmarried-kvartira-telegram-v1",
+
+        JSON.stringify(g)
+
+    );
+
+}
+
+
+/* =========================================================
+   TELEGRAM BACK BUTTON
+========================================================= */
+
+if(
+    tg?.BackButton
+){
+
+    try{
+
+        tg.BackButton.hide();
+
+    }catch(error){}
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+initializeTelegram();
+
+applyLanguage();
+
+offlineReward();
+
+applySkin();
+
+applyRoom();
+
+update();
+
+scheduleTiggo();
+
+
+setInterval(
+
+    saveGame,
+
+    3000
+
+);
+
+
+window
+.addEventListener(
+
+    "beforeunload",
+
+    saveGame
+
+);
+
+</script>
+
+</body>
+</html>
