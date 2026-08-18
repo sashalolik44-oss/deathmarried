@@ -21,30 +21,42 @@
 <style>
 
 /* =========================================================
-   BASE
+   COLORS
 ========================================================= */
 
 :root{
   --cream:#f1e7d0;
   --paper:#dfccb0;
+
   --wine:#702831;
   --wine-dark:#40181f;
+
   --gold:#a98248;
+
   --ink:#2c1d19;
   --muted:#806c61;
 
   --room-light:
-    rgba(255,223,177,.22);
+    rgba(255,223,177,.15);
 }
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
 
 *{
   box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+
+  -webkit-tap-highlight-color:
+    transparent;
 }
+
 
 html{
   min-height:100%;
 }
+
 
 body{
   margin:0;
@@ -57,30 +69,28 @@ body{
 
   font-family:
     "Montserrat",
+    Arial,
     sans-serif;
 
   background:#ded0b5;
 }
 
 
-/*
-Нормальное выделение текста нам
-в игре не нужно.
-*/
-
 button,
 .character,
 .quick-switch,
 .tiggo{
   user-select:none;
+
   -webkit-user-select:none;
 
-  touch-action:manipulation;
+  touch-action:
+    manipulation;
 }
 
 
 /* =========================================================
-   REAL WALLPAPER
+   WALLPAPER
 ========================================================= */
 
 .wallpaper{
@@ -97,20 +107,15 @@ button,
       var(--room-light)
     ),
 
-    url("wallpaper.jpg")
+    url("wallpaper.jpg?v=2")
     center center /
-    cover
-    fixed;
+    cover;
 
   transition:
     filter .7s ease,
     background .7s ease;
 }
 
-
-/*
-Небольшое затемнение снизу.
-*/
 
 .wallpaper::after{
   content:"";
@@ -121,19 +126,19 @@ button,
 
   background:
     linear-gradient(
-      transparent 45%,
-      rgba(75,48,35,.08)
+      transparent 50%,
+      rgba(76,47,34,.08)
     );
 }
 
 
 /* =========================================================
-   ROOM LIGHTING
+   ROOM COLORS
 ========================================================= */
 
 body.room-hall{
   --room-light:
-    rgba(255,229,181,.13);
+    rgba(255,229,181,.10);
 }
 
 
@@ -157,23 +162,23 @@ body.room-bedroom{
 
 body.room-secret{
   --room-light:
-    rgba(39,25,24,.35);
+    rgba(39,25,24,.34);
 }
 
 
 body.room-secret
 .wallpaper{
   filter:
-    brightness(.7)
-    sepia(.15);
+    brightness(.69)
+    sepia(.12);
 }
 
 
 body.room-dj
 .wallpaper{
   filter:
-    saturate(.7)
-    contrast(1.08);
+    saturate(.75)
+    contrast(1.07);
 }
 
 
@@ -188,9 +193,9 @@ body.room-dj
   right:0;
   bottom:0;
 
-  height:13vh;
-
   z-index:-8;
+
+  height:13vh;
 
   border-top:
     5px solid #4e3629;
@@ -220,7 +225,36 @@ body.room-dj
 
   box-shadow:
     inset 0 0 170px
-    rgba(74,49,35,.17);
+    rgba(74,49,35,.14);
+}
+
+
+/* =========================================================
+   NIGHT
+========================================================= */
+
+.night-overlay{
+  position:fixed;
+
+  inset:0;
+
+  z-index:8;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  background:
+    rgba(20,22,32,.62);
+
+  transition:
+    opacity 1.4s;
+}
+
+
+body.night-event
+.night-overlay{
+  opacity:1;
 }
 
 
@@ -240,14 +274,13 @@ body.room-dj
   align-items:center;
   justify-content:center;
 
-  background:
-    #eee3cb;
+  background:#eee3cb;
+
+  cursor:pointer;
 
   transition:
     opacity 1.1s,
     visibility 1.1s;
-
-  cursor:pointer;
 }
 
 
@@ -281,7 +314,8 @@ body.room-dj
   width:65px;
   height:65px;
 
-  margin:0 auto 24px;
+  margin:
+    0 auto 24px;
 
   display:grid;
 
@@ -296,7 +330,8 @@ body.room-dj
 
   font:
     italic 30px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -307,7 +342,8 @@ body.room-dj
     500
     clamp(45px,8vw,90px)
     /.8
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 
   letter-spacing:.08em;
 }
@@ -329,7 +365,8 @@ body.room-dj
 
   height:1px;
 
-  margin:25px auto;
+  margin:
+    25px auto;
 
   background:
     var(--gold);
@@ -341,7 +378,8 @@ body.room-dj
 
   font:
     italic 13px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -353,7 +391,6 @@ header{
   position:fixed;
 
   top:15px;
-
   left:50%;
 
   transform:
@@ -374,7 +411,8 @@ header{
     600
     clamp(30px,4vw,51px)
     /.9
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 
   letter-spacing:.12em;
 }
@@ -411,7 +449,7 @@ header{
     1px solid #927358;
 
   background:
-    rgba(234,218,191,.92);
+    rgba(234,218,191,.93);
 
   backdrop-filter:
     blur(10px);
@@ -419,10 +457,10 @@ header{
 
 
 .language button{
-  border:0;
-
   padding:
     7px 10px;
+
+  border:0;
 
   color:#735c50;
 
@@ -443,7 +481,7 @@ header{
 
 
 /* =========================================================
-   TELEGRAM PROFILE
+   TELEGRAM USER
 ========================================================= */
 
 .tg-profile{
@@ -501,7 +539,7 @@ header{
 
 
 /* =========================================================
-   TOP STATS
+   STATS
 ========================================================= */
 
 .stats{
@@ -517,9 +555,6 @@ header{
 
   width:390px;
 
-  padding:
-    4px 8px;
-
   text-align:center;
 }
 
@@ -529,7 +564,8 @@ header{
 
   font:
     600 36px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -547,7 +583,8 @@ header{
 
   font:
     italic 13px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -555,7 +592,8 @@ header{
   width:260px;
   height:5px;
 
-  margin:6px auto;
+  margin:
+    6px auto;
 
   overflow:hidden;
 
@@ -579,59 +617,80 @@ header{
 
 
 #rageBar{
-  background:
-    #c18849;
+  background:#c18849;
 }
 
 
 /* =========================================================
-   QUICK SWITCHER
+   QUICK SWITCHER — LEFT TOP
 ========================================================= */
 
 .quick-switch{
   position:fixed;
 
-  left:50%;
-  top:154px;
+  left:16px;
+  top:103px;
 
-  transform:
-    translateX(-50%);
+  z-index:1400;
 
-  z-index:40;
+  display:grid;
 
-  display:flex;
+  grid-template-columns:
+    29px 150px 29px;
 
-  align-items:center;
+  gap:4px;
 
-  gap:6px;
+  padding:6px;
+
+  border:
+    1px solid
+    rgba(126,92,67,.45);
+
+  background:
+    rgba(235,219,192,.88);
+
+  box-shadow:
+    0 8px 25px
+    rgba(70,44,31,.08);
+
+  backdrop-filter:
+    blur(10px);
 }
 
 
 .quick-box{
-  width:145px;
+  width:150px;
+
+  min-height:38px;
 
   padding:
-    6px 7px;
+    4px 7px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+  overflow:hidden;
 
   text-align:center;
 
   border:
-    1px solid #a28667;
+    1px solid
+    rgba(151,116,84,.55);
 
   background:
-    rgba(237,220,191,.86);
-
-  backdrop-filter:
-    blur(8px);
+    rgba(248,234,210,.55);
 }
 
 
 .quick-label{
-  color:#957d6c;
+  color:#9a8170;
 
   font-size:6px;
 
-  letter-spacing:.13em;
+  letter-spacing:.15em;
 }
 
 
@@ -640,11 +699,12 @@ header{
 
   overflow:hidden;
 
-  color:#55342d;
+  color:#58362e;
 
   font:
     600 13px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 
   text-overflow:ellipsis;
 
@@ -654,25 +714,80 @@ header{
 
 .quick-arrow{
   width:29px;
-  height:37px;
+
+  min-height:38px;
+
+  padding:0;
 
   border:
-    1px solid #9b7a5d;
+    1px solid
+    rgba(145,106,77,.65);
 
   color:#633b33;
 
   background:
-    rgba(236,218,188,.9);
+    rgba(242,224,195,.72);
 
-  font-size:20px;
+  font:
+    20px
+    "Cormorant Garamond",
+    serif;
 
   cursor:pointer;
 }
 
 
+.quick-arrow:hover{
+  background:
+    rgba(250,239,220,.95);
+}
+
+
 .quick-arrow:active{
   transform:
-    scale(.93);
+    scale(.9);
+}
+
+
+/* ОБЛИК */
+
+#prevSkin{
+  grid-column:1;
+  grid-row:1;
+}
+
+
+.quick-switch
+.quick-box.skin-box{
+  grid-column:2;
+  grid-row:1;
+}
+
+
+#nextSkin{
+  grid-column:3;
+  grid-row:1;
+}
+
+
+/* КОМНАТА */
+
+#prevRoom{
+  grid-column:1;
+  grid-row:2;
+}
+
+
+.quick-switch
+.quick-box.room-box{
+  grid-column:2;
+  grid-row:2;
+}
+
+
+#nextRoom{
+  grid-column:3;
+  grid-row:2;
 }
 
 
@@ -698,7 +813,12 @@ header{
   width:360px;
   height:350px;
 
+  margin-top:100px;
+
   cursor:pointer;
+
+  touch-action:
+    manipulation;
 
   transition:
     transform .065s;
@@ -708,13 +828,6 @@ header{
       0 28px 22px
       rgba(55,31,21,.38)
     );
-
-  /*
-  Главное для телефона:
-  double-tap по персонажу не делает zoom.
-  */
-
-  touch-action:manipulation;
 }
 
 
@@ -830,9 +943,7 @@ header{
 
 .face{
   position:absolute;
-
   inset:0;
-
   z-index:5;
 }
 
@@ -1113,12 +1224,14 @@ header{
 }
 
 
-.skin-dj .dj-console{
+.skin-dj
+.dj-console{
   display:block;
 }
 
 
-.skin-dj .deck{
+.skin-dj
+.deck{
   animation:
     spin 1.6s linear infinite;
 }
@@ -1132,7 +1245,7 @@ header{
 }
 
 
-/* HELL */
+/* HORNS */
 
 .horns{
   position:absolute;
@@ -1174,7 +1287,8 @@ header{
 }
 
 
-.skin-hell .horns{
+.skin-hell
+.horns{
   display:flex;
 }
 
@@ -1192,11 +1306,13 @@ header{
   color:#b18c50;
 
   font:
-    75px Georgia;
+    75px Georgia,
+    serif;
 }
 
 
-.skin-king .crown{
+.skin-king
+.crown{
   display:block;
 }
 
@@ -1219,19 +1335,22 @@ header{
   background:#64273b20;
 
   box-shadow:
-    0 0 70px #67273a55;
+    0 0 70px
+    #67273a55;
 
   animation:
     aura 1s alternate infinite;
 }
 
 
-.skin-void .void-aura{
+.skin-void
+.void-aura{
   display:block;
 }
 
 
-.skin-void .lobe{
+.skin-void
+.lobe{
   background:
     radial-gradient(
       circle at 42% 25%,
@@ -1272,7 +1391,8 @@ header{
 
   font:
     italic 16px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 
   opacity:0;
 }
@@ -1316,7 +1436,7 @@ header{
 .left-panel{
   left:18px;
 
-  top:50%;
+  top:58%;
 
   transform:
     translateY(-50%);
@@ -1338,7 +1458,8 @@ header{
 
   font:
     600 18px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -1360,12 +1481,13 @@ header{
 
   min-height:31px;
 
+  padding:
+    6px 2px;
+
   border:0;
 
   border-bottom:
     1px solid #a2886a;
-
-  padding:6px 2px;
 
   color:#786156;
 
@@ -1373,7 +1495,8 @@ header{
 
   font:
     600 7px
-    Montserrat;
+    Montserrat,
+    sans-serif;
 
   cursor:pointer;
 }
@@ -1383,8 +1506,7 @@ header{
   color:var(--wine);
 
   border-bottom:
-    2px solid
-    var(--wine);
+    2px solid var(--wine);
 }
 
 
@@ -1399,7 +1521,7 @@ header{
 
 
 /* =========================================================
-   ITEMS / BUTTONS
+   ITEMS
 ========================================================= */
 
 .shop-item,
@@ -1455,7 +1577,8 @@ header{
 
   font:
     600 15px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -1473,7 +1596,8 @@ header{
 
   font:
     600 13px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -1492,7 +1616,8 @@ header{
 
   font:
     13px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -1506,7 +1631,7 @@ header{
 
 
 /* =========================================================
-   MODAL / BOTTOM SHEET
+   MODAL
 ========================================================= */
 
 .modal-backdrop{
@@ -1537,10 +1662,17 @@ header{
 
 
 .modal{
-  width:min(520px,100%);
+  width:
+    min(
+      520px,
+      100%
+    );
 
   max-height:
-    min(650px,85vh);
+    min(
+      650px,
+      85vh
+    );
 
   overflow:auto;
 
@@ -1552,7 +1684,11 @@ header{
   background:#ead9bd;
 
   box-shadow:
-    0 20px 70px #331c1766;
+    0 20px 70px
+    #331c1766;
+
+  overscroll-behavior:
+    contain;
 }
 
 
@@ -1573,7 +1709,8 @@ header{
 
   font:
     600 23px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -1594,7 +1731,7 @@ header{
 
 
 /* =========================================================
-   CARD
+   CARDS
 ========================================================= */
 
 .card{
@@ -1629,7 +1766,8 @@ header{
 
   font:
     600 16px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -1727,31 +1865,37 @@ header{
 .loot-name{
   font:
     600 14px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
-.loot.common .loot-name{
+.loot.common
+.loot-name{
   color:#5d554c;
 }
 
 
-.loot.rare .loot-name{
+.loot.rare
+.loot-name{
   color:#2e5d7a;
 }
 
 
-.loot.epic .loot-name{
+.loot.epic
+.loot-name{
   color:#6c3e69;
 }
 
 
-.loot.legendary .loot-name{
+.loot.legendary
+.loot-name{
   color:#87621d;
 }
 
 
-.loot.cursed .loot-name{
+.loot.cursed
+.loot-name{
   color:#791f2d;
 }
 
@@ -1787,7 +1931,8 @@ header{
 
   font:
     600 14px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -1859,7 +2004,8 @@ header{
 
   font:
     600 22px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -1886,6 +2032,7 @@ header{
 
 .hp{
   width:100%;
+
   height:100%;
 
   transition:
@@ -1912,35 +2059,6 @@ header{
 
 
 /* =========================================================
-   NIGHT EVENT
-========================================================= */
-
-.night-overlay{
-  position:fixed;
-
-  inset:0;
-
-  z-index:8;
-
-  pointer-events:none;
-
-  opacity:0;
-
-  background:
-    rgba(22,24,34,.62);
-
-  transition:
-    opacity 1.5s;
-}
-
-
-body.night-event
-.night-overlay{
-  opacity:1;
-}
-
-
-/* =========================================================
    DOORBELL
 ========================================================= */
 
@@ -1954,10 +2072,10 @@ body.night-event
 
   display:none;
 
+  width:300px;
+
   transform:
     translateX(-50%);
-
-  width:300px;
 
   padding:12px;
 
@@ -1985,7 +2103,8 @@ body.night-event
 
   font:
     600 19px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 }
 
 
@@ -2027,6 +2146,9 @@ body.night-event
   height:110px;
 
   cursor:pointer;
+
+  touch-action:
+    manipulation;
 
   filter:
     drop-shadow(
@@ -2190,7 +2312,7 @@ body.night-event
 
 
 /* =========================================================
-   CHASE HUD
+   CHASE
 ========================================================= */
 
 .chase{
@@ -2331,7 +2453,8 @@ body.night-event
 
   font:
     italic 17px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 
   pointer-events:none;
 
@@ -2377,7 +2500,8 @@ body.night-event
 
   font:
     600 24px
-    "Cormorant Garamond";
+    "Cormorant Garamond",
+    serif;
 
   animation:
     floatUp .75s forwards;
@@ -2459,7 +2583,7 @@ body.night-event
 
 
 /* =========================================================
-   MOBILE
+   MOBILE NAV
 ========================================================= */
 
 .mobile-nav{
@@ -2467,31 +2591,45 @@ body.night-event
 }
 
 
+/* =========================================================
+   MOBILE / TELEGRAM
+========================================================= */
+
 @media(max-width:900px){
 
   body{
     min-height:100vh;
 
     overflow:hidden;
+
+    overscroll-behavior:none;
+  }
+
+
+  .wallpaper{
+    background-attachment:
+      scroll;
   }
 
 
   .floor{
-    height:11vh;
+    height:10vh;
   }
 
 
   header{
     top:
       calc(
-        8px +
-        env(safe-area-inset-top)
+        7px +
+        env(
+          safe-area-inset-top
+        )
       );
   }
 
 
   .logo{
-    font-size:31px;
+    font-size:29px;
   }
 
 
@@ -2506,7 +2644,9 @@ body.night-event
     top:
       calc(
         7px +
-        env(safe-area-inset-top)
+        env(
+          safe-area-inset-top
+        )
       );
   }
 
@@ -2519,8 +2659,10 @@ body.night-event
   .stats{
     top:
       calc(
-        60px +
-        env(safe-area-inset-top)
+        55px +
+        env(
+          safe-area-inset-top
+        )
       );
 
     width:100%;
@@ -2528,55 +2670,89 @@ body.night-event
 
 
   .souls{
-    font-size:31px;
+    font-size:30px;
   }
 
 
   .bar{
-    width:220px;
+    width:205px;
   }
 
 
+  /*
+  Переключатели теперь слева.
+  Они больше не перекрывают тыкву.
+  */
+
   .quick-switch{
+    left:7px;
+
     top:
       calc(
-        126px +
-        env(safe-area-inset-top)
+        128px +
+        env(
+          safe-area-inset-top
+        )
       );
 
+    grid-template-columns:
+      26px 108px 26px;
+
     gap:3px;
+
+    padding:4px;
   }
 
 
   .quick-box{
-    width:120px;
+    width:108px;
 
-    padding:5px;
+    min-height:33px;
+
+    padding:3px 4px;
+  }
+
+
+  .quick-label{
+    font-size:5px;
+  }
+
+
+  .quick-name{
+    font-size:10px;
   }
 
 
   .quick-arrow{
-    width:27px;
-    height:34px;
+    width:26px;
+
+    min-height:33px;
+
+    font-size:17px;
   }
 
 
   .game{
-    height:100vh;
+    height:100dvh;
+
+    min-height:580px;
 
     padding-bottom:
-      80px;
+      calc(
+        65px +
+        env(
+          safe-area-inset-bottom
+        )
+      );
   }
 
 
   .character{
-    /*
-    Не transform: scale у родителя,
-    чтобы браузер не дёргал hit testing.
-    */
-
     width:340px;
+
     height:340px;
+
+    margin-top:80px;
 
     transform:none !important;
   }
@@ -2584,7 +2760,8 @@ body.night-event
 
   .character:active{
     transform:
-      scale(.96) !important;
+      scale(.965)
+      !important;
   }
 
 
@@ -2604,8 +2781,8 @@ body.night-event
 
 
   /*
-  Десктопные панели скрыты.
-  Они открываются снизу как модалки.
+  Десктопные большие панели
+  скрываем.
   */
 
   .panel{
@@ -2613,16 +2790,22 @@ body.night-event
   }
 
 
+  /*
+  Нижнее меню.
+  */
+
   .mobile-nav{
     position:fixed;
 
-    left:8px;
-    right:8px;
+    left:7px;
+    right:7px;
 
     bottom:
       calc(
-        8px +
-        env(safe-area-inset-bottom)
+        7px +
+        env(
+          safe-area-inset-bottom
+        )
       );
 
     z-index:3000;
@@ -2630,7 +2813,10 @@ body.night-event
     display:grid;
 
     grid-template-columns:
-      repeat(4,1fr);
+      repeat(
+        4,
+        1fr
+      );
 
     gap:4px;
 
@@ -2648,7 +2834,7 @@ body.night-event
 
 
   .mobile-nav button{
-    min-height:45px;
+    min-height:44px;
 
     border:0;
 
@@ -2664,24 +2850,33 @@ body.night-event
 
 
   .music{
-    right:8px;
+    right:7px;
 
     bottom:
       calc(
-        67px +
-        env(safe-area-inset-bottom)
+        65px +
+        env(
+          safe-area-inset-bottom
+        )
       );
   }
 
 
+  /*
+  Босс сверху,
+  но не закрывает всю тыкву.
+  */
+
   .boss{
-    left:8px;
-    right:8px;
+    left:7px;
+    right:7px;
 
     top:
       calc(
-        54px +
-        env(safe-area-inset-top)
+        48px +
+        env(
+          safe-area-inset-top
+        )
       );
 
     width:auto;
@@ -2691,13 +2886,15 @@ body.night-event
   .doorbell{
     top:
       calc(
-        160px +
-        env(safe-area-inset-top)
+        155px +
+        env(
+          safe-area-inset-top
+        )
       );
 
     width:
       calc(
-        100% - 25px
+        100% - 20px
       );
   }
 
@@ -2705,30 +2902,34 @@ body.night-event
   .chase{
     top:
       calc(
-        165px +
-        env(safe-area-inset-top)
+        155px +
+        env(
+          safe-area-inset-top
+        )
       );
 
     width:
       calc(
-        100% - 25px
+        100% - 20px
       );
   }
 
 
   /*
-  Bottom Sheet
+  Нижняя шторка.
   */
 
   .modal-backdrop{
     align-items:flex-end;
 
     padding:
-      8px
-      8px
+      7px
+      7px
       calc(
-        8px +
-        env(safe-area-inset-bottom)
+        7px +
+        env(
+          safe-area-inset-bottom
+        )
       );
   }
 
@@ -2736,13 +2937,12 @@ body.night-event
   .modal{
     width:100%;
 
-    max-height:72vh;
+    max-height:72dvh;
+
+    padding:14px;
 
     border-radius:
-      15px 15px 4px 4px;
-
-    overscroll-behavior:
-      contain;
+      15px 15px 5px 5px;
 
     -webkit-overflow-scrolling:
       touch;
@@ -2752,8 +2952,10 @@ body.night-event
   .message{
     top:
       calc(
-        183px +
-        env(safe-area-inset-top)
+        190px +
+        env(
+          safe-area-inset-top
+        )
       );
   }
 
@@ -2766,22 +2968,15 @@ body.night-event
 <body class="room-hall">
 
 
-<!-- =====================================================
-     BACKGROUND
-===================================================== -->
+<!-- BACKGROUND -->
 
 <div class="wallpaper"></div>
-
 <div class="floor"></div>
-
 <div class="vignette"></div>
-
 <div class="night-overlay"></div>
 
 
-<!-- =====================================================
-     INTRO
-===================================================== -->
+<!-- INTRO -->
 
 <div
   class="intro"
@@ -2794,10 +2989,7 @@ body.night-event
     </div>
 
     <div class="intro-title">
-
-      DEATH<br>
-      MARRIED
-
+      DEATH<br>MARRIED
     </div>
 
     <div class="intro-line"></div>
@@ -2822,9 +3014,7 @@ body.night-event
 </div>
 
 
-<!-- =====================================================
-     LANGUAGE
-===================================================== -->
+<!-- LANGUAGE -->
 
 <div class="language">
 
@@ -2847,9 +3037,7 @@ body.night-event
 </div>
 
 
-<!-- =====================================================
-     TELEGRAM PROFILE
-===================================================== -->
+<!-- TELEGRAM -->
 
 <div
   class="tg-profile"
@@ -2879,9 +3067,7 @@ body.night-event
 </div>
 
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
+<!-- HEADER -->
 
 <header>
 
@@ -2889,20 +3075,14 @@ body.night-event
     DeathMarried
   </div>
 
-  <div
-    class="tag"
-    id="tagline">
-
-    KVARTIRA • CLICKER
-
+  <div class="tag">
+    KVARTIRA · CLICKER
   </div>
 
 </header>
 
 
-<!-- =====================================================
-     STATS
-===================================================== -->
+<!-- STATS -->
 
 <div class="stats">
 
@@ -2936,16 +3116,16 @@ body.night-event
       1
     </span>
 
-    · x<span id="totalMultiplier">
+    ·
+
+    x<span id="totalMultiplier">
       1.00
     </span>
 
   </div>
 
   <div class="bar">
-
     <div id="levelBar"></div>
-
   </div>
 
   <div class="level-text">
@@ -2961,16 +3141,14 @@ body.night-event
   </div>
 
   <div class="bar">
-
     <div id="rageBar"></div>
-
   </div>
 
 </div>
 
 
 <!-- =====================================================
-     QUICK SWITCH
+     QUICK SWITCH — СЛЕВА
 ===================================================== -->
 
 <div class="quick-switch">
@@ -2983,7 +3161,7 @@ body.night-event
 
   </button>
 
-  <div class="quick-box">
+  <div class="quick-box skin-box">
 
     <div
       class="quick-label"
@@ -3020,7 +3198,7 @@ body.night-event
 
   </button>
 
-  <div class="quick-box">
+  <div class="quick-box room-box">
 
     <div
       class="quick-label"
@@ -3051,9 +3229,7 @@ body.night-event
 </div>
 
 
-<!-- =====================================================
-     GAME
-===================================================== -->
+<!-- GAME -->
 
 <div class="game">
 
@@ -3066,7 +3242,6 @@ body.night-event
     <div class="horns">
 
       <div class="horn"></div>
-
       <div class="horn"></div>
 
     </div>
@@ -3081,13 +3256,9 @@ body.night-event
       <div class="stem"></div>
 
       <div class="lobe a"></div>
-
       <div class="lobe b"></div>
-
       <div class="lobe c"></div>
-
       <div class="lobe d"></div>
-
 
       <div class="face">
 
@@ -3141,9 +3312,7 @@ body.night-event
 </div>
 
 
-<!-- =====================================================
-     LEFT PANEL
-===================================================== -->
+<!-- LEFT PANEL -->
 
 <div class="panel left-panel">
 
@@ -3282,12 +3451,8 @@ body.night-event
     class="tab-content"
     id="wardrobe">
 
-    <div
-      class="panel-title"
-      id="wardrobeTitle">
-
+    <div class="panel-title">
       Облики и комнаты
-
     </div>
 
     <button
@@ -3313,12 +3478,8 @@ body.night-event
     class="tab-content"
     id="collection">
 
-    <div
-      class="panel-title"
-      id="collectionTitle">
-
+    <div class="panel-title">
       Коллекция
-
     </div>
 
     <button
@@ -3342,9 +3503,7 @@ body.night-event
 </div>
 
 
-<!-- =====================================================
-     RIGHT PANEL
-===================================================== -->
+<!-- RIGHT PANEL -->
 
 <div class="panel right-panel">
 
@@ -3403,7 +3562,6 @@ body.night-event
       <div class="price">
 
         ♱
-
         <span id="clickCost">
           25
         </span>
@@ -3411,7 +3569,7 @@ body.night-event
         ·
 
         <span id="clickLvl">
-          0
+          ур. 0
         </span>
 
       </div>
@@ -3438,7 +3596,6 @@ body.night-event
       <div class="price">
 
         ♱
-
         <span id="autoCost">
           50
         </span>
@@ -3446,7 +3603,7 @@ body.night-event
         ·
 
         <span id="autoLvl">
-          0
+          ур. 0
         </span>
 
       </div>
@@ -3473,7 +3630,6 @@ body.night-event
       <div class="price">
 
         ♱
-
         <span id="ringCost">
           250
         </span>
@@ -3481,7 +3637,7 @@ body.night-event
         ·
 
         <span id="ringLvl">
-          0
+          ур. 0
         </span>
 
       </div>
@@ -3508,7 +3664,6 @@ body.night-event
       <div class="price">
 
         ♱
-
         <span id="critCost">
           650
         </span>
@@ -3516,7 +3671,7 @@ body.night-event
         ·
 
         <span id="critLvl">
-          0
+          ур. 0
         </span>
 
       </div>
@@ -3543,7 +3698,6 @@ body.night-event
       <div class="price">
 
         ♱
-
         <span id="critPowerCost">
           1800
         </span>
@@ -3551,7 +3705,7 @@ body.night-event
         ·
 
         <span id="critPowerLvl">
-          0
+          ур. 0
         </span>
 
       </div>
@@ -3565,12 +3719,8 @@ body.night-event
     class="tab-content"
     id="tasks">
 
-    <div
-      class="panel-title"
-      id="tasksTitle">
-
+    <div class="panel-title">
       Записки на столе
-
     </div>
 
     <div id="contractsList"></div>
@@ -3582,12 +3732,8 @@ body.night-event
     class="tab-content"
     id="marriage">
 
-    <div
-      class="panel-title"
-      id="marriageTitle">
-
+    <div class="panel-title">
       Брак со Смертью
-
     </div>
 
     <div
@@ -3595,7 +3741,7 @@ body.night-event
       id="marriageDescription">
 
       Новый цикл становится сложнее,
-      но каждый брак постоянно усиливает доход.
+      но каждый брак усиливает доход.
 
     </div>
 
@@ -3623,46 +3769,30 @@ body.night-event
 </div>
 
 
-<!-- =====================================================
-     MOBILE NAV
-===================================================== -->
+<!-- MOBILE MENU -->
 
 <div class="mobile-nav">
 
-  <button
-    id="mobileProfile">
-
+  <button id="mobileProfile">
     ПРОФИЛЬ
-
   </button>
 
-  <button
-    id="mobileShop">
-
+  <button id="mobileShop">
     МАГАЗИН
-
   </button>
 
-  <button
-    id="mobileWardrobe">
-
+  <button id="mobileWardrobe">
     ОБЛИКИ
-
   </button>
 
-  <button
-    id="mobileInventory">
-
+  <button id="mobileInventory">
     ВЕЩИ
-
   </button>
 
 </div>
 
 
-<!-- =====================================================
-     BOSS
-===================================================== -->
+<!-- BOSS -->
 
 <div
   class="boss"
@@ -3717,9 +3847,7 @@ body.night-event
 </div>
 
 
-<!-- =====================================================
-     DOORBELL EVENT
-===================================================== -->
+<!-- DOORBELL -->
 
 <div
   class="doorbell"
@@ -3756,17 +3884,13 @@ body.night-event
 </div>
 
 
-<!-- =====================================================
-     BLACK TIGGO HUD
-===================================================== -->
+<!-- CHASE -->
 
 <div
   class="chase"
   id="chase">
 
-  <b id="chaseTitle">
-    BLACK TIGGO
-  </b>
+  <b>BLACK TIGGO</b>
 
   <div class="hpbar">
 
@@ -3794,9 +3918,7 @@ body.night-event
 </div>
 
 
-<!-- =====================================================
-     MODAL
-===================================================== -->
+<!-- MODAL -->
 
 <div
   class="modal-backdrop"
@@ -3828,9 +3950,7 @@ body.night-event
 </div>
 
 
-<!-- =====================================================
-     MUSIC
-===================================================== -->
+<!-- MUSIC -->
 
 <audio
   id="music"
@@ -3838,7 +3958,7 @@ body.night-event
   preload="auto">
 
   <source
-    src="music.mp3?v=1"
+    src="music.mp3?v=2"
     type="audio/mpeg">
 
 </audio>
@@ -3869,7 +3989,10 @@ body.night-event
 
 const $ =
   id =>
-    document.getElementById(id);
+    document
+    .getElementById(
+      id
+    );
 
 
 const tg =
@@ -3901,6 +4024,15 @@ const TEXT = {
     room:
       "КОМНАТА",
 
+    level:
+      "уровень",
+
+    soulSec:
+      "душ / сек.",
+
+    click:
+      "нажатие",
+
     profile:
       "ПРОФИЛЬ",
 
@@ -3912,15 +4044,6 @@ const TEXT = {
 
     items:
       "ВЕЩИ",
-
-    level:
-      "уровень",
-
-    soulSec:
-      "душ / сек.",
-
-    click:
-      "нажатие",
 
     equip:
       "НАДЕТЬ",
@@ -3940,17 +4063,14 @@ const TEXT = {
     boss:
       "БОСС КУКОЛДОВ",
 
+    bossButton:
+      "ПОЗВАТЬ БОССА",
+
     phase1:
       "ФАЗА I · НЕДОВОЛЕН",
 
     phase2:
       "ФАЗА II · В ЯРОСТИ",
-
-    bossArrived:
-      "БОСС КУКОЛДОВ пришёл в квартиру",
-
-    bossKilled:
-      "БОСС КУКОЛДОВ побеждён",
 
     rage:
       "РИТМ",
@@ -3960,9 +4080,6 @@ const TEXT = {
 
     daily:
       "УТРЕННЯЯ ПОЧТА",
-
-    bossButton:
-      "ПОЗВАТЬ БОССА",
 
     inventory:
       "Инвентарь",
@@ -3993,12 +4110,6 @@ const TEXT = {
 
     ignore:
       "НЕ ОТКРЫВАТЬ",
-
-    night:
-      "В квартире погас свет. Началась Ночная смена.",
-
-    nightEnd:
-      "Свет снова включился.",
 
     critical:
       "КРИТ",
@@ -4038,6 +4149,15 @@ const TEXT = {
     room:
       "ROOM",
 
+    level:
+      "level",
+
+    soulSec:
+      "souls / sec.",
+
+    click:
+      "click",
+
     profile:
       "PROFILE",
 
@@ -4049,15 +4169,6 @@ const TEXT = {
 
     items:
       "ITEMS",
-
-    level:
-      "level",
-
-    soulSec:
-      "souls / sec.",
-
-    click:
-      "click",
 
     equip:
       "WEAR",
@@ -4077,17 +4188,14 @@ const TEXT = {
     boss:
       "CUCKOLD BOSS",
 
+    bossButton:
+      "CALL THE BOSS",
+
     phase1:
       "PHASE I · ANNOYED",
 
     phase2:
       "PHASE II · ENRAGED",
-
-    bossArrived:
-      "CUCKOLD BOSS entered the apartment",
-
-    bossKilled:
-      "CUCKOLD BOSS defeated",
 
     rage:
       "RHYTHM",
@@ -4097,9 +4205,6 @@ const TEXT = {
 
     daily:
       "MORNING MAIL",
-
-    bossButton:
-      "CALL THE BOSS",
 
     inventory:
       "Inventory",
@@ -4114,10 +4219,10 @@ const TEXT = {
       "Rooms",
 
     noItems:
-      "The inventory is empty.",
+      "Inventory is empty.",
 
     noRecords:
-      "No records have been found.",
+      "No records found.",
 
     door:
       "Someone is ringing the bell.",
@@ -4130,12 +4235,6 @@ const TEXT = {
 
     ignore:
       "IGNORE",
-
-    night:
-      "The lights went out. Night Shift has begun.",
-
-    nightEnd:
-      "The lights came back on.",
 
     critical:
       "CRITICAL",
@@ -4166,24 +4265,16 @@ const TEXT = {
 };
 
 
-function tx(key){
-
-  return TEXT[
-    language
-  ][key];
-
-}
+const tx =
+  key =>
+    TEXT[
+      language
+    ][key];
 
 
 /* =========================================================
-   SAVE DATA
+   SAVE
 ========================================================= */
-
-/*
-ВАЖНО:
-ключ сохранения оставлен как в прошлой
-Telegram-версии.
-*/
 
 const SAVE_KEY =
   "deathmarried-kvartira-telegram-v1";
@@ -4231,9 +4322,11 @@ const DEFAULT_GAME = {
 
   lastDaily:0,
 
-  currentSkin:"default",
+  currentSkin:
+    "default",
 
-  currentRoom:"hall",
+  currentRoom:
+    "hall",
 
   unlockedSkins:[
     "default"
@@ -4262,49 +4355,56 @@ let game = {
 
 try{
 
-  const old =
+  const saved =
     JSON.parse(
-      localStorage.getItem(
+      localStorage
+      .getItem(
         SAVE_KEY
       )
     );
 
 
-  if(old){
+  if(saved){
 
     game = {
 
       ...DEFAULT_GAME,
 
-      ...old,
+      ...saved,
 
       loot:
-        Array.isArray(old.loot)
-        ? old.loot
+        Array.isArray(
+          saved.loot
+        )
+        ? saved.loot
         : [],
 
       records:
-        Array.isArray(old.records)
-        ? old.records
+        Array.isArray(
+          saved.records
+        )
+        ? saved.records
         : [],
 
       contracts:
-        Array.isArray(old.contracts)
-        ? old.contracts
+        Array.isArray(
+          saved.contracts
+        )
+        ? saved.contracts
         : [],
 
       unlockedSkins:
         Array.isArray(
-          old.unlockedSkins
+          saved.unlockedSkins
         )
-        ? old.unlockedSkins
+        ? saved.unlockedSkins
         : ["default"],
 
       unlockedRooms:
         Array.isArray(
-          old.unlockedRooms
+          saved.unlockedRooms
         )
-        ? old.unlockedRooms
+        ? saved.unlockedRooms
         : ["hall"]
 
     };
@@ -4315,7 +4415,7 @@ try{
 
 
 /* =========================================================
-   SKINS
+   DATA
 ========================================================= */
 
 const SKINS = [
@@ -4412,10 +4512,6 @@ const SKINS = [
 ];
 
 
-/* =========================================================
-   ROOMS
-========================================================= */
-
 const ROOMS = [
 
   {
@@ -4442,13 +4538,13 @@ const ROOMS = [
 
     ru:[
       "Бордовая гостиная",
-      "Тёплый красный свет старой мебели.",
+      "Тёплый красный свет.",
       "+25% пассивного дохода."
     ],
 
     en:[
       "Burgundy Salon",
-      "Warm red light from old furniture.",
+      "Warm red light.",
       "+25% passive income."
     ]
   },
@@ -4460,13 +4556,13 @@ const ROOMS = [
 
     ru:[
       "Комната DJ",
-      "Холодный синий свет и музыка.",
+      "Холодный синий свет.",
       "Комбо растёт вдвое быстрее."
     ],
 
     en:[
       "DJ Room",
-      "Cold blue light and music.",
+      "Cold blue light.",
       "Combo grows twice as fast."
     ]
   },
@@ -4484,7 +4580,7 @@ const ROOMS = [
 
     en:[
       "Bedroom",
-      "Lost objects keep appearing here.",
+      "Lost objects keep appearing.",
       "+20% item chance."
     ]
   },
@@ -4509,10 +4605,6 @@ const ROOMS = [
 
 ];
 
-
-/* =========================================================
-   LOOT DEFINITIONS
-========================================================= */
 
 const ITEM_NAMES = {
 
@@ -4557,10 +4649,6 @@ const ITEM_NAMES = {
 };
 
 
-/* =========================================================
-   RECORDS
-========================================================= */
-
 const RECORDS = [
 
   "KVARTIRA 00:13",
@@ -4577,10 +4665,6 @@ const RECORDS = [
 
 ];
 
-
-/* =========================================================
-   CONTRACTS
-========================================================= */
 
 const CONTRACT_TYPES = {
 
@@ -4710,7 +4794,8 @@ function level(){
       190
     )
 
-  ) + 1;
+  )
+  + 1;
 
 }
 
@@ -4759,31 +4844,51 @@ function levelProgress(){
 
 
 /* =========================================================
-   ITEM BONUSES
+   ITEM BONUS
 ========================================================= */
 
 function itemBonus(type){
 
-  return game.loot.reduce(
+  return game.loot
+  .reduce(
 
     (sum,item) => {
 
+      let total =
+        sum;
+
+
       if(
         item.stat
-        !== type
+        ===
+        type
       ){
 
-        return sum;
+        total +=
+          Number(
+            item.value
+          )
+          || 0;
 
       }
 
 
-      return sum
-        +
-        (
-          Number(item.value)
-          || 0
-        );
+      if(
+        item.penaltyStat
+        ===
+        type
+      ){
+
+        total +=
+          Number(
+            item.penalty
+          )
+          || 0;
+
+      }
+
+
+      return total;
 
     },
 
@@ -4820,23 +4925,6 @@ function recordMulti(){
 }
 
 
-function globalItemMulti(){
-
-  return Math.max(
-
-    .2,
-
-    1
-    +
-    itemBonus(
-      "global"
-    )
-
-  );
-
-}
-
-
 function skinGlobal(){
 
   if(
@@ -4860,24 +4948,24 @@ function skinGlobal(){
 
 function roomGlobal(){
 
-  if(
+  return (
     game.currentRoom
     === "secret"
   )
-    return 1.4;
-
-
-  return 1;
+  ? 1.40
+  : 1;
 
 }
 
 
-let eventMultiplier = 1;
+let eventMultiplier =
+  1;
 
 
 function globalMulti(){
 
   return (
+
     prestigeMulti()
 
     *
@@ -4886,7 +4974,14 @@ function globalMulti(){
 
     *
 
-    globalItemMulti()
+    Math.max(
+      .2,
+      1
+      +
+      itemBonus(
+        "global"
+      )
+    )
 
     *
 
@@ -4899,6 +4994,7 @@ function globalMulti(){
     *
 
     eventMultiplier
+
   );
 
 }
@@ -4906,11 +5002,9 @@ function globalMulti(){
 
 function baseClick(){
 
-  return (
-    1
+  return 1
     +
-    game.clickLvl
-  );
+    game.clickLvl;
 
 }
 
@@ -4929,14 +5023,16 @@ function clickMulti(){
     game.currentSkin
     === "dj"
   )
-    value *= 1.25;
+    value *=
+      1.25;
 
 
   if(
     game.currentRoom
     === "hall"
   )
-    value *= 1.10;
+    value *=
+      1.10;
 
 
   return Math.max(
@@ -4951,9 +5047,7 @@ function passiveBase(){
 
   return (
     game.autoLvl
-
     +
-
     game.ringLvl
     *
     5
@@ -4976,7 +5070,8 @@ function passiveMulti(){
     game.currentRoom
     === "salon"
   )
-    value *= 1.25;
+    value *=
+      1.25;
 
 
   return Math.max(
@@ -5035,15 +5130,15 @@ function itemDropChance(){
   return (
     game.currentRoom
     === "bedroom"
-    ? .20
-    : 0
-  );
+  )
+  ? .20
+  : 0;
 
 }
 
 
 /* =========================================================
-   HAPTICS
+   HAPTIC
 ========================================================= */
 
 function haptic(type){
@@ -5056,62 +5151,49 @@ function haptic(type){
 
     if(
       type === "light"
-    ){
-
+    )
       tg.HapticFeedback
         ?.impactOccurred(
           "light"
         );
 
-    }
-
 
     if(
       type === "heavy"
-    ){
-
+    )
       tg.HapticFeedback
         ?.impactOccurred(
           "heavy"
         );
 
-    }
-
 
     if(
       type === "success"
-    ){
-
+    )
       tg.HapticFeedback
         ?.notificationOccurred(
           "success"
         );
 
-    }
-
 
     if(
       type === "error"
-    ){
-
+    )
       tg.HapticFeedback
         ?.notificationOccurred(
           "error"
         );
 
-    }
-
 
     if(
       type === "select"
-    ){
-
+    )
       tg.HapticFeedback
         ?.selectionChanged();
 
-    }
+  }
 
-  }catch(error){}
+  catch(error){}
 
 }
 
@@ -5132,7 +5214,9 @@ function initTelegram(){
 
     tg.expand();
 
-  }catch(error){}
+  }
+
+  catch(error){}
 
 
   try{
@@ -5141,11 +5225,14 @@ function initTelegram(){
       "#702831"
     );
 
+
     tg.setBackgroundColor(
       "#ded0b5"
     );
 
-  }catch(error){}
+  }
+
+  catch(error){}
 
 
   const user =
@@ -5180,7 +5267,9 @@ function initTelegram(){
       .join(" ");
 
 
-  if(user.photo_url){
+  if(
+    user.photo_url
+  ){
 
     $("tgAvatar").src =
       user.photo_url;
@@ -5227,15 +5316,19 @@ function checkUnlocks(){
 
 
         message(
+
           (
             language === "ru"
-            ? "Открыт новый облик: "
-            : "New skin unlocked: "
+            ? "Новый облик: "
+            : "New skin: "
           )
+
           +
+
           skin[
             language
           ][0]
+
         );
 
 
@@ -5276,15 +5369,19 @@ function checkUnlocks(){
 
 
         message(
+
           (
             language === "ru"
-            ? "Открыта новая комната: "
-            : "New room unlocked: "
+            ? "Новая комната: "
+            : "New room: "
           )
+
           +
+
           room[
             language
           ][0]
+
         );
 
 
@@ -5302,7 +5399,7 @@ function checkUnlocks(){
 
 
 /* =========================================================
-   SKIN
+   APPLY SKIN
 ========================================================= */
 
 function applySkin(){
@@ -5311,12 +5408,13 @@ function applySkin(){
     $("character");
 
 
-  character.classList.remove(
-    "skin-dj",
-    "skin-hell",
-    "skin-king",
-    "skin-void"
-  );
+  character.classList
+    .remove(
+      "skin-dj",
+      "skin-hell",
+      "skin-king",
+      "skin-void"
+    );
 
 
   if(
@@ -5324,21 +5422,24 @@ function applySkin(){
     !== "default"
   ){
 
-    character.classList.add(
-      "skin-"
-      +
-      game.currentSkin
-    );
+    character.classList
+      .add(
+        "skin-"
+        +
+        game.currentSkin
+      );
 
   }
 
 
   const skin =
     SKINS.find(
+
       item =>
         item.id
         ===
         game.currentSkin
+
     )
     ||
     SKINS[0];
@@ -5346,45 +5447,47 @@ function applySkin(){
 
   $("quickSkin")
     .textContent =
-    skin[language][0];
+    skin[
+      language
+    ][0];
 
 }
 
 
 /* =========================================================
-   ROOM
+   APPLY ROOM
 ========================================================= */
 
 function applyRoom(){
 
-  document.body.classList.remove(
-
-    "room-hall",
-
-    "room-salon",
-
-    "room-dj",
-
-    "room-bedroom",
-
-    "room-secret"
-
-  );
+  document.body
+    .classList
+    .remove(
+      "room-hall",
+      "room-salon",
+      "room-dj",
+      "room-bedroom",
+      "room-secret"
+    );
 
 
-  document.body.classList.add(
-    "room-"
-    +
-    game.currentRoom
-  );
+  document.body
+    .classList
+    .add(
+      "room-"
+      +
+      game.currentRoom
+    );
 
 
   const room =
     ROOMS.find(
+
       item =>
         item.id
         ===
         game.currentRoom
+
     )
     ||
     ROOMS[0];
@@ -5392,7 +5495,9 @@ function applyRoom(){
 
   $("quickRoom")
     .textContent =
-    room[language][0];
+    room[
+      language
+    ][0];
 
 }
 
@@ -5412,13 +5517,13 @@ function switchUnlocked(
     : ROOMS;
 
 
-  const unlockedIds =
+  const unlocked =
     type === "skin"
     ? game.unlockedSkins
     : game.unlockedRooms;
 
 
-  const currentId =
+  const current =
     type === "skin"
     ? game.currentSkin
     : game.currentRoom;
@@ -5426,34 +5531,41 @@ function switchUnlocked(
 
   const available =
     source.filter(
+
       item =>
-        unlockedIds.includes(
+        unlocked.includes(
           item.id
         )
+
     );
 
 
   if(
     available.length
-    <=
-    1
-  ){
-
+    <
+    2
+  )
     return;
-
-  }
 
 
   let index =
     available.findIndex(
+
       item =>
         item.id
-        ===
-        currentId
+        === current
+
     );
 
 
+  if(
+    index < 0
+  )
+    index = 0;
+
+
   index =
+
     (
       index
       +
@@ -5461,7 +5573,9 @@ function switchUnlocked(
       +
       available.length
     )
+
     %
+
     available.length;
 
 
@@ -5470,7 +5584,9 @@ function switchUnlocked(
   ){
 
     game.currentSkin =
-      available[index].id;
+      available[
+        index
+      ].id;
 
 
     applySkin();
@@ -5480,7 +5596,9 @@ function switchUnlocked(
   else{
 
     game.currentRoom =
-      available[index].id;
+      available[
+        index
+      ].id;
 
 
     applyRoom();
@@ -5495,7 +5613,7 @@ function switchUnlocked(
 
   saveGame();
 
-  update();
+  updateUI();
 
 }
 
@@ -5542,7 +5660,7 @@ $("nextRoom")
 
 function openModal(
   title,
-  html
+  content
 ){
 
   $("modalTitle")
@@ -5552,7 +5670,7 @@ function openModal(
 
   $("modalContent")
     .innerHTML =
-    html;
+    content;
 
 
   $("modalBackdrop")
@@ -5588,17 +5706,14 @@ event => {
     event.target
     ===
     $("modalBackdrop")
-  ){
-
+  )
     closeModal();
-
-  }
 
 };
 
 
 /* =========================================================
-   SKIN MODAL
+   SKIN MENU
 ========================================================= */
 
 function showSkins(){
@@ -5608,7 +5723,7 @@ function showSkins(){
 
       skin => {
 
-        const open =
+        const unlocked =
           game.unlockedSkins
             .includes(
               skin.id
@@ -5621,8 +5736,10 @@ function showSkins(){
           skin.id;
 
 
-        const text =
-          skin[language];
+        const data =
+          skin[
+            language
+          ];
 
 
         return `
@@ -5630,14 +5747,14 @@ function showSkins(){
         <div class="
           card
           ${selected ? "selected" : ""}
-          ${open ? "" : "locked"}
+          ${unlocked ? "" : "locked"}
         ">
 
           <div class="card-name">
 
             ${
-              open
-              ? text[0]
+              unlocked
+              ? data[0]
               : "🔒 ???"
             }
 
@@ -5646,8 +5763,8 @@ function showSkins(){
           <div class="card-info">
 
             ${
-              open
-              ? text[1]
+              unlocked
+              ? data[1]
               : tx("locked")
                 + " "
                 + skin.level
@@ -5658,19 +5775,20 @@ function showSkins(){
           <div class="card-info">
 
             ${
-              open
-              ? text[2]
+              unlocked
+              ? data[2]
               : ""
             }
 
           </div>
 
           ${
-            open
+            unlocked
+
             ? `
 
             <button
-              data-equip-skin="${skin.id}"
+              data-skin="${skin.id}"
               ${selected ? "disabled" : ""}>
 
               ${
@@ -5682,6 +5800,7 @@ function showSkins(){
             </button>
 
             `
+
             : ""
           }
 
@@ -5702,7 +5821,7 @@ function showSkins(){
 
   document
     .querySelectorAll(
-      "[data-equip-skin]"
+      "[data-skin]"
     )
     .forEach(
 
@@ -5712,11 +5831,11 @@ function showSkins(){
         () => {
 
           game.currentSkin =
-            button.dataset
-              .equipSkin;
+            button.dataset.skin;
 
 
           applySkin();
+
 
           haptic(
             "select"
@@ -5727,7 +5846,7 @@ function showSkins(){
 
           closeModal();
 
-          update();
+          updateUI();
 
         };
 
@@ -5739,7 +5858,7 @@ function showSkins(){
 
 
 /* =========================================================
-   ROOM MODAL
+   ROOM MENU
 ========================================================= */
 
 function showRooms(){
@@ -5749,7 +5868,7 @@ function showRooms(){
 
       room => {
 
-        const open =
+        const unlocked =
           game.unlockedRooms
             .includes(
               room.id
@@ -5762,8 +5881,10 @@ function showRooms(){
           room.id;
 
 
-        const text =
-          room[language];
+        const data =
+          room[
+            language
+          ];
 
 
         return `
@@ -5771,14 +5892,14 @@ function showRooms(){
         <div class="
           card
           ${selected ? "selected" : ""}
-          ${open ? "" : "locked"}
+          ${unlocked ? "" : "locked"}
         ">
 
           <div class="card-name">
 
             ${
-              open
-              ? text[0]
+              unlocked
+              ? data[0]
               : "🔒 ???"
             }
 
@@ -5787,8 +5908,8 @@ function showRooms(){
           <div class="card-info">
 
             ${
-              open
-              ? text[1]
+              unlocked
+              ? data[1]
               : tx("locked")
                 + " "
                 + room.level
@@ -5799,19 +5920,20 @@ function showRooms(){
           <div class="card-info">
 
             ${
-              open
-              ? text[2]
+              unlocked
+              ? data[2]
               : ""
             }
 
           </div>
 
           ${
-            open
+            unlocked
+
             ? `
 
             <button
-              data-enter-room="${room.id}"
+              data-room="${room.id}"
               ${selected ? "disabled" : ""}>
 
               ${
@@ -5823,6 +5945,7 @@ function showRooms(){
             </button>
 
             `
+
             : ""
           }
 
@@ -5843,7 +5966,7 @@ function showRooms(){
 
   document
     .querySelectorAll(
-      "[data-enter-room]"
+      "[data-room]"
     )
     .forEach(
 
@@ -5853,11 +5976,11 @@ function showRooms(){
         () => {
 
           game.currentRoom =
-            button.dataset
-              .enterRoom;
+            button.dataset.room;
 
 
           applyRoom();
+
 
           haptic(
             "select"
@@ -5868,7 +5991,7 @@ function showRooms(){
 
           closeModal();
 
-          update();
+          updateUI();
 
         };
 
@@ -5890,7 +6013,7 @@ $("openRooms")
 
 
 /* =========================================================
-   INVENTORY
+   GENERATE LOOT
 ========================================================= */
 
 function generateLoot(
@@ -5901,25 +6024,27 @@ function generateLoot(
     Math.random();
 
 
-  let rarity;
-  let base;
-
-
   if(
     guaranteedGood
   ){
 
     roll =
-      .55
+      .60
       +
       Math.random()
       *
-      .45;
+      .40;
 
   }
 
 
-  if(roll < .45){
+  let rarity;
+  let base;
+
+
+  if(
+    roll < .45
+  ){
 
     rarity =
       "common";
@@ -5929,7 +6054,9 @@ function generateLoot(
 
   }
 
-  else if(roll < .76){
+  else if(
+    roll < .76
+  ){
 
     rarity =
       "rare";
@@ -5939,7 +6066,9 @@ function generateLoot(
 
   }
 
-  else if(roll < .93){
+  else if(
+    roll < .93
+  ){
 
     rarity =
       "epic";
@@ -5949,7 +6078,9 @@ function generateLoot(
 
   }
 
-  else if(roll < .985){
+  else if(
+    roll < .985
+  ){
 
     rarity =
       "legendary";
@@ -5980,17 +6111,22 @@ function generateLoot(
 
   const stat =
     stats[
+
       Math.floor(
         Math.random()
         *
         stats.length
       )
+
     ];
 
 
   let value =
+
     base
+
     *
+
     (
       .75
       +
@@ -6000,15 +6136,12 @@ function generateLoot(
     );
 
 
-  /*
-  Для crit бонус меньше.
-  */
-
   if(
     stat === "crit"
   ){
 
-    value *= .35;
+    value *=
+      .35;
 
   }
 
@@ -6035,16 +6168,11 @@ function generateLoot(
   };
 
 
-  /*
-  Проклятые предметы сильные,
-  но получают штраф к другой характеристике.
-  */
-
   if(
     rarity === "cursed"
   ){
 
-    const penalties =
+    const possible =
       [
         "click",
         "passive",
@@ -6057,37 +6185,19 @@ function generateLoot(
 
 
     item.penaltyStat =
-      penalties[
+      possible[
+
         Math.floor(
           Math.random()
           *
-          penalties.length
+          possible.length
         )
+
       ];
 
 
     item.penalty =
       -.12;
-
-
-    /*
-    Добавляем второй виртуальный item,
-    представляющий проклятие.
-    */
-
-    game.loot.push({
-
-      key:item.key,
-
-      rarity:"cursed",
-
-      stat:item.penaltyStat,
-
-      value:item.penalty,
-
-      hiddenPenalty:true
-
-    });
 
   }
 
@@ -6104,7 +6214,8 @@ function generateLoot(
   ){
 
     game.loot =
-      game.loot.slice(
+      game.loot
+      .slice(
         -50
       );
 
@@ -6117,13 +6228,17 @@ function generateLoot(
 
 
   message(
+
     tx("drop")
+
     +
     " · "
+
     +
     ITEM_NAMES[
       language
     ][item.key]
+
   );
 
 
@@ -6133,7 +6248,7 @@ function generateLoot(
 
 
 /* =========================================================
-   INVENTORY UI
+   INVENTORY
 ========================================================= */
 
 function statName(stat){
@@ -6143,7 +6258,7 @@ function statName(stat){
     ru:{
       click:"сила нажатия",
       passive:"пассивный доход",
-      global:"весь доход",
+      global:"общий доход",
       crit:"шанс крита"
     },
 
@@ -6166,121 +6281,123 @@ function statName(stat){
 
 function showInventory(){
 
-  const visible =
-    game.loot.filter(
-      item =>
-        !item.hiddenPenalty
-    );
-
-
   const summary = `
 
   <div class="inventory-summary">
 
-    ${language === "ru"
-      ? "Бонус нажатия"
-      : "Click bonus"
+    ${
+      language === "ru"
+      ? "Сила нажатия"
+      : "Click power"
     }:
-    +${Math.round(itemBonus("click")*100)}%
+    ${(itemBonus("click")*100).toFixed(1)}%
 
     <br>
 
-    ${language === "ru"
+    ${
+      language === "ru"
       ? "Пассивный доход"
       : "Passive income"
     }:
-    +${Math.round(itemBonus("passive")*100)}%
+    ${(itemBonus("passive")*100).toFixed(1)}%
 
     <br>
 
-    ${language === "ru"
+    ${
+      language === "ru"
       ? "Общий доход"
       : "All income"
     }:
-    ${Math.round(itemBonus("global")*100)}%
+    ${(itemBonus("global")*100).toFixed(1)}%
 
     <br>
 
-    ${language === "ru"
-      ? "Шанс крита"
-      : "Critical chance"
+    ${
+      language === "ru"
+      ? "Доп. шанс крита"
+      : "Extra critical chance"
     }:
-    +${(itemBonus("crit")*100).toFixed(1)}%
+    ${(itemBonus("crit")*100).toFixed(1)}%
 
   </div>
 
   `;
 
 
-  const html =
-    visible.length
+  const items =
+    game.loot.length
 
-    ? visible
+    ? game.loot
       .slice()
       .reverse()
       .map(
 
         item => {
 
-          const name =
-            ITEM_NAMES[
-              language
-            ][
-              Number.isInteger(item.key)
-              ? item.key
-              : 0
-            ];
+          const key =
+            Number.isInteger(
+              item.key
+            )
+            ? item.key
+            : 0;
 
 
           return `
 
           <div class="
             loot
-            ${item.rarity}
+            ${item.rarity || "common"}
           ">
 
             <div class="loot-name">
 
-              ${name}
+              ${
+                ITEM_NAMES[
+                  language
+                ][key]
+              }
 
             </div>
 
             <div class="loot-stat">
 
-              ${
-                item.value >= 0
-                ? "+"
-                : ""
-              }
-
-              ${
+              +${
                 (
-                  item.value
+                  Math.max(
+                    0,
+                    Number(item.value)
+                    || 0
+                  )
                   *
                   100
-                ).toFixed(1)
+                )
+                .toFixed(1)
               }%
 
-              ${statName(item.stat)}
+              ${
+                statName(
+                  item.stat
+                )
+              }
 
             </div>
 
             ${
-              item.rarity === "cursed"
+              item.rarity
+              ===
+              "cursed"
 
               ? `
 
               <div class="loot-stat">
 
-                ☠
+                ☠ −12%
 
                 ${
-                  language === "ru"
-                  ? "Проклятие: −12% "
-                  : "Curse: −12% "
+                  statName(
+                    item.penaltyStat
+                  )
                 }
-
-                ${statName(item.penaltyStat)}
 
               </div>
 
@@ -6307,7 +6424,7 @@ function showInventory(){
 
     summary
     +
-    html
+    items
 
   );
 
@@ -6327,11 +6444,13 @@ function dropRecord(){
 
   const record =
     RECORDS[
+
       Math.floor(
         Math.random()
         *
         RECORDS.length
       )
+
     ];
 
 
@@ -6361,9 +6480,10 @@ function dropRecord(){
   }
 
 
-  game.records.push(
-    record
-  );
+  game.records
+    .push(
+      record
+    );
 
 
   haptic(
@@ -6372,11 +6492,15 @@ function dropRecord(){
 
 
   message(
+
     tx("recordDrop")
+
     +
     " · "
+
     +
     record
+
   );
 
 
@@ -6395,12 +6519,24 @@ function showRecords(){
 
         (record,index) => `
 
-        <div class="loot legendary">
+        <div class="
+          loot legendary
+        ">
 
           <div class="loot-name">
 
-            ${String(index+1).padStart(2,"0")}
+            ${
+              String(
+                index + 1
+              )
+              .padStart(
+                2,
+                "0"
+              )
+            }
+
             ·
+
             ${record}
 
           </div>
@@ -6408,6 +6544,7 @@ function showRecords(){
           <div class="loot-stat">
 
             +4%
+
             ${
               language === "ru"
               ? "ко всему доходу"
@@ -6427,11 +6564,8 @@ function showRecords(){
 
 
   openModal(
-
     tx("records"),
-
     html
-
   );
 
 }
@@ -6467,11 +6601,17 @@ function createContracts(){
     )
 
     .map(
+
       type => ({
+
         type,
+
         progress:0,
+
         done:false
+
       })
+
     );
 
 }
@@ -6534,8 +6674,11 @@ function progressContract(
 
 
           const reward =
+
             data.reward
+
             *
+
             globalMulti();
 
 
@@ -6550,11 +6693,15 @@ function progressContract(
 
 
           message(
+
             tx("task")
+
             +
             " · +"
+
             +
             fmt(reward)
+
           );
 
         }
@@ -6588,9 +6735,13 @@ function renderContracts(){
             100,
 
             contract.progress
+
             /
+
             data.target
+
             *
+
             100
 
           );
@@ -6602,7 +6753,11 @@ function renderContracts(){
 
           <div class="contract-name">
 
-            ${contract.done ? "✓ " : ""}
+            ${
+              contract.done
+              ? "✓ "
+              : ""
+            }
 
             ${data[language]}
 
@@ -6611,7 +6766,10 @@ function renderContracts(){
           <div class="progress">
 
             <div
-              style="width:${percent}%">
+              style="
+                width:
+                ${percent}%
+              ">
             </div>
 
           </div>
@@ -6619,10 +6777,14 @@ function renderContracts(){
           <div class="small">
 
             ${fmt(contract.progress)}
+
             /
+
             ${fmt(data.target)}
-            ·
-            ♱ ${fmt(data.reward)}
+
+            · ♱
+
+            ${fmt(data.reward)}
 
           </div>
 
@@ -6639,7 +6801,7 @@ function renderContracts(){
 
 
 /* =========================================================
-   ADD SOULS
+   SOULS
 ========================================================= */
 
 function addSoulsRaw(
@@ -6674,7 +6836,7 @@ function addSouls(
 
 
 /* =========================================================
-   CLICKING
+   CLICK
 ========================================================= */
 
 let combo = 0;
@@ -6692,13 +6854,8 @@ $("character")
   event => {
 
     /*
-    PreventDefault на pointerdown
-    специально только у тыквы.
-
-    Это предотвращает неприятный
-    double-tap zoom на мобильном,
-    но не запрещает масштабирование
-    всей страницы в остальных местах.
+    Убираем double tap zoom именно
+    при клике по тыкве.
     */
 
     if(
@@ -6721,6 +6878,7 @@ $("character")
 
 
     combo =
+
       now
       -
       lastClick
@@ -6736,29 +6894,39 @@ $("character")
       now;
 
 
-    const comboSpeed =
+    const speed =
+
       game.currentRoom
       === "dj"
+
       ? 2
+
       : 1;
 
 
     const comboMulti =
+
       Math.min(
 
         2.2,
 
         1
+
         +
+
         (
           combo
           -
           1
         )
+
         *
+
         .021
+
         *
-        comboSpeed
+
+        speed
 
       );
 
@@ -6781,8 +6949,11 @@ $("character")
 
 
     const critical =
+
       Math.random()
+
       <
+
       critChance();
 
 
@@ -6865,6 +7036,7 @@ $("character")
       event.clientY,
 
       critical
+
       ? tx("critical")
         +
         " +"
@@ -6884,15 +7056,19 @@ $("character")
       .textContent =
 
       tx("combo")
+
       +
       " "
+
       +
       combo
+
       +
       " · x"
+
       +
       comboMulti
-        .toFixed(2);
+      .toFixed(2);
 
 
     $("combo")
@@ -6991,9 +7167,13 @@ $("rageButton")
 
 
   message(
+
     language === "ru"
+
     ? "Квартира входит в ритм · нажатия x5"
+
     : "KVARTIRA enters the rhythm · clicks x5"
+
   );
 
 
@@ -7006,9 +7186,13 @@ $("rageButton")
 
 
       message(
+
         language === "ru"
+
         ? "Ритм стих."
+
         : "The rhythm faded."
+
       );
 
     },
@@ -7016,6 +7200,9 @@ $("rageButton")
     10000
 
   );
+
+
+  updateUI();
 
 };
 
@@ -7039,9 +7226,7 @@ const PRICE_MULTI = {
 };
 
 
-function buy(
-  type
-){
+function buy(type){
 
   const costKey =
     type
@@ -7058,22 +7243,32 @@ function buy(
   if(
     game.souls
     <
-    game[costKey]
+    game[
+      costKey
+    ]
   )
     return;
 
 
   game.souls -=
-    game[costKey];
+    game[
+      costKey
+    ];
 
 
-  game[levelKey]++;
+  game[
+    levelKey
+  ]++;
 
 
-  game[costKey] =
+  game[
+    costKey
+  ] =
     Math.floor(
 
-      game[costKey]
+      game[
+        costKey
+      ]
 
       *
 
@@ -7104,32 +7299,27 @@ function buy(
 
 $("buyClick")
 .onclick =
-() =>
-  buy("click");
+() => buy("click");
 
 
 $("buyAuto")
 .onclick =
-() =>
-  buy("auto");
+() => buy("auto");
 
 
 $("buyRing")
 .onclick =
-() =>
-  buy("ring");
+() => buy("ring");
 
 
 $("buyCrit")
 .onclick =
-() =>
-  buy("crit");
+() => buy("crit");
 
 
 $("buyCritPower")
 .onclick =
-() =>
-  buy("critPower");
+() => buy("critPower");
 
 
 /* =========================================================
@@ -7219,10 +7409,6 @@ function startBoss(){
     false;
 
 
-  /*
-  Босс стал заметно сложнее.
-  */
-
   bossMaxHP =
 
     4200
@@ -7241,9 +7427,13 @@ function startBoss(){
 
     (
       1
+
       +
+
       game.prestiges
+
       *
+
       .35
     );
 
@@ -7266,13 +7456,24 @@ function startBoss(){
     );
 
 
+  $("bossName")
+    .textContent =
+    tx("boss");
+
+
   $("bossPhase")
     .textContent =
     tx("phase1");
 
 
   message(
-    tx("bossArrived")
+
+    language === "ru"
+
+    ? "БОСС КУКОЛДОВ пришёл в квартиру"
+
+    : "CUCKOLD BOSS entered the apartment"
+
   );
 
 
@@ -7286,20 +7487,13 @@ function startBoss(){
 }
 
 
-function damageBoss(
-  amount
-){
+function damageBoss(amount){
 
   if(
     !bossActive
   )
     return;
 
-
-  /*
-  Во второй фазе босс получает
-  на 18% меньше урона.
-  */
 
   if(
     bossEnraged
@@ -7322,9 +7516,13 @@ function damageBoss(
     &&
 
     bossHP
+
     <=
+
     bossMaxHP
+
     *
+
     .5
 
   ){
@@ -7346,9 +7544,13 @@ function damageBoss(
 
 
     message(
+
       language === "ru"
-      ? "БОСС КУКОЛДОВ В ЯРОСТИ — защита усилена"
-      : "CUCKOLD BOSS IS ENRAGED — defense increased"
+
+      ? "БОСС КУКОЛДОВ В ЯРОСТИ · защита усилена"
+
+      : "CUCKOLD BOSS ENRAGED · defense increased"
+
     );
 
 
@@ -7360,9 +7562,7 @@ function damageBoss(
 
 
   if(
-    bossHP
-    <=
-    0
+    bossHP <= 0
   ){
 
     killBoss();
@@ -7399,6 +7599,7 @@ function updateBossUI(){
       100
 
     )
+
     +
     "%";
 
@@ -7474,10 +7675,6 @@ function killBoss(){
   );
 
 
-  /*
-  Босс гарантирует хороший предмет.
-  */
-
   generateLoot(
     true
   );
@@ -7487,11 +7684,8 @@ function killBoss(){
     Math.random()
     <
     .35
-  ){
-
+  )
     dropRecord();
-
-  }
 
 
   haptic(
@@ -7500,11 +7694,15 @@ function killBoss(){
 
 
   message(
-    tx("bossKilled")
-    +
-    " · +"
-    +
-    fmt(reward)
+
+    language === "ru"
+
+    ? "БОСС КУКОЛДОВ побеждён · +"
+      + fmt(reward)
+
+    : "CUCKOLD BOSS defeated · +"
+      + fmt(reward)
+
   );
 
 
@@ -7544,11 +7742,9 @@ function carHTML(){
 
   return `
 
-  <div class="car-roof">
-  </div>
+  <div class="car-roof"></div>
 
-  <div class="car-window">
-  </div>
+  <div class="car-window"></div>
 
   <div class="car-body">
 
@@ -7558,11 +7754,9 @@ function carHTML(){
 
   </div>
 
-  <div class="wheel one">
-  </div>
+  <div class="wheel one"></div>
 
-  <div class="wheel two">
-  </div>
+  <div class="wheel two"></div>
 
   `;
 
@@ -7570,7 +7764,7 @@ function carHTML(){
 
 
 /* =========================================================
-   NORMAL TIGGO
+   TIGGO
 ========================================================= */
 
 function spawnTiggo(){
@@ -7609,13 +7803,8 @@ function spawnTiggo(){
       *
 
       Math.max(
-
         40,
-
-        innerHeight
-        -
-        390
-
+        innerHeight - 390
       )
 
     )
@@ -7630,7 +7819,7 @@ function spawnTiggo(){
     );
 
 
-  const timeout =
+  const timer =
     setTimeout(
 
       () => {
@@ -7662,7 +7851,7 @@ function spawnTiggo(){
 
 
     clearTimeout(
-      timeout
+      timer
     );
 
 
@@ -7697,13 +7886,8 @@ function spawnTiggo(){
     const reward =
 
       Math.max(
-
         1200,
-
-        baseClick()
-        *
-        300
-
+        baseClick() * 300
       )
 
       *
@@ -7722,10 +7906,6 @@ function spawnTiggo(){
     );
 
 
-    /*
-    Предметы стали чуть реже.
-    */
-
     if(
 
       Math.random()
@@ -7736,11 +7916,8 @@ function spawnTiggo(){
       +
       itemDropChance()
 
-    ){
-
+    )
       generateLoot();
-
-    }
 
 
     if(
@@ -7756,7 +7933,7 @@ function spawnTiggo(){
     );
 
 
-    createMessage(
+    message(
       "TIGGO · +"
       +
       fmt(reward)
@@ -7817,13 +7994,8 @@ function spawnBlackTiggo(){
   const maxHP =
 
     Math.max(
-
       100,
-
-      baseClick()
-      *
-      45
-
+      baseClick() * 45
     );
 
 
@@ -7889,7 +8061,10 @@ function spawnBlackTiggo(){
             false;
 
 
-          car.remove();
+          if(
+            car.isConnected
+          )
+            car.remove();
 
 
           $("chase")
@@ -7940,10 +8115,14 @@ function spawnBlackTiggo(){
       clickMulti();
 
 
-    if(
+    const critical =
       Math.random()
       <
-      critChance()
+      critChance();
+
+
+    if(
+      critical
     ){
 
       damage *=
@@ -7960,7 +8139,8 @@ function spawnBlackTiggo(){
     if(
       rageActive
     )
-      damage *= 5;
+      damage *=
+        5;
 
 
     hp -=
@@ -7981,6 +8161,7 @@ function spawnBlackTiggo(){
         100
 
       )
+
       +
       "%";
 
@@ -8003,8 +8184,7 @@ function spawnBlackTiggo(){
 
 
     if(
-      hp <=
-      0
+      hp <= 0
     ){
 
       clearInterval(
@@ -8059,13 +8239,8 @@ function spawnBlackTiggo(){
       const reward =
 
         Math.max(
-
           6000,
-
-          baseClick()
-          *
-          1200
-
+          baseClick() * 1200
         )
 
         *
@@ -8122,9 +8297,7 @@ function spawnBlackTiggo(){
 }
 
 
-function moveBlack(
-  car
-){
+function moveBlack(car){
 
   if(
     !car.isConnected
@@ -8148,13 +8321,8 @@ function moveBlack(
       *
 
       Math.max(
-
         40,
-
-        innerWidth
-        -
-        260
-
+        innerWidth - 260
       )
 
     )
@@ -8175,13 +8343,8 @@ function moveBlack(
       *
 
       Math.max(
-
         50,
-
-        innerHeight
-        -
-        370
-
+        innerHeight - 370
       )
 
     )
@@ -8193,7 +8356,7 @@ function moveBlack(
 
 
 /* =========================================================
-   TIGGO SCHEDULER
+   TIGGO SCHEDULE
 ========================================================= */
 
 function scheduleTiggo(){
@@ -8268,11 +8431,8 @@ function startDoorbell(){
 
       if(
         doorbellActive
-      ){
-
+      )
         closeDoorbell();
-
-      }
 
     },
 
@@ -8300,11 +8460,7 @@ function closeDoorbell(){
 
 $("ignoreDoor")
 .onclick =
-() => {
-
-  closeDoorbell();
-
-};
+  closeDoorbell;
 
 
 $("openDoor")
@@ -8324,13 +8480,6 @@ $("openDoor")
     Math.random();
 
 
-  /*
-  45% подарок
-  25% предмет
-  20% босс
-  10% проклятие
-  */
-
   if(
     roll < .45
   ){
@@ -8338,13 +8487,8 @@ $("openDoor")
     const reward =
 
       Math.max(
-
         1500,
-
-        passiveBase()
-        *
-        300
-
+        passiveBase() * 300
       )
 
       *
@@ -8358,11 +8502,15 @@ $("openDoor")
 
 
     message(
+
       language === "ru"
+
       ? "За дверью лежал конверт · +"
         + fmt(reward)
+
       : "An envelope was outside · +"
         + fmt(reward)
+
     );
 
 
@@ -8390,18 +8538,18 @@ $("openDoor")
 
   else{
 
-    /*
-    Небольшое временное проклятие.
-    */
-
     eventMultiplier =
       .65;
 
 
     message(
+
       language === "ru"
+
       ? "Вы открыли не тому. Доход −35% на 20 секунд."
+
       : "Wrong visitor. Income −35% for 20 seconds."
+
     );
 
 
@@ -8455,17 +8603,18 @@ function startNightShift(){
     );
 
 
-  /*
-  Ночью x2 доход,
-  но TIGGO становится чаще.
-  */
-
   eventMultiplier =
     2;
 
 
   message(
-    tx("night")
+
+    language === "ru"
+
+    ? "Свет погас. Началась Ночная смена · доход x2"
+
+    : "Lights out. Night Shift started · income x2"
+
   );
 
 
@@ -8489,7 +8638,13 @@ function startNightShift(){
 
 
       message(
-        tx("nightEnd")
+
+        language === "ru"
+
+        ? "Свет снова включился."
+
+        : "The lights came back on."
+
       );
 
     },
@@ -8502,7 +8657,7 @@ function startNightShift(){
 
 
 /* =========================================================
-   RANDOM APARTMENT EVENT
+   APARTMENT EVENTS
 ========================================================= */
 
 function scheduleApartmentEvent(){
@@ -8515,17 +8670,11 @@ function scheduleApartmentEvent(){
         Math.random()
         <
         .55
-      ){
-
+      )
         startDoorbell();
 
-      }
-
-      else{
-
+      else
         startNightShift();
-
-      }
 
 
       scheduleApartmentEvent();
@@ -8618,7 +8767,6 @@ function updateDaily(){
 
     $("dailyButton")
       .textContent =
-
       `${h}h ${m}m`;
 
   }
@@ -8647,13 +8795,8 @@ $("dailyButton")
   const reward =
 
     Math.max(
-
       2000,
-
-      passiveBase()
-      *
-      600
-
+      passiveBase() * 600
     )
 
     *
@@ -8712,7 +8855,9 @@ $("prestigeButton")
     );
 
 
-  if(!okay)
+  if(
+    !okay
+  )
     return;
 
 
@@ -8806,13 +8951,10 @@ function offlineReward(){
 
     &&
 
-    passiveBase() > 0
+    passiveBase()
+    >
+    0
   ){
-
-    /*
-    Теперь только 35% производства.
-    Игра немного сложнее.
-    */
 
     const reward =
 
@@ -8934,29 +9076,23 @@ function createExplosion(
 
     particle.style
       .setProperty(
-
         "--x",
-
         Math.cos(angle)
         *
         distance
         +
         "px"
-
       );
 
 
     particle.style
       .setProperty(
-
         "--y",
-
         Math.sin(angle)
         *
         distance
         +
         "px"
-
       );
 
 
@@ -8986,7 +9122,7 @@ function createExplosion(
 
 
 /* =========================================================
-   FLOATING TEXT
+   FLOAT
 ========================================================= */
 
 function floatingText(
@@ -9081,7 +9217,7 @@ function message(text){
 
 
 /* =========================================================
-   DESKTOP TABS
+   TABS
 ========================================================= */
 
 document
@@ -9101,8 +9237,8 @@ document
       )
       .forEach(
 
-        item =>
-          item.classList
+        x =>
+          x.classList
           .remove(
             "active"
           )
@@ -9165,8 +9301,8 @@ document
       )
       .forEach(
 
-        item =>
-          item.classList
+        x =>
+          x.classList
           .remove(
             "active"
           )
@@ -9213,7 +9349,7 @@ document
 
 
 /* =========================================================
-   MOBILE NAV
+   MOBILE MODALS
 ========================================================= */
 
 function showProfileModal(){
@@ -9264,7 +9400,7 @@ function showProfileModal(){
 
   <button
     class="action"
-    id="mobileRage">
+    id="modalRage">
 
     ${
       game.rage >= 100
@@ -9286,7 +9422,7 @@ function showProfileModal(){
   );
 
 
-  $("mobileRage")
+  $("modalRage")
     .onclick =
     () => {
 
@@ -9304,9 +9440,13 @@ function showShopModal(){
 
   const html = `
 
-  <button class="shop-item" data-mobile-buy="click">
+  <button
+    class="shop-item"
+    data-buy-mobile="click">
 
-    <b>${$("clickUpgradeName").textContent}</b>
+    <b>
+      ${$("clickUpgradeName").textContent}
+    </b>
 
     <span class="desc">
       ${$("clickUpgradeDesc").textContent}
@@ -9319,9 +9459,13 @@ function showShopModal(){
   </button>
 
 
-  <button class="shop-item" data-mobile-buy="auto">
+  <button
+    class="shop-item"
+    data-buy-mobile="auto">
 
-    <b>${$("autoUpgradeName").textContent}</b>
+    <b>
+      ${$("autoUpgradeName").textContent}
+    </b>
 
     <span class="desc">
       ${$("autoUpgradeDesc").textContent}
@@ -9334,9 +9478,13 @@ function showShopModal(){
   </button>
 
 
-  <button class="shop-item" data-mobile-buy="ring">
+  <button
+    class="shop-item"
+    data-buy-mobile="ring">
 
-    <b>${$("ringUpgradeName").textContent}</b>
+    <b>
+      ${$("ringUpgradeName").textContent}
+    </b>
 
     <span class="desc">
       ${$("ringUpgradeDesc").textContent}
@@ -9349,9 +9497,13 @@ function showShopModal(){
   </button>
 
 
-  <button class="shop-item" data-mobile-buy="crit">
+  <button
+    class="shop-item"
+    data-buy-mobile="crit">
 
-    <b>${$("critUpgradeName").textContent}</b>
+    <b>
+      ${$("critUpgradeName").textContent}
+    </b>
 
     <span class="desc">
       ${$("critUpgradeDesc").textContent}
@@ -9364,9 +9516,13 @@ function showShopModal(){
   </button>
 
 
-  <button class="shop-item" data-mobile-buy="critPower">
+  <button
+    class="shop-item"
+    data-buy-mobile="critPower">
 
-    <b>${$("critPowerUpgradeName").textContent}</b>
+    <b>
+      ${$("critPowerUpgradeName").textContent}
+    </b>
 
     <span class="desc">
       ${$("critPowerUpgradeDesc").textContent}
@@ -9388,29 +9544,29 @@ function showShopModal(){
 
 
   document
-    .querySelectorAll(
-      "[data-mobile-buy]"
-    )
-    .forEach(
+  .querySelectorAll(
+    "[data-buy-mobile]"
+  )
+  .forEach(
 
-      button => {
+    button => {
 
-        button.onclick =
-        () => {
+      button.onclick =
+      () => {
 
-          buy(
-            button.dataset
-              .mobileBuy
-          );
+        buy(
+          button.dataset
+          .buyMobile
+        );
 
 
-          showShopModal();
+        showShopModal();
 
-        };
+      };
 
-      }
+    }
 
-    );
+  );
 
 }
 
@@ -9436,12 +9592,14 @@ $("mobileInventory")
 
 
 /* =========================================================
-   LANGUAGE UI
+   LANGUAGE
 ========================================================= */
 
 function applyLanguage(){
 
-  document.documentElement.lang =
+  document
+    .documentElement
+    .lang =
     language;
 
 
@@ -9511,11 +9669,6 @@ function applyLanguage(){
     tx("items");
 
 
-  $("bossName")
-    .textContent =
-    tx("boss");
-
-
   $("doorbellTitle")
     .textContent =
     tx("door");
@@ -9540,10 +9693,6 @@ function applyLanguage(){
     .textContent =
     tx("telegram");
 
-
-  /*
-  Магазин
-  */
 
   if(
     language === "ru"
@@ -9598,11 +9747,6 @@ function applyLanguage(){
       .textContent =
       "+1 к силе критического удара";
 
-
-    $("marriageDescription")
-      .textContent =
-      "Новый цикл становится сложнее, но каждый Брак со Смертью навсегда усиливает доход.";
-
   }
 
   else{
@@ -9656,11 +9800,6 @@ function applyLanguage(){
       .textContent =
       "+1 critical power";
 
-
-    $("marriageDescription")
-      .textContent =
-      "Every new cycle becomes harder, but each Marriage with Death permanently increases income.";
-
   }
 
 }
@@ -9675,11 +9814,8 @@ function setLanguage(
 
 
   localStorage.setItem(
-
     "dm-language",
-
     language
-
   );
 
 
@@ -9695,7 +9831,7 @@ function setLanguage(
 
 
 /* =========================================================
-   UPDATE UI
+   UPDATE
 ========================================================= */
 
 function updateUI(){
@@ -9763,11 +9899,8 @@ function updateUI(){
       0,
 
       Math.min(
-
         100,
-
         levelProgress()
-
       )
 
     )
@@ -9825,17 +9958,11 @@ function updateUI(){
 
 
   const types = [
-
     "click",
-
     "auto",
-
     "ring",
-
     "crit",
-
     "critPower"
-
   ];
 
 
@@ -9880,21 +10007,23 @@ function updateUI(){
       ];
 
 
-      const buttonId =
+      const id =
 
         "buy"
 
         +
 
-        type.charAt(0)
-          .toUpperCase()
+        type
+        .charAt(0)
+        .toUpperCase()
 
         +
 
-        type.slice(1);
+        type
+        .slice(1);
 
 
-      $(buttonId)
+      $(id)
         .disabled =
 
         game.souls
@@ -9922,17 +10051,11 @@ function updateUI(){
   $("rageButton")
     .textContent =
 
-    game.rage
-    >=
-    100
+    game.rage >= 100
 
-    ? tx(
-        "rageReady"
-      )
+    ? tx("rageReady")
 
-    : tx(
-        "rage"
-      )
+    : tx("rage")
       +
       " "
       +
@@ -9969,17 +10092,11 @@ function updateUI(){
   $("prestigeButton")
     .textContent =
 
-    level()
-    >=
-    50
+    level() >= 50
 
-    ? tx(
-        "prestigeReady"
-      )
+    ? tx("prestigeReady")
 
-    : tx(
-        "prestigeLocked"
-      );
+    : tx("prestigeLocked");
 
 
   applySkin();
@@ -10020,9 +10137,7 @@ const savedVolume =
 
 
 if(
-  savedVolume
-  !==
-  null
+  savedVolume !== null
 ){
 
   volume.value =
@@ -10059,8 +10174,7 @@ async function playMusic(){
 }
 
 
-document
-.addEventListener(
+document.addEventListener(
 
   "pointerdown",
 
@@ -10117,11 +10231,8 @@ volume
 
 
   localStorage.setItem(
-
     "dm-volume",
-
     volume.value
-
   );
 
 };
@@ -10151,7 +10262,7 @@ function saveGame(){
 
 
 /* =========================================================
-   START
+   INTRO
 ========================================================= */
 
 setTimeout(
@@ -10178,6 +10289,10 @@ $("intro")
   );
 
 
+/* =========================================================
+   START
+========================================================= */
+
 initTelegram();
 
 applyLanguage();
@@ -10190,28 +10305,20 @@ applyRoom();
 
 updateUI();
 
-
 scheduleTiggo();
 
 scheduleApartmentEvent();
 
 
 setInterval(
-
   saveGame,
-
   3000
-
 );
 
 
-window
-.addEventListener(
-
+window.addEventListener(
   "beforeunload",
-
   saveGame
-
 );
 
 </script>
